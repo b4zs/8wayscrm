@@ -1,0 +1,18 @@
+Application\CrmBundle\Entity\Office:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        company:
+            type: string
+            length: 255
+            column: Office
+        address:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

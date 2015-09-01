@@ -1,0 +1,29 @@
+Application\CrmBundle\Entity\Company:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        mainContactInformation:
+            type: string
+            length: 255
+        sectorOfActivity:
+            type: string
+            length: 255
+        websites:
+            type: string
+            length: 255
+        offices:
+            type: string
+            length: 255
+        memberships:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

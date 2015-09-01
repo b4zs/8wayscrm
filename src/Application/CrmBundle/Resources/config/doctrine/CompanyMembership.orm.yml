@@ -1,0 +1,31 @@
+Application\CrmBundle\Entity\CompanyMembership:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        company:
+            type: string
+            length: 255
+        person:
+            type: string
+            length: 255
+        role:
+            type: string
+            length: 255
+        startDate:
+            type: datetime
+        endDate:
+            type: string
+            length: 255
+        workPermit:
+            type: string
+            length: 255
+        holidaysRemaining:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

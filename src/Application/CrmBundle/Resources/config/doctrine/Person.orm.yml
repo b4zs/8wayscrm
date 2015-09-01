@@ -1,0 +1,20 @@
+Application\CrmBundle\Entity\Person:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        personalData:
+            type: string
+            length: 255
+        contactInformation:
+            type: string
+            length: 255
+        companyMemberships:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

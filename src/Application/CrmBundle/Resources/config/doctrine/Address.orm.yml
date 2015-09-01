@@ -1,0 +1,26 @@
+Application\CrmBundle\Entity\Address:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        country:
+            type: string
+            length: '2'
+        state:
+            type: string
+            length: 255
+        city:
+            type: string
+            length: 255
+        street:
+            type: string
+            length: 255
+        streetNumber:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

@@ -1,0 +1,27 @@
+Application\CrmBundle\Entity\PersonalData:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        firstName:
+            type: string
+            length: 255
+        lastName:
+            type: string
+            length: 255
+        dateOfBirth:
+            type: datetime
+        gender:
+            type: string
+            length: '2'
+        nationality:
+            type: string
+            length: '2'
+        avatarId:
+            type: integer
+    lifecycleCallbacks: {  }
