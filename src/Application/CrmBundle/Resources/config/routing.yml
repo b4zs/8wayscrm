@@ -1,5 +1,0 @@
-home:
-    path:     /
-    defaults: { _controller: SonataAdminBundle:Core:dashboard }
-
-
