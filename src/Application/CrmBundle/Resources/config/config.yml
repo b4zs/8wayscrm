@@ -1,0 +1,3 @@
+orm:
+    entity_managers:
+      ApplicationCrmBundle:  ~

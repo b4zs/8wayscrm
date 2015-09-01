@@ -1,0 +1,35 @@
+services:
+    sonata.admin.client:
+        class: Application\CrmBundle\Admin\ClientAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: "Manage"
+              label: "Clients"
+        arguments:
+            - ~
+            - Application\CrmBundle\Entity\Client
+            - ~
+    sonata.admin.project:
+        class: Application\CrmBundle\Admin\ProjectAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: "Manage"
+              label: "Projects"
+        arguments:
+            - ~
+            - Appliation\CrmBundle\Entity\Project
+            - ~
+    sonata.admin.project.manager:
+        class: Application\CrmBundle\Admin\ProjectManagerAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: "Manage"
+              label: "Project Managers"
+        arguments:
+            - ~
+            - Appliation\CrmBundle\Entity\ProjectManager
+            - ~
+
