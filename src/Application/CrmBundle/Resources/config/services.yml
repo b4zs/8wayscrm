@@ -3,7 +3,7 @@ services:
         class: Application\CrmBundle\Admin\PersonalDataAdmin
         arguments: [~, Application\CrmBundle\Entity\PersonalData, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: system_tables, label: PersonalData, show_in_dashboard: true }
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: PersonalData, show_in_dashboard: false }
 
     application_crm.admin.person:
         class: Application\CrmBundle\Admin\PersonAdmin
@@ -15,13 +15,13 @@ services:
         class: Application\CrmBundle\Admin\ContactInformationAdmin
         arguments: [~, Application\CrmBundle\Entity\ContactInformation, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: system_tables, label: ContactInformation, show_in_dashboard: true }
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: ContactInformation, show_in_dashboard: false }
 
     application_crm.admin.address:
         class: Application\CrmBundle\Admin\AddressAdmin
         arguments: [~, Application\CrmBundle\Entity\Address, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: system_tables, label: Address, show_in_dashboard: true }
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: Address, show_in_dashboard: false }
 
     application_crm.admin.company:
         class: Application\CrmBundle\Admin\CompanyAdmin
@@ -33,19 +33,19 @@ services:
         class: Application\CrmBundle\Admin\OfficeAdmin
         arguments: [~, Application\CrmBundle\Entity\Office, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: system_tables, label: Office, show_in_dashboard: true }
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: Office, show_in_dashboard: false }
 
     application_crm.admin.company_membership:
         class: Application\CrmBundle\Admin\CompanyMembershipAdmin
         arguments: [~, Application\CrmBundle\Entity\CompanyMembership, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: system_tables, label: CompanyMembership}
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: CompanyMembership, show_in_dashboard: false }
 
     application_crm.admin.client:
         class: Application\CrmBundle\Admin\ClientAdmin
         arguments: [~, Application\CrmBundle\Entity\Client, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: CRM, label: Client}
+            - {name: sonata.admin, manager_type: orm, group: CRM, label: Lead }
 
     application_crm.admin.project:
         class: Application\CrmBundle\Admin\ProjectAdmin
@@ -57,4 +57,4 @@ services:
         class: Application\CrmBundle\Admin\ProjectMembershipAdmin
         arguments: [~, Application\CrmBundle\Entity\ProjectMembership, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: system_tables, label: ProjectMembership}
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: ProjectMembership, show_in_dashboard: false }

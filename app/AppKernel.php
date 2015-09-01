@@ -1,5 +1,6 @@
 <?php
 
+use Application\AdminBundle\ApplicationAdminBundle;
 use Application\MediaBundle\ApplicationMediaBundle;
 use Application\UserBundle\ApplicationUserBundle;
 use FOS\RestBundle\FOSRestBundle;
@@ -47,6 +48,8 @@ class AppKernel extends Kernel
             new FOSUserBundle(),
             new SonataUserBundle(),
             new ApplicationUserBundle(),
+
+            new ApplicationAdminBundle(),
 
             //You need to add this dependency to make media functional
         );

@@ -7,6 +7,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    sonata_user.google_authenticator.server: http://example.com
 
 framework:
     #esi:             ~
@@ -87,7 +88,7 @@ swiftmailer:
     spool:     { type: memory }
 
 sonata_admin:
-    title: 8 Ways CRM
+    title: 8Ways CRM
     templates:
         dashboard: SonataAdminBundle:Core:dashboard.html.twig
 
@@ -163,9 +164,7 @@ sonata_media:
             create:     false
 
 
-sonata_user:
-    security_acl: true
-    manager_type: orm # can be orm or mongodb
+
 
 sonata_block:
     blocks:
@@ -193,3 +192,32 @@ fos_user:
 
     service:
         user_manager: sonata.user.orm.user_manager                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
+
+
+sonata_user:
+    security_acl:             true
+    table:
+        user_group:           user__user_group
+
+    impersonating:
+        route:                page_slug
+        parameters:           { path: / }
+
+    google_authenticator:
+        server:               %sonata_user.google_authenticator.server%
+        enabled:              false
+
+    manager_type:             orm
+    class:
+        user: Application\UserBundle\Entity\User
+        group: Application\UserBundle\Entity\Group
+
+    profile:
+        form:
+            type:                 sonata_user_profile
+            handler:              sonata.user.profile.form.handler.default
+            name:                 sonata_user_profile_form
+            validation_groups:
+                # Defaults:
+                - Profile
+                - Default
