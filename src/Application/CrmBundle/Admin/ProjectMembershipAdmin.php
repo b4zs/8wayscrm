@@ -35,7 +35,6 @@ class ProjectMembershipAdmin extends Admin
             ->add('person')
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )

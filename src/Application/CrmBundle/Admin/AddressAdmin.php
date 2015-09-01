@@ -39,7 +39,6 @@ class AddressAdmin extends Admin
             ->add('streetNumber')
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )

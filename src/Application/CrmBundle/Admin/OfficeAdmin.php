@@ -32,7 +32,6 @@ class OfficeAdmin extends Admin
             ->add('address')
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )

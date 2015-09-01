@@ -38,7 +38,6 @@ class ProjectAdmin extends Admin
             ->add('createdAt')
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )

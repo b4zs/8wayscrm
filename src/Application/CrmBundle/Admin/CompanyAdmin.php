@@ -32,7 +32,6 @@ class CompanyAdmin extends Admin
 //            ->add('sectorOfActivity')
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )
