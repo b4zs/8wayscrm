@@ -1,35 +1,60 @@
 services:
-    sonata.admin.client:
-        class: Application\CrmBundle\Admin\ClientAdmin
+    application_crm.admin.personal_data:
+        class: Application\CrmBundle\Admin\PersonalDataAdmin
+        arguments: [~, Application\CrmBundle\Entity\PersonalData, SonataAdminBundle:CRUD]
         tags:
-            - name: sonata.admin
-              manager_type: orm
-              group: "Manage"
-              label: "Clients"
-        arguments:
-            - ~
-            - Application\CrmBundle\Entity\Client
-            - ~
-    sonata.admin.project:
-        class: Application\CrmBundle\Admin\ProjectAdmin
-        tags:
-            - name: sonata.admin
-              manager_type: orm
-              group: "Manage"
-              label: "Projects"
-        arguments:
-            - ~
-            - Appliation\CrmBundle\Entity\Project
-            - ~
-    sonata.admin.project.manager:
-        class: Application\CrmBundle\Admin\ProjectManagerAdmin
-        tags:
-            - name: sonata.admin
-              manager_type: orm
-              group: "Manage"
-              label: "Project Managers"
-        arguments:
-            - ~
-            - Appliation\CrmBundle\Entity\ProjectManager
-            - ~
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: PersonalData, show_in_dashboard: true }
 
+    application_crm.admin.person:
+        class: Application\CrmBundle\Admin\PersonAdmin
+        arguments: [~, Application\CrmBundle\Entity\Person, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: CRM, label: Person}
+
+    application_crm.admin.contact_information:
+        class: Application\CrmBundle\Admin\ContactInformationAdmin
+        arguments: [~, Application\CrmBundle\Entity\ContactInformation, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: ContactInformation, show_in_dashboard: true }
+
+    application_crm.admin.address:
+        class: Application\CrmBundle\Admin\AddressAdmin
+        arguments: [~, Application\CrmBundle\Entity\Address, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: Address, show_in_dashboard: true }
+
+    application_crm.admin.company:
+        class: Application\CrmBundle\Admin\CompanyAdmin
+        arguments: [~, Application\CrmBundle\Entity\Company, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: CRM, label: Company}
+
+    application_crm.admin.office:
+        class: Application\CrmBundle\Admin\OfficeAdmin
+        arguments: [~, Application\CrmBundle\Entity\Office, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: Office, show_in_dashboard: true }
+
+    application_crm.admin.company_membership:
+        class: Application\CrmBundle\Admin\CompanyMembershipAdmin
+        arguments: [~, Application\CrmBundle\Entity\CompanyMembership, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: CompanyMembership}
+
+    application_crm.admin.client:
+        class: Application\CrmBundle\Admin\ClientAdmin
+        arguments: [~, Application\CrmBundle\Entity\Client, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: CRM, label: Client}
+
+    application_crm.admin.project:
+        class: Application\CrmBundle\Admin\ProjectAdmin
+        arguments: [~, Application\CrmBundle\Entity\Project, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: CRM, label: Project}
+
+    application_crm.admin.project_membership:
+        class: Application\CrmBundle\Admin\ProjectMembershipAdmin
+        arguments: [~, Application\CrmBundle\Entity\ProjectMembership, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: ProjectMembership}

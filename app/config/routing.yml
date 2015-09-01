@@ -8,6 +8,10 @@ _sonata_admin:
     prefix: /admin
 
 
+sonata_user:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+    prefix: /admin
+
 #app_index:
 #    path: /
 #    defaults:

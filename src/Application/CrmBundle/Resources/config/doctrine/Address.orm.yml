@@ -11,16 +11,21 @@ Application\CrmBundle\Entity\Address:
         country:
             type: string
             length: '2'
+            nullable: true
         state:
             type: string
             length: 255
+            nullable: true
         city:
             type: string
             length: 255
+            nullable: true
         street:
             type: string
             length: 255
+            nullable: true
         streetNumber:
             type: string
             length: 255
+            nullable: true
     lifecycleCallbacks: {  }

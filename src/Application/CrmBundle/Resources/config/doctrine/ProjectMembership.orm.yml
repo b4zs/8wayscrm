@@ -1,0 +1,23 @@
+Application\CrmBundle\Entity\ProjectMembership:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        role:
+            type: string
+            length: 255
+        createdAt:
+            type: datetime
+    manyToOne:
+        project:
+            targetEntity: Application\CrmBundle\Entity\Project
+            inversedBy: memberships
+        person:
+            targetEntity: Application\CrmBundle\Entity\Person
+            inversedBy: projectMemberships
+    lifecycleCallbacks: {  }

@@ -13,7 +13,6 @@ class Address
      * @var integer
      */
     private $id;
-
     /**
      * @var string
      */

@@ -1,0 +1,32 @@
+Application\CrmBundle\Entity\Project:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        createdAt:
+            type: datetime
+        description:
+            type: text
+            nullable: true
+        status:
+            type: string
+            length: '16'
+    manyToOne:
+        client:
+            targetEntity: Application\CrmBundle\Entity\Client
+            inversedBy: projects
+    oneToMany:
+        memberships:
+            targetEntity: Application\CrmBundle\Entity\ProjectMembership
+            mappedBy: project
+            cascade: [all]
+            orphanRemoval: true
+    lifecycleCallbacks: {  }

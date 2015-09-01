@@ -17,16 +17,6 @@ class CompanyMembership
     /**
      * @var string
      */
-    private $company;
-
-    /**
-     * @var string
-     */
-    private $person;
-
-    /**
-     * @var string
-     */
     private $role;
 
     /**
@@ -49,6 +39,16 @@ class CompanyMembership
      */
     private $holidaysRemaining;
 
+    /**
+     * @var \Application\CrmBundle\Entity\Company
+     */
+    private $company;
+
+    /**
+     * @var \Application\CrmBundle\Entity\Person
+     */
+    private $person;
+
 
     /**
      * Get id
@@ -58,75 +58,6 @@ class CompanyMembership
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set company
-     *
-     * @param string $company
-     * @return CompanyMembership
-     */
-    public function setCompany($company)
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * Get company
-     *
-     * @return string 
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-    /**
-     * Set person
-     *
-     * @param string $person
-     * @return CompanyMembership
-     */
-    public function setPerson($person)
-    {
-        $this->person = $person;
-
-        return $this;
-    }
-
-    /**
-     * Get person
-     *
-     * @return string 
-     */
-    public function getPerson()
-    {
-        return $this->person;
-    }
-
-    /**
-     * Set role
-     *
-     * @param string $role
-     * @return CompanyMembership
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return string 
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**
@@ -220,4 +151,81 @@ class CompanyMembership
     {
         return $this->holidaysRemaining;
     }
+
+    /**
+     * Set company
+     *
+     * @param \Application\CrmBundle\Entity\Company $company
+     * @return CompanyMembership
+     */
+    public function setCompany(\Application\CrmBundle\Entity\Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \Application\CrmBundle\Entity\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * Set person
+     *
+     * @param \Application\CrmBundle\Entity\Person $person
+     * @return CompanyMembership
+     */
+    public function setPerson(\Application\CrmBundle\Entity\Person $person = null)
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    /**
+     * Get person
+     *
+     * @return \Application\CrmBundle\Entity\Person 
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    function __toString()
+    {
+        return $this->getCompany() && $this->getPerson()
+            ? sprintf('%s - %s', $this->getCompany(), $this->getPerson())
+            : 'new';
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param string $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
+
 }

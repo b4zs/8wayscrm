@@ -8,24 +8,30 @@ Application\CrmBundle\Entity\CompanyMembership:
             generator:
                 strategy: AUTO
     fields:
-        company:
-            type: string
-            length: 255
-        person:
-            type: string
-            length: 255
         role:
             type: string
             length: 255
+            nullable: true
         startDate:
-            type: datetime
+            type: date
+            nullable: true
         endDate:
-            type: string
-            length: 255
+            type: date
+            nullable: true
         workPermit:
             type: string
             length: 255
+            nullable: true
         holidaysRemaining:
             type: string
             length: 255
+            nullable: true
+    manyToOne:
+        company:
+            targetEntity: Application\CrmBundle\Entity\Company
+            inversedBy: memberships
+        person:
+            targetEntity: Application\CrmBundle\Entity\Person
+            inversedBy: companyMemberships
+            cascade: [persist]
     lifecycleCallbacks: {  }

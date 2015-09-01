@@ -20,7 +20,7 @@ class Company
     private $name;
 
     /**
-     * @var string
+     * @var ContactInformation
      */
     private $mainContactInformation;
 
@@ -30,20 +30,30 @@ class Company
     private $sectorOfActivity;
 
     /**
-     * @var string
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $websites;
+    private $memberships;
 
     /**
-     * @var string
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $offices;
 
     /**
-     * @var string
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $memberships;
+    private $websites;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->memberships = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->offices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->websites = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->mainContactInformation = new ContactInformation();
+    }
 
     /**
      * Get id
@@ -125,45 +135,69 @@ class Company
     }
 
     /**
-     * Set websites
+     * Add memberships
      *
-     * @param string $websites
+     * @param \Application\CrmBundle\Entity\CompanyMembership $memberships
      * @return Company
      */
-    public function setWebsites($websites)
+    public function addMembership(\Application\CrmBundle\Entity\CompanyMembership $memberships)
     {
-        $this->websites = $websites;
+        $memberships->setCompany($this);
+        $this->memberships[] = $memberships;
 
         return $this;
     }
 
     /**
-     * Get websites
+     * Remove memberships
      *
-     * @return string 
+     * @param \Application\CrmBundle\Entity\CompanyMembership $memberships
      */
-    public function getWebsites()
+    public function removeMembership(\Application\CrmBundle\Entity\CompanyMembership $memberships)
     {
-        return $this->websites;
+        $this->memberships->removeElement($memberships);
+        $memberships->setCompany(null);
     }
 
     /**
-     * Set offices
+     * Get memberships
      *
-     * @param string $offices
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMemberships()
+    {
+        return $this->memberships;
+    }
+
+    /**
+     * Add offices
+     *
+     * @param \Application\CrmBundle\Entity\Office $offices
      * @return Company
      */
-    public function setOffices($offices)
+    public function addOffice(\Application\CrmBundle\Entity\Office $offices)
     {
-        $this->offices = $offices;
+        $this->offices[] = $offices;
+        $offices->setCompany($this);
 
         return $this;
+    }
+
+    /**
+     * Remove offices
+     *
+     * @param \Application\CrmBundle\Entity\Office $offices
+     */
+    public function removeOffice(\Application\CrmBundle\Entity\Office $offices)
+    {
+        $this->offices->removeElement($offices);
+        $offices->setCompany(null);
     }
 
     /**
      * Get offices
      *
-     * @return string 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getOffices()
     {
@@ -171,25 +205,48 @@ class Company
     }
 
     /**
-     * Set memberships
+     * Add websites
      *
-     * @param string $memberships
+     * @param \Application\CrmBundle\Entity\Website $websites
      * @return Company
      */
-    public function setMemberships($memberships)
+    public function addWebsite(\Application\CrmBundle\Entity\Website $websites)
     {
-        $this->memberships = $memberships;
+        $this->websites[] = $websites;
 
         return $this;
     }
 
     /**
-     * Get memberships
+     * Remove websites
      *
-     * @return string 
+     * @param \Application\CrmBundle\Entity\Website $websites
      */
-    public function getMemberships()
+    public function removeWebsite(\Application\CrmBundle\Entity\Website $websites)
     {
-        return $this->memberships;
+        $this->websites->removeElement($websites);
     }
+
+    /**
+     * Get websites
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWebsites()
+    {
+        return $this->websites;
+    }
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    function __toString()
+    {
+        return $this->getName();
+    }
+
+
 }

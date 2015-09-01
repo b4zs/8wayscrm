@@ -13,7 +13,6 @@ class ContactInformation
      * @var integer
      */
     private $id;
-
     /**
      * @var string
      */

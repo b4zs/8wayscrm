@@ -8,11 +8,15 @@ Application\CrmBundle\Entity\Office:
             generator:
                 strategy: AUTO
     fields:
+        name:
+            type: string
+            length: 255
+            nullable: true
+    manyToOne:
         company:
-            type: string
-            length: 255
-            column: Office
+            targetEntity: Application\CrmBundle\Entity\Company
+            inversedBy: offices
         address:
-            type: string
-            length: 255
+            targetEntity: Application\CrmBundle\Entity\Address
+            cascade: [persist]
     lifecycleCallbacks: {  }

@@ -7,14 +7,20 @@ Application\CrmBundle\Entity\Person:
             id: true
             generator:
                 strategy: AUTO
-    fields:
+    manyToOne:
         personalData:
-            type: string
-            length: 255
+            targetEntity: Application\CrmBundle\Entity\PersonalData
+            cascade: [all]
         contactInformation:
-            type: string
-            length: 255
+            targetEntity: Application\CrmBundle\Entity\ContactInformation
+            cascade: [all]
+    oneToMany:
         companyMemberships:
-            type: string
-            length: 255
+            targetEntity: Application\CrmBundle\Entity\CompanyMembership
+            mappedBy: person
+            cascade: [all]
+        companyMemberships:
+            targetEntity: Application\CrmBundle\Entity\ProjectMembership
+            mappedBy: person
+            cascade: [all]
     lifecycleCallbacks: {  }

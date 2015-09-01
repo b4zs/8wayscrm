@@ -1,12 +1,16 @@
 <?php
 
+use Application\MediaBundle\ApplicationMediaBundle;
+use Application\UserBundle\ApplicationUserBundle;
 use FOS\RestBundle\FOSRestBundle;
+use FOS\UserBundle\FOSUserBundle;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
 use Sonata\AdminBundle\SonataAdminBundle;
 use Sonata\BlockBundle\SonataBlockBundle;
 use Sonata\CoreBundle\SonataCoreBundle;
 use Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle;
+use Sonata\UserBundle\SonataUserBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -31,6 +35,20 @@ class AppKernel extends Kernel
 	        new SonataBlockBundle(),
 	        new SonataDoctrineORMAdminBundle(),
             new Application\CrmBundle\ApplicationCrmBundle(),
+
+            ///media
+            // ...
+            new Sonata\MediaBundle\SonataMediaBundle(),
+            new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
+            new Sonata\IntlBundle\SonataIntlBundle(),
+
+            new ApplicationMediaBundle(),
+
+            new FOSUserBundle(),
+            new SonataUserBundle(),
+            new ApplicationUserBundle(),
+
+            //You need to add this dependency to make media functional
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

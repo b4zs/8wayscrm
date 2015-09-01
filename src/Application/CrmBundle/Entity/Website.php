@@ -13,7 +13,6 @@ class Website
      * @var integer
      */
     private $id;
-
     /**
      * @var string
      */

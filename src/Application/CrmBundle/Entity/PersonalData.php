@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Entity;
 
+use Application\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,9 +41,9 @@ class PersonalData
     private $nationality;
 
     /**
-     * @var integer
+     * @var \Application\MediaBundle\Entity\Media
      */
-    private $avatarId;
+    private $avatar;
 
 
     /**
@@ -171,25 +172,38 @@ class PersonalData
     }
 
     /**
-     * Set avatarId
+     * Set avatar
      *
-     * @param integer $avatarId
+     * @param \Application\MediaBundle\Entity\Media $avatar
      * @return PersonalData
      */
-    public function setAvatarId($avatarId)
+    public function setAvatar(\Application\MediaBundle\Entity\Media $avatar = null)
     {
-        $this->avatarId = $avatarId;
+        $this->avatar = $avatar;
 
         return $this;
     }
 
     /**
-     * Get avatarId
+     * Get avatar
      *
-     * @return integer 
+     * @return \Application\MediaBundle\Entity\Media 
      */
-    public function getAvatarId()
+    public function getAvatar()
     {
-        return $this->avatarId;
+        return $this->avatar;
     }
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    function __toString()
+    {
+        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
+    }
+
+
 }

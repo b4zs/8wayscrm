@@ -17,12 +17,22 @@ class Office
     /**
      * @var string
      */
+    private $name;
+
+    /**
+     * @var \Application\CrmBundle\Entity\Company
+     */
     private $company;
 
     /**
-     * @var string
+     * @var \Application\CrmBundle\Entity\Address
      */
     private $address;
+
+    function __construct()
+    {
+        $this->address = new Address();
+    }
 
 
     /**
@@ -38,21 +48,36 @@ class Office
     /**
      * @return string
      */
-    public function getAddress()
+    public function getName()
     {
-        return $this->address;
+        return $this->name;
     }
 
     /**
-     * @param string $address
+     * @param string $name
      */
-    public function setAddress($address)
+    public function setName($name)
     {
-        $this->address = $address;
+        $this->name = $name;
     }
 
     /**
-     * @return string
+     * Set company
+     *
+     * @param \Application\CrmBundle\Entity\Office $company
+     * @return Office
+     */
+    public function setCompany(Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \Application\CrmBundle\Entity\Company
      */
     public function getCompany()
     {
@@ -60,11 +85,39 @@ class Office
     }
 
     /**
-     * @param string $company
+     * Set address
+     *
+     * @param \Application\CrmBundle\Entity\Address $address
+     * @return Office
      */
-    public function setCompany($company)
+    public function setAddress(\Application\CrmBundle\Entity\Address $address = null)
     {
-        $this->company = $company;
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return \Application\CrmBundle\Entity\Address 
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    function __toString()
+    {
+        return $this->getId()
+            ? ($this->getCompany() ? $this->getCompany() .' - ' : '') . $this->getName()
+            : 'new';
     }
 
 

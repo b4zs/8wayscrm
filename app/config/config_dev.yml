@@ -11,6 +11,10 @@ web_profiler:
     toolbar: true
     intercept_redirects: false
 
+#doctrine:
+#    orm:
+#        metadata_cache_driver: { type: service, id: doctrine_metadata_cache }
+
 monolog:
     handlers:
         main:

@@ -11,19 +11,33 @@ Application\CrmBundle\Entity\Company:
         name:
             type: string
             length: 255
-        mainContactInformation:
+            nullable: true
             type: string
             length: 255
+            nullable: true
         sectorOfActivity:
             type: string
             length: 255
-        websites:
-            type: string
-            length: 255
-        offices:
-            type: string
-            length: 255
+            nullable: true
+    manyToOne:
+        mainContactInformation:
+            targetEntity: Application\CrmBundle\Entity\ContactInformation
+            cascade: [all]
+    oneToMany:
         memberships:
-            type: string
-            length: 255
+            targetEntity: Application\CrmBundle\Entity\CompanyMembership
+            mappedBy: company
+            cascade: [all]
+            orphanRemoval: true
+        offices:
+            targetEntity: Application\CrmBundle\Entity\Office
+            mappedBy: company
+            cascade: [all]
+            orphanRemoval: true
+    manyToMany:
+        websites:
+            targetEntity: Application\CrmBundle\Entity\Website
+            cascade: [all]
+            orphanRemoval: true
+
     lifecycleCallbacks: {  }

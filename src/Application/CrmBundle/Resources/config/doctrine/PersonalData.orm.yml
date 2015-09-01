@@ -11,17 +11,23 @@ Application\CrmBundle\Entity\PersonalData:
         firstName:
             type: string
             length: 255
+            nullable: true
         lastName:
             type: string
             length: 255
+            nullable: true
         dateOfBirth:
             type: datetime
+            nullable: true
         gender:
             type: string
             length: '2'
+            nullable: true
         nationality:
             type: string
             length: '2'
-        avatarId:
-            type: integer
+            nullable: true
+    manyToOne:
+        avatar:
+            targetEntity: Application\MediaBundle\Entity\Media
     lifecycleCallbacks: {  }

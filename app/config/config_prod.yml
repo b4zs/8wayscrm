@@ -7,11 +7,12 @@ imports:
 #    serializer:
 #        cache: serializer.mapping.cache.apc
 
-#doctrine:
-#    orm:
-#        metadata_cache_driver: apc
-#        result_cache_driver: apc
-#        query_cache_driver: apc
+doctrine:
+    orm:
+        metadata_cache_driver:  { type: service, id: doctrine_metadata_cache }
+        result_cache_driver:    { type: service, id: doctrine_result_cache }
+        query_cache_driver:    { type: service, id: doctrine_result_cache }
+
 
 monolog:
     handlers:

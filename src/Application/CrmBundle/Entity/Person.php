@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,22 +14,37 @@ class Person
      * @var integer
      */
     private $id;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $companyMemberships;
 
     /**
-     * @var string
+     * @var \Application\CrmBundle\Entity\PersonalData
      */
     private $personalData;
 
     /**
-     * @var string
+     * @var \Application\CrmBundle\Entity\ContactInformation
      */
     private $contactInformation;
 
     /**
-     * @var string
+     * @var Collection
      */
-    private $companyMemberships;
+    private $projectMemberships;
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->personalData = new PersonalData();
+        $this->contactInformation = new ContactInformation();
+        $this->companyMemberships = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->projectMemberships = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -41,12 +57,45 @@ class Person
     }
 
     /**
-     * Set personalData
+     * Add companyMemberships
      *
-     * @param string $personalData
+     * @param \Application\CrmBundle\Entity\CompanyMembership $companyMemberships
      * @return Person
      */
-    public function setPersonalData($personalData)
+    public function addCompanyMembership(\Application\CrmBundle\Entity\CompanyMembership $companyMemberships)
+    {
+        $this->companyMemberships[] = $companyMemberships;
+
+        return $this;
+    }
+
+    /**
+     * Remove companyMemberships
+     *
+     * @param \Application\CrmBundle\Entity\CompanyMembership $companyMemberships
+     */
+    public function removeCompanyMembership(\Application\CrmBundle\Entity\CompanyMembership $companyMemberships)
+    {
+        $this->companyMemberships->removeElement($companyMemberships);
+    }
+
+    /**
+     * Get companyMemberships
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCompanyMemberships()
+    {
+        return $this->companyMemberships;
+    }
+
+    /**
+     * Set personalData
+     *
+     * @param \Application\CrmBundle\Entity\PersonalData $personalData
+     * @return Person
+     */
+    public function setPersonalData(\Application\CrmBundle\Entity\PersonalData $personalData = null)
     {
         $this->personalData = $personalData;
 
@@ -56,7 +105,7 @@ class Person
     /**
      * Get personalData
      *
-     * @return string 
+     * @return \Application\CrmBundle\Entity\PersonalData 
      */
     public function getPersonalData()
     {
@@ -66,10 +115,10 @@ class Person
     /**
      * Set contactInformation
      *
-     * @param string $contactInformation
+     * @param \Application\CrmBundle\Entity\ContactInformation $contactInformation
      * @return Person
      */
-    public function setContactInformation($contactInformation)
+    public function setContactInformation(\Application\CrmBundle\Entity\ContactInformation $contactInformation = null)
     {
         $this->contactInformation = $contactInformation;
 
@@ -79,33 +128,16 @@ class Person
     /**
      * Get contactInformation
      *
-     * @return string 
+     * @return \Application\CrmBundle\Entity\ContactInformation 
      */
     public function getContactInformation()
     {
         return $this->contactInformation;
     }
 
-    /**
-     * Set companyMemberships
-     *
-     * @param string $companyMemberships
-     * @return Person
-     */
-    public function setCompanyMemberships($companyMemberships)
+    function __toString()
     {
-        $this->companyMemberships = $companyMemberships;
-
-        return $this;
+        return $this->getPersonalData()->__toString();
     }
 
-    /**
-     * Get companyMemberships
-     *
-     * @return string 
-     */
-    public function getCompanyMemberships()
-    {
-        return $this->companyMemberships;
-    }
 }
