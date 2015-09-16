@@ -1,4 +1,4 @@
-/web/bundles/
+/web/bundles/*
 /web/themes/
 /web/sitemap*.xml
 /app/bootstrap.php.cache
@@ -13,7 +13,6 @@
 /vendor/
 /bin/
 /composer.phar
-/web/bundles
 /web/uploads
 /web/css
 /web/js
