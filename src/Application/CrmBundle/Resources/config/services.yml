@@ -9,7 +9,7 @@ services:
         class: Application\CrmBundle\Admin\PersonAdmin
         arguments: [~, Application\CrmBundle\Entity\Person, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: CRM, label: Person}
+            - {name: sonata.admin, manager_type: orm, group: CRM, label: People }
 
     application_crm.admin.contact_information:
         class: Application\CrmBundle\Admin\ContactInformationAdmin
@@ -27,7 +27,7 @@ services:
         class: Application\CrmBundle\Admin\CompanyAdmin
         arguments: [~, Application\CrmBundle\Entity\Company, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: CRM, label: Company}
+            - {name: sonata.admin, manager_type: orm, group: CRM, label: Companies}
 
     application_crm.admin.office:
         class: Application\CrmBundle\Admin\OfficeAdmin
@@ -45,16 +45,23 @@ services:
         class: Application\CrmBundle\Admin\ClientAdmin
         arguments: [~, Application\CrmBundle\Entity\Client, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: CRM, label: Lead }
+            - {name: sonata.admin, manager_type: orm, group: Leads, label: All }
 
     application_crm.admin.project:
         class: Application\CrmBundle\Admin\ProjectAdmin
         arguments: [~, Application\CrmBundle\Entity\Project, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: CRM, label: Project}
+            - {name: sonata.admin, manager_type: orm, group: Projects, label: All }
 
     application_crm.admin.project_membership:
         class: Application\CrmBundle\Admin\ProjectMembershipAdmin
         arguments: [~, Application\CrmBundle\Entity\ProjectMembership, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: system_tables, label: ProjectMembership, show_in_dashboard: false }
+
+    application_crm.event_listener.menu.admin:
+        class: Application\CrmBundle\EventListener\AdminMenuBuildListener
+        calls:
+            - [setContainer, [@service_container]]
+        tags:
+            - { name: kernel.event_listener, event: menu.build.sonata_admin_sidebar, method: onAdminMenuBuild }

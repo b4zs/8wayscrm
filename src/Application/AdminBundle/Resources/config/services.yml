@@ -1,0 +1,10 @@
+services:
+     application.admin.menu.provider.sonata_admin:
+          class: Application\AdminBundle\Menu\SonataAdminMenuProvider
+          arguments:
+              - @knp_menu.factory
+              - @sonata.admin.pool
+          calls:
+              - [setContainer, [@service_container]]
+          tags:
+              - { name: knp_menu.provider }

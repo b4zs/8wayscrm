@@ -10,7 +10,7 @@ _sonata_admin:
 
 sonata_user:
     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
-    prefix: /admin
+    prefix: /
 
 app_index:
     path: /
