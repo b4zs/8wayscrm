@@ -45,13 +45,13 @@ services:
         class: Application\CrmBundle\Admin\ClientAdmin
         arguments: [~, Application\CrmBundle\Entity\Client, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Leads, label: All }
+            - {name: sonata.admin, manager_type: orm, group: Leads, label: All leads }
 
     application_crm.admin.project:
         class: Application\CrmBundle\Admin\ProjectAdmin
         arguments: [~, Application\CrmBundle\Entity\Project, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Projects, label: All }
+            - {name: sonata.admin, manager_type: orm, group: Projects, label: All projects }
 
     application_crm.admin.project_membership:
         class: Application\CrmBundle\Admin\ProjectMembershipAdmin

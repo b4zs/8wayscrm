@@ -22,7 +22,6 @@ class PersonAdmin extends Admin
             ->add('personalData.firstName')
             ->add('personalData.lastName')
         ;
-
     }
 
     /**
@@ -58,6 +57,10 @@ class PersonAdmin extends Admin
             'delete'    => false,
             'btn_add'   => false,
             'label'     => false,
+        ));
+
+        $formMapper->add('user', 'sonata_type_model_list', array(
+            'label'     => 'User account',
         ));
 
         $formMapper->end();

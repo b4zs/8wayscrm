@@ -19,9 +19,9 @@ class ProjectAdmin extends Admin
         $datagridMapper
             ->add('id')
             ->add('name')
-            ->add('createdAt')
-            ->add('description')
-            ->add('status')
+//            ->add('createdAt')
+//            ->add('description')
+            ->add('status', null, array('label' => ' '), 'hidden')
         ;
     }
 

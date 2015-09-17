@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Entity;
 
+use Application\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -33,6 +34,11 @@ class Person
      * @var Collection
      */
     private $projectMemberships;
+
+    /**
+     * @var User
+     */
+    private $user;
 
 
     /**
@@ -138,6 +144,22 @@ class Person
     function __toString()
     {
         return $this->getPersonalData()->__toString();
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
 }

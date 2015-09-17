@@ -18,10 +18,10 @@ class ClientAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('type')
-            ->add('financialInformation')
-            ->add('status')
-            ->add('createdAt')
+//            ->add('type')
+//            ->add('financialInformation')
+            ->add('status', null, array('label' => ' '), 'hidden')
+//            ->add('createdAt')
         ;
     }
 

@@ -25,31 +25,7 @@ class AdminMenuBuildListener extends ContainerAware
 		$this->modifyProjectsMenu($menu);
 		$this->modifyLeadsMenu($menu);
 
-		$request = $this->container->get('request');
-		$activeAdminCode = $request->get('_sonata_admin');
-		if ($activeAdminCode) {
-			$activeAdmin = $this->container->get('sonata.admin.pool')->getAdminByAdminCode($activeAdminCode);
-			$activeAdmin->setRequest($request);
-			$filterParameters = $activeAdmin->getFilterParameters();
-			$pa = new PropertyAccessor();
-			$filterStatus = $pa->getValue($filterParameters, '[status][value]');
-			$subjectStatus = null;
-
-			if ($subject = $activeAdmin->getSubject()) {
-				$subjectStatus = method_exists($subject, 'getStatus') ? $subject->getStatus() : null;
-			}
-
-			$status = $subjectStatus ? $subjectStatus : $filterStatus;
-//			@var_dump($this->createdMenuItems[$activeAdminCode.'#'.$status]);
-			/** @var MenuItem $activeItem */
-			if ($status && $activeItem = $this->createdMenuItems[$activeAdminCode.'#'.$status]) {
-				$activeItem->setCurrent(true);
-			}
-		}
-
-		$this->container->get('event_dispatcher')->addListener('kernel.view', function(){
-			die('adsf');
-		});
+		$this->markActiveMenuItem();
 	}
 
 	/**
@@ -102,6 +78,31 @@ class AdminMenuBuildListener extends ContainerAware
 			));
 
 			$mainMenuItem->addChild($statusItem);
+		}
+	}
+
+	protected function markActiveMenuItem()
+	{
+		$request = $this->container->get('request');
+		$activeAdminCode = $request->get('_sonata_admin');
+		if ($activeAdminCode) {
+			$activeAdmin = $this->container->get('sonata.admin.pool')->getAdminByAdminCode($activeAdminCode);
+			$activeAdmin->setRequest($request);
+			$filterParameters = $activeAdmin->getFilterParameters();
+			$pa = new PropertyAccessor();
+			$filterStatus = $pa->getValue($filterParameters, '[status][value]');
+			$subjectStatus = null;
+
+			if ($subject = $activeAdmin->getSubject()) {
+				$subjectStatus = method_exists($subject, 'getStatus') ? $subject->getStatus() : null;
+			}
+
+			$status = $subjectStatus ? $subjectStatus : $filterStatus;
+
+			/** @var MenuItem $activeItem */
+			if ($status && $activeItem = $this->createdMenuItems[$activeAdminCode . '#' . $status]) {
+				$activeItem->setCurrent(true);
+			}
 		}
 	}
 
