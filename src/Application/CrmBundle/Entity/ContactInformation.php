@@ -43,7 +43,6 @@ class ContactInformation
      */
     private $facebookId;
 
-
     /**
      * Get id
      *
@@ -190,5 +189,21 @@ class ContactInformation
     public function getFacebookId()
     {
         return $this->facebookId;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \DateTime $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Entity;
 
+use Application\CrmBundle\Enum\ProjectStatus;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,7 +32,7 @@ class Project
     /**
      * @var string
      */
-    private $status;
+    private $status = ProjectStatus::PENDING;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -39,9 +40,14 @@ class Project
     private $memberships;
 
     /**
-     * @var \Application\CrmBundle\Entity\Client
+     * @var \Application\CrmBundle\Entity\Lead
      */
-    private $client;
+    private $lead;
+
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
 
     /**
      * Constructor
@@ -212,38 +218,37 @@ class Project
         return $this->memberships;
     }
 
-    /**
-     * Set client
-     *
-     * @param \Application\CrmBundle\Entity\Client $client
-     * @return Project
-     */
-    public function setClient(\Application\CrmBundle\Entity\Client $client = null)
+    public function setLead(\Application\CrmBundle\Entity\Lead $lead = null)
     {
-        $this->client = $client;
+        $this->lead = $lead;
 
         return $this;
     }
 
-    /**
-     * Get client
-     *
-     * @return \Application\CrmBundle\Entity\Client 
-     */
-    public function getClient()
+    public function getLead()
     {
-        return $this->client;
+        return $this->lead;
+    }
+
+    function __toString()
+    {
+        return $this->getLead() . ' - ' . $this->getName();
     }
 
     /**
-     * The __toString method allows a class to decide how it will react when it is converted to a string.
-     *
-     * @return string
-     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     * @return \DateTime
      */
-    function __toString()
+    public function getDeletedAt()
     {
-        return $this->getClient() . ' - ' . $this->getName();
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \DateTime $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
     }
 
 

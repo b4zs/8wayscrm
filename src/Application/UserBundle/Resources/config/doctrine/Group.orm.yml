@@ -1,0 +1,9 @@
+Application\UserBundle\Entity\Group:
+    table: fos_user_group
+    type: entity
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO

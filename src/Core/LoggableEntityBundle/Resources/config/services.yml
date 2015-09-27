@@ -1,0 +1,20 @@
+services:
+
+  core.loggable_entity.admin.extension:
+        class: Core\LoggableEntityBundle\Admin\Extension\LoggableEntityExtension
+        tags:
+            - { name: sonata.admin.extension, global: true }
+
+
+  gedmo.listener.loggable:
+      class: Core\LoggableEntityBundle\EventListener\LoggableListener
+      tags:
+          - { name: doctrine.event_subscriber, connection: default }
+          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+      calls:
+          - [setTokenStorage, [@security.token_storage]]
+
+  core.loggable.twig.extension:
+      class: Core\LoggableEntityBundle\Twig\LoggableTwigExtension
+      tags:
+          - { name: twig.extension }

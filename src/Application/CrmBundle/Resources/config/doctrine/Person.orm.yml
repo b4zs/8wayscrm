@@ -1,5 +1,9 @@
 Application\CrmBundle\Entity\Person:
     type: entity
+    inheritanceType: SINGLE_TABLE
+    discriminatorColumn:
+        name: type
+        type: string
     table: null
     id:
         id:
@@ -7,6 +11,15 @@ Application\CrmBundle\Entity\Person:
             id: true
             generator:
                 strategy: AUTO
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
+            time_aware: false
+    fields:
+        deletedAt:
+            type: datetime
+            nullable: true
+
     manyToOne:
         personalData:
             targetEntity: Application\CrmBundle\Entity\PersonalData
@@ -14,15 +27,17 @@ Application\CrmBundle\Entity\Person:
         contactInformation:
             targetEntity: Application\CrmBundle\Entity\ContactInformation
             cascade: [all]
+    oneToOne:
         user:
             targetEntity: Application\UserBundle\Entity\User
+            mappedBy: person
             cascade: [persist]
     oneToMany:
         companyMemberships:
             targetEntity: Application\CrmBundle\Entity\CompanyMembership
             mappedBy: person
             cascade: [all]
-        companyMemberships:
+        projectMemberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership
             mappedBy: person
             cascade: [all]

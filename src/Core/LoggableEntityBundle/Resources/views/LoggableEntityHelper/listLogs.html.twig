@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+	{#<div class="panel-heading">History</div>#}
+	{#<div class="panel-body">#}
+		{##}
+	{#</div>#}
+	<ul class="list-group">
+		{% for index, entry in logEntries %}
+		<li class="list-group-item" style="padding-top: 0px;" id="update-{{ 1+index }}">
+			<div class="row" style="border-bottom: 1px solid #ddd; padding-bottom: 3px; color: #333;background-color: #f5f5f5; border-color: #ddd;">
+				<div class="col-md-4"><a href="#update-{{ 1+index }}">#{{ 1+index }}</a> - <small>{{ entry.customAction ? entry.customAction : entry.action }}</small></div>
+				<div class="col-md-8 text-right">{{ entry.username }} - {{ entry.loggedAt|localizeddate() }}</div>
+			</div>
+			<div class="row">
+				<div class="col-md-7" title="comment">
+					<p>{{ entry.comment|nl2br }}</p>
+				</div>
+				<div class="col-md-5" title="changeset">
+					<dl class="dl dl-horizontal" style="margin-bottom: 0px!important;">
+						{% for field, value in entry.data %}
+							<dt>{{ field }}</dt>
+							<dd>
+							{% if is_string(value) %}
+							{{ value|nl2br }}
+							{% else %}
+							{{ value|json_encode }}
+							{% endif %}
+							</dd>
+						{% endfor %}
+					</dl>
+				</div>
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+</div>

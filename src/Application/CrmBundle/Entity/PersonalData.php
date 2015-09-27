@@ -45,7 +45,6 @@ class PersonalData
      */
     private $avatar;
 
-
     /**
      * Get id
      *
@@ -204,6 +203,4 @@ class PersonalData
     {
         return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
     }
-
-
 }

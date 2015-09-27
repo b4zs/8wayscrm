@@ -5,6 +5,7 @@ use Application\MediaBundle\ApplicationMediaBundle;
 use Application\UserBundle\ApplicationUserBundle;
 use FOS\RestBundle\FOSRestBundle;
 use FOS\UserBundle\FOSUserBundle;
+use Gedmo\DoctrineExtensions;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
 use Sonata\AdminBundle\SonataAdminBundle;
@@ -28,6 +29,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 	        new KnpMenuBundle(),
             new JMSSerializerBundle(),
             new FOSRestBundle(),
@@ -50,6 +52,8 @@ class AppKernel extends Kernel
             new ApplicationUserBundle(),
 
             new ApplicationAdminBundle(),
+
+            new Core\LoggableEntityBundle\CoreLoggableEntityBundle(),
 
             //You need to add this dependency to make media functional
         );

@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs col-md-12" >
+	{% for type, title in types %}
+		<li class="col-md-4 text-center">
+			<a href="?type={{ type }}" class="col-md-12">
+				{{ title }}
+				<i class="fa fa-angle-double-right"></i>
+			</a>
+
+		</li>
+	{% endfor %}
+</ul>

@@ -7,6 +7,10 @@ Application\CrmBundle\Entity\Company:
             id: true
             generator:
                 strategy: AUTO
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
+            time_aware: false
     fields:
         name:
             type: string
@@ -19,6 +23,9 @@ Application\CrmBundle\Entity\Company:
             type: string
             length: 255
             nullable: true
+        deletedAt:
+            type: datetime
+            nullable: true
     manyToOne:
         mainContactInformation:
             targetEntity: Application\CrmBundle\Entity\ContactInformation
@@ -29,11 +36,11 @@ Application\CrmBundle\Entity\Company:
             mappedBy: company
             cascade: [all]
             orphanRemoval: true
-        offices:
-            targetEntity: Application\CrmBundle\Entity\Office
-            mappedBy: company
+        leads:
+            targetEntity: Application\CrmBundle\Entity\Lead
             cascade: [all]
             orphanRemoval: true
+            mappedBy: company
     manyToMany:
         websites:
             targetEntity: Application\CrmBundle\Entity\Website

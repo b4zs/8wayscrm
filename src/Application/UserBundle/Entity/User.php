@@ -11,6 +11,7 @@
 
 namespace Application\UserBundle\Entity;
 
+use Application\CrmBundle\Entity\Person;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 
 /**
@@ -29,6 +30,16 @@ class User extends BaseUser
     protected $id;
 
     /**
+     * @var Person
+     */
+    protected $person;
+
+    /**
+     * @var integer
+     */
+    protected $redmineUserId;
+
+    /**
      * Get id
      *
      * @return integer $id
@@ -36,5 +47,21 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Person
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param Person $person
+     */
+    public function setPerson($person)
+    {
+        $this->person = $person;
     }
 }

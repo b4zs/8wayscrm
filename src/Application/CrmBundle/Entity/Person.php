@@ -40,6 +40,15 @@ class Person
      */
     private $user;
 
+    /**
+     * @var string
+     */
+    private $type;
+
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
 
     /**
      * Constructor
@@ -48,6 +57,7 @@ class Person
     {
         $this->personalData = new PersonalData();
         $this->contactInformation = new ContactInformation();
+
         $this->companyMemberships = new \Doctrine\Common\Collections\ArrayCollection();
         $this->projectMemberships = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -160,6 +170,22 @@ class Person
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \DateTime $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
     }
 
 }

@@ -1,0 +1,18 @@
+Application\UserBundle\Entity\User:
+    table: fos_user_user
+    type: entity
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        redmineUserId:
+            column: redmine_user_id
+            type: integer
+            nullable: true
+    oneToOne:
+        person:
+            targetEntity: Application\CrmBundle\Entity\TeamMember
+            inversedBy: user

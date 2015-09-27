@@ -52,31 +52,42 @@ class PersonalDataAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $parentAdmin = $this->getParentAdmin($formMapper);
+        $advancedFields = $parentAdmin !== 'lead';
+
 	    $formMapper
 		    ->add('firstName', 'text', array(
 			    'required'  => false,
 		    ))
 		    ->add('lastName', 'text', array(
 			    'required'  => false,
-		    ))
-		    ->add('dateOfBirth', 'date', array(
-			    'widget'    => 'single_text',
-			    'required'  => false,
-		    ))
-		    ->add('gender', 'choice', array(
-			    'required'  => false,
-			    'choices'   => array(
-				    'm' => 'Male',
-				    'f' => 'Female',
-			    ),
-		    ))
+		    ));
+
+        if ($advancedFields) {
+            $formMapper->add('gender', 'choice', array(
+                'required'  => false,
+                'choices'   => array(
+                    'm' => 'Male',
+                    'f' => 'Female',
+                ),
+            ));
+            $formMapper->add('dateOfBirth', 'date', array(
+                'widget'    => 'single_text',
+                'required'  => false,
+            ));
+        };
+
+        $formMapper
 		    ->add('nationality', 'country', array(
 			    'required'  => false,
-		    ))
-		    ->add('avatar', 'sonata_type_model_list', array(
-			    'required'  => false,
-		    ))
-        ;
+		    ));
+
+        if ($advancedFields) {
+            $formMapper
+                ->add('avatar', 'sonata_type_model_list', array(
+                    'required'  => false,
+                ));
+        }
     }
 
     /**
@@ -92,5 +103,19 @@ class PersonalDataAdmin extends Admin
             ->add('gender')
             ->add('nationality')
         ;
+    }
+
+    protected function getParentAdmin(FormMapper $formMapper)
+    {
+        $options = $formMapper->getFormBuilder()->getFormConfig()->getOptions();
+        if (isset($options['sonata_field_description'])) {
+            $options = $options['sonata_field_description']->getOptions();
+            $linkParameters = isset($options['link_parameters']) ? $options['link_parameters'] : array();
+            $parentAdmin = isset($linkParameters['parent_admin']) ? $linkParameters['parent_admin'] : null;
+        } else {
+            $parentAdmin = null;
+        }
+
+        return $parentAdmin;
     }
 }

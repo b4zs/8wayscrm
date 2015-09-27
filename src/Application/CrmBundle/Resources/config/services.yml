@@ -3,19 +3,39 @@ services:
         class: Application\CrmBundle\Admin\PersonalDataAdmin
         arguments: [~, Application\CrmBundle\Entity\PersonalData, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: system_tables, label: PersonalData, show_in_dashboard: false }
+            - {name: sonata.admin, manager_type: orm, group: system_tables, label: PersonalData  }
 
-    application_crm.admin.person:
-        class: Application\CrmBundle\Admin\PersonAdmin
-        arguments: [~, Application\CrmBundle\Entity\Person, SonataAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: CRM, label: People }
+#    application_crm.admin.person:
+#        class: Application\CrmBundle\Admin\PersonAdmin
+#        arguments: [~, Application\CrmBundle\Entity\Person, SonataAdminBundle:CRUD]
+#        tags:
+#            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: People  }
 
     application_crm.admin.contact_information:
         class: Application\CrmBundle\Admin\ContactInformationAdmin
         arguments: [~, Application\CrmBundle\Entity\ContactInformation, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: system_tables, label: ContactInformation, show_in_dashboard: false }
+
+    application_crm.admin.team_member:
+        class: Application\CrmBundle\Admin\TeamMemberAdmin
+        arguments: [~, Application\CrmBundle\Entity\TeamMember, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Team, icon: group  }
+
+    application_crm.admin.contact_person:
+        class: Application\CrmBundle\Admin\ContactPersonAdmin
+        arguments: [~, Application\CrmBundle\Entity\ContactPerson, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Contact Persons }
+
+
+    application_crm.admin.individual:
+        class: Application\CrmBundle\Admin\IndividualAdmin
+        arguments: [~, Application\CrmBundle\Entity\Individual, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Individuals  }
+
 
     application_crm.admin.address:
         class: Application\CrmBundle\Admin\AddressAdmin
@@ -27,13 +47,7 @@ services:
         class: Application\CrmBundle\Admin\CompanyAdmin
         arguments: [~, Application\CrmBundle\Entity\Company, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: CRM, label: Companies}
-
-    application_crm.admin.office:
-        class: Application\CrmBundle\Admin\OfficeAdmin
-        arguments: [~, Application\CrmBundle\Entity\Office, SonataAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: system_tables, label: Office, show_in_dashboard: false }
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Companies,  show_in_dashboard: true }
 
     application_crm.admin.company_membership:
         class: Application\CrmBundle\Admin\CompanyMembershipAdmin
@@ -41,9 +55,9 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: system_tables, label: CompanyMembership, show_in_dashboard: false }
 
-    application_crm.admin.client:
-        class: Application\CrmBundle\Admin\ClientAdmin
-        arguments: [~, Application\CrmBundle\Entity\Client, SonataAdminBundle:CRUD]
+    application_crm.admin.lead:
+        class: Application\CrmBundle\Admin\LeadAdmin
+        arguments: [~, Application\CrmBundle\Entity\Lead, ApplicationCrmBundle:LeadAdmin]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Leads, label: All leads }
 
@@ -60,7 +74,7 @@ services:
             - {name: sonata.admin, manager_type: orm, group: system_tables, label: ProjectMembership, show_in_dashboard: false }
 
     application_crm.event_listener.menu.admin:
-        class: Application\CrmBundle\EventListener\AdminMenuBuildListener
+        class: Application\CrmBundle\Menu\AdminMenuBuildListener
         calls:
             - [setContainer, [@service_container]]
         tags:

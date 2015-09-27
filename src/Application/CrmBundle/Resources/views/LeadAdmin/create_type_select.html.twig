@@ -1,0 +1,9 @@
+{% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
+
+{% block form %}
+	{% include '@ApplicationCrm/LeadAdmin/type_selector.html.twig' %}
+{% endblock %}
+
+{% block navbar_title %}
+	Create Lead - 1/2 <small>(select type)</small>
+{% endblock %}

@@ -51,17 +51,23 @@ class PersonAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->with('Person', array('class' => 'col-md-6',));
+        $formMapper->with($this->getClassnameLabel(), array('class' => 'col-md-6',));
 
         $formMapper->add('personalData', 'sonata_type_admin', array(
             'delete'    => false,
             'btn_add'   => false,
             'label'     => false,
+        ), array(
+            'link_parameters' => array(
+                'parent_admin' => $this->getParentAdmin($formMapper),
+            )
         ));
 
-        $formMapper->add('user', 'sonata_type_model_list', array(
-            'label'     => 'User account',
-        ));
+        if (null === $this->getParentAdmin($formMapper)) {
+            $formMapper->add('user', 'sonata_type_model_list', array(
+                'label'     => 'User account',
+            ));
+        }
 
         $formMapper->end();
         $formMapper->with('Contact', array('class' => 'col-md-6',));
@@ -69,17 +75,13 @@ class PersonAdmin extends Admin
             'delete'    => false,
             'btn_add'   => false,
             'label'     => false,
+        ), array(
+            'link_parameters' => array(
+                'parent_admin' => $this->getParentAdmin($formMapper),
+            )
         ));
 
-
         $formMapper->end();
-
-        if ('client' === $this->getParentAdmin($formMapper)) {
-            $formMapper->get('personalData')->remove('dateOfBirth');
-            $formMapper->get('personalData')->remove('avatar');
-            $formMapper->get('contactInformation')->remove('skypeId');
-            $formMapper->get('contactInformation')->remove('facebookId');
-        }
     }
 
     /**
@@ -92,9 +94,6 @@ class PersonAdmin extends Admin
         ;
     }
 
-    /**
-     * @return null
-     */
     protected function getParentAdmin(FormMapper $formMapper)
     {
         $options = $formMapper->getFormBuilder()->getFormConfig()->getOptions();

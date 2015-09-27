@@ -1,0 +1,76 @@
+Application\CrmBundle\Entity\Lead:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
+            time_aware: false
+        loggable:
+          logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry
+    fields:
+        type:
+            type: string
+            length: '16'
+            nullable: true
+            gedmo:
+                - versioned
+        financialInformation:
+            type: string
+            length: 255
+            nullable: true
+            gedmo:
+                - versioned
+        status:
+            type: string
+            length: '16'
+            nullable: true
+            gedmo:
+                - versioned
+        createdAt:
+            type: datetime
+        updatedAt:
+            type: datetime
+            nullable: true
+            gedmo:
+                timestampable:
+                    on: update
+        deletedAt:
+            type: datetime
+            nullable: true
+    manyToOne:
+        company:
+            targetEntity: Application\CrmBundle\Entity\Company
+            cascade: [all]
+            inversedBy: leads
+            gedmo:
+                - versioned
+        individual:
+            targetEntity: Application\CrmBundle\Entity\Individual
+            cascade: [all]
+            inversedBy: leads
+            gedmo:
+                - versioned
+        owner:
+            targetEntity: Application\CrmBundle\Entity\TeamMember
+            gedmo:
+                - versioned
+    oneToMany:
+        projects:
+            targetEntity: Application\CrmBundle\Entity\Project
+            mappedBy: lead
+            cascade: [all]
+            gedmo:
+                - versioned
+    manyToMany:
+        contactPersons:
+            targetEntity: Application\CrmBundle\Entity\ContactPerson
+            cascade: [all]
+            gedmo:
+                - versioned
+    lifecycleCallbacks: {  }

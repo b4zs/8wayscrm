@@ -16,5 +16,8 @@ services:
     doctrine_result_cache:
         class: Doctrine\Common\Cache\FilesystemCache
         arguments: ['%kernel.cache_dir%/doctrine/result' ]
-
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
 

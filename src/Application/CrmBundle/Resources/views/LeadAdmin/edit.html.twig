@@ -1,0 +1,12 @@
+
+{% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
+
+{% block navbar_title %}
+	Edit Lead: "{{ object }}" <small>({{ object.type }}, {{ object.status }})</small>
+{% endblock %}
+
+{% block form %}
+	{{ parent() }}
+
+	{{ render(controller('CoreLoggableEntityBundle:LoggableEntityHelper:listLogs', { className: admin.class, id: object.id })) }}
+{% endblock form %}

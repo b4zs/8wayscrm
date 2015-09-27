@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,12 +38,17 @@ class Company
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $offices;
+    private $websites;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $websites;
+    private $leads;
+
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
 
     /**
      * Constructor
@@ -50,9 +56,9 @@ class Company
     public function __construct()
     {
         $this->memberships = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->offices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->websites = new \Doctrine\Common\Collections\ArrayCollection();
         $this->mainContactInformation = new ContactInformation();
+        $this->leads = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -170,41 +176,6 @@ class Company
     }
 
     /**
-     * Add offices
-     *
-     * @param \Application\CrmBundle\Entity\Office $offices
-     * @return Company
-     */
-    public function addOffice(\Application\CrmBundle\Entity\Office $offices)
-    {
-        $this->offices[] = $offices;
-        $offices->setCompany($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove offices
-     *
-     * @param \Application\CrmBundle\Entity\Office $offices
-     */
-    public function removeOffice(\Application\CrmBundle\Entity\Office $offices)
-    {
-        $this->offices->removeElement($offices);
-        $offices->setCompany(null);
-    }
-
-    /**
-     * Get offices
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOffices()
-    {
-        return $this->offices;
-    }
-
-    /**
      * Add websites
      *
      * @param \Application\CrmBundle\Entity\Website $websites
@@ -242,5 +213,49 @@ class Company
         return $this->getName() ? $this->getName() : 'new';
     }
 
+    /**
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
 
+    /**
+     * @param \DateTime $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLeads()
+    {
+        return $this->leads;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\Collection $leads
+     */
+    public function setLeads($leads)
+    {
+        $this->leads = $leads;
+    }
+
+    public function addLead(\Application\CrmBundle\Entity\Lead $lead)
+    {
+        $lead->setCompany($this);
+        $this->websites[] = $lead;
+
+        return $this;
+    }
+
+    public function removeLead(\Application\CrmBundle\Entity\Lead $lead)
+    {
+        $lead->setCompany(null);
+        $this->websites->removeElement($lead);
+    }
 }

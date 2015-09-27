@@ -56,7 +56,7 @@ class CompanyAdmin extends Admin
         ;
         $formMapper->end();
 
-        if ('client' !== $parentAdmin) {
+        if ('lead' !== $parentAdmin) {
             $formMapper->with('Contact', array('class' => 'col-md-6',));
             $formMapper
                 ->add('mainContactInformation', 'sonata_type_admin', array(
@@ -71,20 +71,6 @@ class CompanyAdmin extends Admin
         if (null === $parentAdmin) {
             $formMapper->with('Members', array('class' => 'col-md-12',));
             $formMapper->add('memberships', 'sonata_type_collection', array(
-                'label'         => false,
-                'by_reference'  => false,
-            ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-                'link_parameters' => array(
-                    'parent_admin'  => 'company',
-                ),
-            ));
-            $formMapper->end();
-
-            $formMapper->with('Offices', array('class' => 'col-md-12',));
-
-            $formMapper->add('offices', 'sonata_type_collection', array(
                 'label'         => false,
                 'by_reference'  => false,
             ), array(

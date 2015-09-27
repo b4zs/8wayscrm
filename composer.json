@@ -26,7 +26,9 @@
     "friendsofsymfony/rest": "~1.0",
     "friendsofsymfony/rest-bundle": "~1.7",
     "sonata-project/media-bundle": "~2.3",
-    "sonata-project/user-bundle": "~2.2"
+    "sonata-project/user-bundle": "~2.2",
+    "gedmo/doctrine-extensions": "^2.4",
+    "stof/doctrine-extensions-bundle": "^1.2"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"

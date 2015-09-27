@@ -53,14 +53,17 @@ class ContactInformationAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
-            ->add('companyPhone')
-            ->add('privatePhone')
-            ->add('companyEmail')
-            ->add('privateEmail')
-            ->add('skypeId')
-            ->add('facebookId')
-        ;
+        $parentAdmin = $this->getParentAdmin($formMapper);
+        $advancedFields = $parentAdmin !== 'lead';
+
+        $formMapper->add('companyPhone');
+
+        if ($advancedFields) $formMapper->add('privatePhone');
+        $formMapper->add('companyEmail');
+        if ($advancedFields) $formMapper->add('privateEmail');
+        $formMapper->add('skypeId');
+        if ($advancedFields) $formMapper->add('facebookId');
+
     }
 
     /**
@@ -77,5 +80,19 @@ class ContactInformationAdmin extends Admin
             ->add('skypeId')
             ->add('facebookId')
         ;
+    }
+
+    protected function getParentAdmin(FormMapper $formMapper)
+    {
+        $options = $formMapper->getFormBuilder()->getFormConfig()->getOptions();
+        if (isset($options['sonata_field_description'])) {
+            $options = $options['sonata_field_description']->getOptions();
+            $linkParameters = isset($options['link_parameters']) ? $options['link_parameters'] : array();
+            $parentAdmin = isset($linkParameters['parent_admin']) ? $linkParameters['parent_admin'] : null;
+        } else {
+            $parentAdmin = null;
+        }
+
+        return $parentAdmin;
     }
 }

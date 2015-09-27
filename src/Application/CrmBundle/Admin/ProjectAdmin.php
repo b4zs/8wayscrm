@@ -55,16 +55,18 @@ class ProjectAdmin extends Admin
 
         $formMapper->with('Project', array('class' => 'col-md-6'));
 
-        if ('client' !== $parentAdmin) {
+        if ('lead' !== $parentAdmin) {
             $formMapper->add('client', 'sonata_type_model_list', array(), array());
         }
 
-        $formMapper
-            ->add('name')
-            ->add('status', 'choice', array(
+        $formMapper->add('name');
+
+        if (null === $parentAdmin) {
+            $formMapper->add('status', 'choice', array(
                 'choices' => ProjectStatus::getChoices(),
-            ))
-        ;
+            ));
+        }
+
         $formMapper->end();
 
         $formMapper->with('Info', array('class' => 'col-md-6'));
