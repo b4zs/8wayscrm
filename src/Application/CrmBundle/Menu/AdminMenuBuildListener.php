@@ -123,7 +123,7 @@ class AdminMenuBuildListener extends ContainerAware
 			if (!$createItemAdded) {
 				$addLeadItem = $statusItem->addChild('Create lead');
 				$addLeadItem->setUri($admin->generateUrl('create'));
-				$addLeadItem->setExtra('icon', 'fa fa-user-plus');
+				$addLeadItem->setExtra('icon', 'fa fa-plus');
 				$createItemAdded = true;
 			}
 

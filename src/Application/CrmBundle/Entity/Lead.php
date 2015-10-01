@@ -44,11 +44,6 @@ class Lead implements LogExtraDataAware
     private $company;
 
     /**
-     * @var \Application\CrmBundle\Entity\Individual
-     */
-    private $individual;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $contactPersons;

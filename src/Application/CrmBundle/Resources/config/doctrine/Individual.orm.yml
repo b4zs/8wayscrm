@@ -1,9 +1,0 @@
-Application\CrmBundle\Entity\Individual:
-    type: entity
-    oneToMany:
-        leads:
-            targetEntity: Application\CrmBundle\Entity\Lead
-            cascade: [all]
-            orphanRemoval: true
-            mappedBy: company
-    lifecycleCallbacks: {  }

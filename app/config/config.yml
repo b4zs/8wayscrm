@@ -228,7 +228,7 @@ sonata_user:
         user_group:           user__user_group
 
     impersonating:
-        route:                page_slug
+        route:                sonata_admin_dashboard
         parameters:           { path: / }
 
     google_authenticator:

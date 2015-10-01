@@ -47,8 +47,8 @@
 		{% set item = knp_menu_get('sonata_admin_sidebar') %}
 		<ul class="sidebar-menu">
 			{% for child in item  %}
-				<li class="{% if child.uri and false %}{% else %}treeview{% endif %}{% if child.isCurrent  %} active{% endif %}">
-					<div style="background: #333; padding: 5px; margin-top: 2px;" class="clearfix">
+				<li class="{% if child.uri and false %}{% else %}treeview{% endif %}{% if true or child.isCurrent  %} active{% endif %}">
+					<div style="background: #444; padding: 5px; padding-left: 15px; margin-top: 2px;" class="clearfix">
 						<a href="#" class="btn btn-xs tree-toggle pull-right" oncl-ick="javascript:null;" style="padding: 5px; padding-right: 13px;">
 							<i class="fa pull-right fa-angle-left" style="font-weight: 600;"></i>
 						</a>

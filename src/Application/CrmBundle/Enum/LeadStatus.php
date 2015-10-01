@@ -23,7 +23,7 @@ class LeadStatus
 	{
 		return array(
 			self::PROSPECT => array(
-				'icon' => 'fa fa-tripadvisor',
+				'icon' => 'fa fa-user-plus',
 				'title'=> 'Prospect',
 			),
 			self::WORKING => array(

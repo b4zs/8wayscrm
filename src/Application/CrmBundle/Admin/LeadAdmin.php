@@ -67,7 +67,7 @@ class LeadAdmin extends Admin
     {
         $type = $this->getSubject() ? $this->getSubject()->getType() : null;
 
-        if (LeadType::COMPANY === $type || LeadType::SUPPLIER === $type) {
+        if (LeadType::CLIENT === $type || LeadType::SUPPLIER === $type) {
             $formMapper->with(ucfirst($type) . ' information', array('class' => 'col-md-7',));
 
             $formMapper->add('company', 'sonata_type_admin', array(
@@ -82,24 +82,7 @@ class LeadAdmin extends Admin
             ));
 
             $formMapper->end();
-        } elseif (LeadType::INDIVIDUAL === $type) {
-            $formMapper->with('Individual information', array('class' => 'col-md-7',));
-
-            $formMapper->add('individual', 'sonata_type_admin', array(
-                'label' => false,
-                'btn_delete' => false,
-                'btn_add' => false,
-            ), array(
-                //            'edit' => 'inline',
-                'link_parameters' => array(
-                    'parent_admin' => 'lead',
-                )
-            ));
-
-            $formMapper->end();
-        }
-
-
+        };
 
         $formMapper->with('Lead', array('class' => 'col-md-5',));
         $formMapper->add('type', 'choice', array(
@@ -138,7 +121,7 @@ class LeadAdmin extends Admin
         ));
         $formMapper->end();
 
-        if (LeadType::INDIVIDUAL !== $type) {
+        if (LeadType::CLIENT === $type || LeadType::SUPPLIER === $type) {
             $formMapper->with('Contact Persons', array('class' => 'col-md-12',));
             $formMapper->add('contactPersons', 'sonata_type_collection', array(
                 'label'         => false,

@@ -50,12 +50,6 @@ Application\CrmBundle\Entity\Lead:
             inversedBy: leads
             gedmo:
                 - versioned
-        individual:
-            targetEntity: Application\CrmBundle\Entity\Individual
-            cascade: [all]
-            inversedBy: leads
-            gedmo:
-                - versioned
         owner:
             targetEntity: Application\CrmBundle\Entity\TeamMember
             gedmo:
