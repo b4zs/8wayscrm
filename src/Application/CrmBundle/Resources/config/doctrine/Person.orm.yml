@@ -1,44 +1,60 @@
 Application\CrmBundle\Entity\Person:
-    type: entity
-    inheritanceType: SINGLE_TABLE
-    discriminatorColumn:
-        name: type
-        type: string
-    table: null
-    id:
-        id:
-            type: integer
-            id: true
-            generator:
-                strategy: AUTO
-    gedmo:
-        soft_deleteable:
-            field_name: deletedAt
-            time_aware: false
+    type: embeddable
     fields:
-        deletedAt:
+        firstName:
+            type: string
+            length: 255
+            nullable: true
+        lastName:
+            type: string
+            length: 255
+            nullable: true
+        dateOfBirth:
             type: datetime
             nullable: true
+        gender:
+            type: string
+            length: '2'
+            nullable: true
+        nationality:
+            type: string
+            length: '2'
+            nullable: true
+        directLinePhone:
+            type: string
+            length: '64'
+            nullable: true
+        companyPhone:
+            type: string
+            length: '64'
+            nullable: true
+        privatePhone:
+            type: string
+            length: '64'
+            nullable: true
+        companyEmail:
+            type: string
+            length: '128'
+            nullable: true
+        privateEmail:
+            type: string
+            length: '128'
+            nullable: true
+        skypeId:
+            type: string
+            length: '64'
+            nullable: true
+        facebookId:
+            type: string
+            length: '64'
+            nullable: true
+        twitter:
+            type: string
+            length: '64'
+            nullable: true
+        instagram:
+            type: string
+            length: '64'
+            nullable: true
 
-    manyToOne:
-        personalData:
-            targetEntity: Application\CrmBundle\Entity\PersonalData
-            cascade: [all]
-        contactInformation:
-            targetEntity: Application\CrmBundle\Entity\ContactInformation
-            cascade: [all]
-    oneToOne:
-        user:
-            targetEntity: Application\UserBundle\Entity\User
-            mappedBy: person
-            cascade: [persist]
-    oneToMany:
-        companyMemberships:
-            targetEntity: Application\CrmBundle\Entity\CompanyMembership
-            mappedBy: person
-            cascade: [all]
-        projectMemberships:
-            targetEntity: Application\CrmBundle\Entity\ProjectMembership
-            mappedBy: person
-            cascade: [all]
     lifecycleCallbacks: {  }

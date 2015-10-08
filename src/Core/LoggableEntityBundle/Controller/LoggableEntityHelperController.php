@@ -10,6 +10,10 @@ class LoggableEntityHelperController extends Controller
 {
     public function listLogsAction($className, $id)
     {
+        if (!$id) {
+            throw new \InvalidArgumentException('ID parameter is not valid');
+        }
+
         $entityManager = $this->container->get('doctrine.orm.default_entity_manager');
         $object = $entityManager->find($className, $id);
 

@@ -2,21 +2,38 @@
 
 namespace Application\CrmBundle\Entity;
 
-use Application\CrmBundle\Enum\LeadStatus;
+use Application\CrmBundle\Enum\ClientStatus;
+use Application\UserBundle\Entity\User;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Doctrine\ORM\Mapping as ORM;
 
-class Lead implements LogExtraDataAware
+class Client implements LogExtraDataAware
 {
     /**
      * @var integer
      */
     private $id;
+
     /**
      * @var string
      */
-    private $type = 'company';
+    private $type = 'client';
+
+    /**
+     * @var User
+     */
+    private $owner;
+
+    /**
+     * @var User
+     */
+    private $projectManager;
+
+    /**
+     * @var string
+     */
+    private $referral;
 
     /**
      * @var string
@@ -26,7 +43,7 @@ class Lead implements LogExtraDataAware
     /**
      * @var string
      */
-    private $status = LeadStatus::PROSPECT;
+    private $status = ClientStatus::COLD;
 
     /**
      * @var \DateTime
@@ -39,19 +56,16 @@ class Lead implements LogExtraDataAware
     private $projects;
 
     /**
-     * @var \Application\CrmBundle\Entity\Company
+     * @var Company
      */
     private $company;
+
+
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $contactPersons;
-
-    /**
-     * @var Person
-     */
-    private $owner;
+    private $contacts;
 
     /**
      * @var \DateTime|null
@@ -73,7 +87,7 @@ class Lead implements LogExtraDataAware
     {
         $this->company = new Company();
         $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contactPersons = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdAt = new \DateTime();
     }
 
@@ -91,7 +105,7 @@ class Lead implements LogExtraDataAware
      * Set type
      *
      * @param string $type
-     * @return Lead
+     * @return Client
      */
     public function setType($type)
     {
@@ -114,7 +128,7 @@ class Lead implements LogExtraDataAware
      * Set financialInformation
      *
      * @param string $financialInformation
-     * @return Lead
+     * @return Client
      */
     public function setFinancialInformation($financialInformation)
     {
@@ -137,7 +151,7 @@ class Lead implements LogExtraDataAware
      * Set status
      *
      * @param string $status
-     * @return Lead
+     * @return Client
      */
     public function setStatus($status)
     {
@@ -160,7 +174,7 @@ class Lead implements LogExtraDataAware
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Lead
+     * @return Client
      */
     public function setCreatedAt($createdAt)
     {
@@ -183,12 +197,12 @@ class Lead implements LogExtraDataAware
      * Add projects
      *
      * @param \Application\CrmBundle\Entity\Project $projects
-     * @return Lead
+     * @return Client
      */
     public function addProject(\Application\CrmBundle\Entity\Project $projects)
     {
         $this->projects[] = $projects;
-        $projects->setLead($this);
+        $projects->setClient($this);
         $this->setUpdatedAt(new \DateTime());
 
         return $this;
@@ -202,7 +216,7 @@ class Lead implements LogExtraDataAware
     public function removeProject(\Application\CrmBundle\Entity\Project $projects)
     {
         $this->projects->removeElement($projects);
-        $projects->setLead(null);
+        $projects->setClient(null);
         $this->setUpdatedAt(new \DateTime());
     }
 
@@ -220,7 +234,7 @@ class Lead implements LogExtraDataAware
      * Set company
      *
      * @param \Application\CrmBundle\Entity\Company $company
-     * @return Lead
+     * @return Client
      */
     public function setCompany(\Application\CrmBundle\Entity\Company $company = null)
     {
@@ -239,27 +253,18 @@ class Lead implements LogExtraDataAware
         return $this->company;
     }
 
-    /**
-     * Add contactPersons
-     *
-     * @param \Application\CrmBundle\Entity\Person $contactPersons
-     * @return Lead
-     */
-    public function addContactPerson(\Application\CrmBundle\Entity\Person $contactPersons)
+    public function addContact(\Application\CrmBundle\Entity\Contact $contact)
     {
-        $this->contactPersons[] = $contactPersons;
+        $this->contacts[] = $contact;
+        $contact->setClient($this);
 
         return $this;
     }
 
-    /**
-     * Remove contactPersons
-     *
-     * @param \Application\CrmBundle\Entity\Person $contactPersons
-     */
-    public function removeContactPerson(\Application\CrmBundle\Entity\Person $contactPersons)
+    public function removeContact(\Application\CrmBundle\Entity\Contact $contact)
     {
-        $this->contactPersons->removeElement($contactPersons);
+        $this->contacts->removeElement($contact);
+        $contact->setClient(null);
     }
 
     /**
@@ -267,28 +272,26 @@ class Lead implements LogExtraDataAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getContactPersons()
+    public function getContacts()
     {
-        return $this->contactPersons;
+        return $this->contacts;
     }
 
     function __toString()
     {
-        return $this->getCompany() ? (string)$this->getCompany() : ('#'.$this->getId());
+        return $this->getCompany()
+//            ? ''
+            ? (string)$this->getCompany()
+            : ('#'.$this->getId())
+        ;
     }
 
-    /**
-     * @return Person
-     */
     public function getOwner()
     {
         return $this->owner;
     }
 
-    /**
-     * @param Person $owner
-     */
-    public function setOwner($owner)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
     }
@@ -355,6 +358,38 @@ class Lead implements LogExtraDataAware
     public function setLogExtraData(LogExtraData $logExtraData)
     {
         $this->logExtraData = $logExtraData;
+    }
+
+    /**
+     * @return User
+     */
+    public function getProjectManager()
+    {
+        return $this->projectManager;
+    }
+
+    /**
+     * @param User $projectManager
+     */
+    public function setProjectManager($projectManager)
+    {
+        $this->projectManager = $projectManager;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferral()
+    {
+        return $this->referral;
+    }
+
+    /**
+     * @param string $referral
+     */
+    public function setReferral($referral)
+    {
+        $this->referral = $referral;
     }
 
 

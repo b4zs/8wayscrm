@@ -8,5 +8,7 @@
 {% block form %}
 	{{ parent() }}
 
+	{% if object and object.id %}
 	{{ render(controller('CoreLoggableEntityBundle:LoggableEntityHelper:listLogs', { className: admin.class, id: object.id })) }}
+	{% endif %}
 {% endblock form %}

@@ -4,7 +4,7 @@
 namespace Application\CrmBundle\Enum;
 
 
-class LeadType
+class ClientType
 {
 
 

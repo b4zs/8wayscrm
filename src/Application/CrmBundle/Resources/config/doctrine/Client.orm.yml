@@ -1,6 +1,6 @@
-Application\CrmBundle\Entity\Lead:
+Application\CrmBundle\Entity\Client:
     type: entity
-    table: null
+    table: crm__client
     id:
         id:
             type: integer
@@ -43,27 +43,35 @@ Application\CrmBundle\Entity\Lead:
         deletedAt:
             type: datetime
             nullable: true
-    manyToOne:
+        referral:
+            type: string
+            length: 255
+            nullable: true
+    embedded:
         company:
-            targetEntity: Application\CrmBundle\Entity\Company
-            cascade: [all]
-            inversedBy: leads
+            class: Application\CrmBundle\Entity\Company
             gedmo:
                 - versioned
+
+    manyToOne:
         owner:
-            targetEntity: Application\CrmBundle\Entity\TeamMember
+            targetEntity: Application\UserBundle\Entity\User
+            gedmo:
+                - versioned
+        projectManager:
+            targetEntity: Application\UserBundle\Entity\User
             gedmo:
                 - versioned
     oneToMany:
         projects:
             targetEntity: Application\CrmBundle\Entity\Project
-            mappedBy: lead
+            mappedBy: client
             cascade: [all]
             gedmo:
                 - versioned
     manyToMany:
-        contactPersons:
-            targetEntity: Application\CrmBundle\Entity\ContactPerson
+        contacts:
+            targetEntity: Application\CrmBundle\Entity\Contact
             cascade: [all]
             gedmo:
                 - versioned

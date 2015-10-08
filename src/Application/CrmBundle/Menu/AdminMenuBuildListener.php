@@ -2,9 +2,9 @@
 
 namespace Application\CrmBundle\Menu;
 
-use Application\CrmBundle\Admin\LeadAdmin;
+use Application\CrmBundle\Admin\ClientAdmin;
 use Application\CrmBundle\Admin\ProjectAdmin;
-use Application\CrmBundle\Enum\LeadStatus;
+use Application\CrmBundle\Enum\ClientStatus;
 use Application\CrmBundle\Enum\ProjectStatus;
 use Knp\Menu\MenuItem;
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -20,9 +20,9 @@ class AdminMenuBuildListener extends ContainerAware
 		/** @var MenuItem $menu */
 		$menu = $event->getSubject();
 
-		$this->modifyContactManagerMenu($menu);
+//		$this->modifyContactManagerMenu($menu);
 		$this->modifyProjectsMenu($menu);
-		$this->modifyLeadsMenu($menu);
+//		$this->modifyLeadsMenu($menu);
 
 
 		$this->removeSystemTables($menu);
@@ -95,7 +95,7 @@ class AdminMenuBuildListener extends ContainerAware
 
 	protected function modifyLeadsMenu(MenuItem $menu)
 	{
-		$statuses = LeadStatus::getAllData();
+		$statuses = ClientStatus::getAllData();
 		$adminCode = 'application_crm.admin.lead';
 		$mainMenuItem = $menu->getChild('Leads');
 
@@ -104,7 +104,7 @@ class AdminMenuBuildListener extends ContainerAware
 		$mainMenuItem->removeChild($adminCode);
 		$mainMenuItem->setUri($mainAdminUri);
 
-		/** @var LeadAdmin $admin */
+		/** @var ClientAdmin $admin */
 		$admin = $this->container->get($adminCode);
 
 //		$addLeadItem = $mainMenuItem->addChild('Add');

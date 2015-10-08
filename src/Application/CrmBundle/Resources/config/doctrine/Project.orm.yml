@@ -1,6 +1,6 @@
 Application\CrmBundle\Entity\Project:
     type: entity
-    table: null
+    table: crm__project
     id:
         id:
             type: integer
@@ -27,8 +27,8 @@ Application\CrmBundle\Entity\Project:
             type: datetime
             nullable: true
     manyToOne:
-        lead:
-            targetEntity: Application\CrmBundle\Entity\Lead
+        client:
+            targetEntity: Application\CrmBundle\Entity\Client
             inversedBy: projects
     oneToMany:
         memberships:

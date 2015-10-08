@@ -1,5 +1,5 @@
 Application\UserBundle\Entity\User:
-    table: fos_user_user
+    table: user__user
     type: entity
     id:
         id:
@@ -12,7 +12,3 @@ Application\UserBundle\Entity\User:
             column: redmine_user_id
             type: integer
             nullable: true
-    oneToOne:
-        person:
-            targetEntity: Application\CrmBundle\Entity\TeamMember
-            inversedBy: user

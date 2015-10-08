@@ -1,5 +1,5 @@
 Application\UserBundle\Entity\Group:
-    table: fos_user_group
+    table: user__group
     type: entity
     id:
         id:

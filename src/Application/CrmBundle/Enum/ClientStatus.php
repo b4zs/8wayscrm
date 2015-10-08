@@ -3,12 +3,13 @@
 namespace Application\CrmBundle\Enum;
 
 
-class LeadStatus
+class ClientStatus
 {
-	const PROSPECT = 'prospect';
-	const WORKING = 'working';
+	const COLD = 'cold';
 	const HOT = 'hot';
 	const SLEEPING = 'sleeping';
+	const ACTIVE = 'active';
+	const ARCHIVED = 'archived';
 	const JUNK = 'junk';
 
 	public static function getChoices()
@@ -22,13 +23,9 @@ class LeadStatus
 	public static function getAllData()
 	{
 		return array(
-			self::PROSPECT => array(
+			self::COLD => array(
 				'icon' => 'fa fa-user-plus',
-				'title'=> 'Prospect',
-			),
-			self::WORKING => array(
-				'icon'  => 'fa fa-steam',
-				'title'=> 'Working',
+				'title'=> 'Cold',
 			),
 			self::HOT => array(
 				'icon'  => 'fa fa-fire',
@@ -37,6 +34,14 @@ class LeadStatus
 			self::SLEEPING => array(
 				'icon'  => 'fa fa-bed',
 				'title'=> 'Sleeping',
+			),
+			self::ACTIVE => array(
+				'icon'  => 'fa fa-bed',
+				'title'=> 'Active',
+			),
+			self::ARCHIVED => array(
+				'icon'  => 'fa fa-bed',
+				'title'=> 'Archived',
 			),
 			self::JUNK => array(
 				'icon'  => 'fa fa-trash',

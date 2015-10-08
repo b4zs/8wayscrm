@@ -54,27 +54,22 @@ class ProjectAdmin extends Admin
 
 
         $formMapper->with('Project', array('class' => 'col-md-6'));
+            if ('lead' !== $parentAdmin) {
+                $formMapper->add('client', 'sonata_type_model_list', array(), array());
+            }
 
-        if ('lead' !== $parentAdmin) {
-            $formMapper->add('client', 'sonata_type_model_list', array(), array());
-        }
-
-        $formMapper->add('name');
-
-        if (null === $parentAdmin) {
-            $formMapper->add('status', 'choice', array(
-                'choices' => ProjectStatus::getChoices(),
-            ));
-        }
-
+            $formMapper->add('name');
         $formMapper->end();
 
         $formMapper->with('Info', array('class' => 'col-md-6'));
-        $formMapper
-            ->add('description', 'textarea', array(
-                'required' => false,
-            ))
-        ;
+            $formMapper
+                ->add('description', 'textarea', array(
+                    'required' => false,
+                ))
+            ;
+            $formMapper->add('status', 'choice', array(
+                'choices' => ProjectStatus::getChoices(),
+            ));
         $formMapper->end();
 
         if (null === $parentAdmin) {
@@ -91,6 +86,8 @@ class ProjectAdmin extends Admin
             ));
             $formMapper->end();
         }
+
+
     }
 
     /**

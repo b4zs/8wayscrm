@@ -2,7 +2,7 @@
 
 namespace Core\LoggableEntityBundle\Admin\Extension;
 
-use Application\CrmBundle\Entity\Lead;
+use Application\CrmBundle\Entity\Client;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Sonata\AdminBundle\Admin\AdminExtension;

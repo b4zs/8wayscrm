@@ -45,39 +45,40 @@
 {% block side_bar_nav %}
 	{% if app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
 		{% set item = knp_menu_get('sonata_admin_sidebar') %}
-		<ul class="sidebar-menu">
-			{% for child in item  %}
-				<li class="{% if child.uri and false %}{% else %}treeview{% endif %}{% if true or child.isCurrent  %} active{% endif %}">
-					<div style="background: #444; padding: 5px; padding-left: 15px; margin-top: 2px;" class="clearfix">
-						<a href="#" class="btn btn-xs tree-toggle pull-right" oncl-ick="javascript:null;" style="padding: 5px; padding-right: 13px;">
-							<i class="fa pull-right fa-angle-left" style="font-weight: 600;"></i>
-						</a>
-						<a href="{{ child.uri|default('#') }}" class="pull-left">
-							<i class="{{ child.extras.icon|default('fa fa-folder') }}"></i>
-							<span>{{ child.label }}</span>
-						</a>
-					</div>
-					{% if child.children|length > 0 %}
-					<ul class="treeview-menu {% if child.isCurrent %} active{% endif %}">
-						{% for subChild in child.children %}
-							<li class="{% if subChild.isCurrent %}active{% endif %}" >
-								<a href="{{ subChild.uri }}" class="pull-left">
-									<i class="{{ subChild.extras.icon|default('fa fa-angle-double-right') }}"></i>
-									<span>{{ subChild.label }}</span>
-								</a>
-								{% for subSubChild in subChild.children %}
-									<a href="{{ subSubChild.uri }}" class="pull-right" title="{{ subSubChild.label }}" style="padding-right: 8px;">
-										<i class="{{ subSubChild.extras.icon|default('fa fa-question') }}"></i>
-									</a>
-								{% endfor %}
-								<div class="clearfix"></div>
-							</li>
-						{% endfor %}
-					</ul>
-					{% endif %}
-				</li>
-			{% endfor %}
-		</ul>
+		{{ knp_menu_render(item) }}
+		{#<ul class="sidebar-menu">#}
+			{#{% for child in item  %}#}
+				{#<li class="{% if child.uri and false %}{% else %}treeview{% endif %}{% if true or child.isCurrent  %} active{% endif %}">#}
+					{#<div style="background: #444; padding: 5px; padding-left: 15px; margin-top: 2px;" class="clearfix">#}
+						{#<a href="#" class="btn btn-xs tree-toggle pull-right" oncl-ick="javascript:null;" style="padding: 5px; padding-right: 13px;">#}
+							{#<i class="fa pull-right fa-angle-left" style="font-weight: 600;"></i>#}
+						{#</a>#}
+						{#<a href="{{ child.uri|default('#') }}" class="pull-left">#}
+							{#<i class="{{ child.extras.icon|default('fa fa-folder') }}"></i>#}
+							{#<span>{{ child.label }}</span>#}
+						{#</a>#}
+					{#</div>#}
+					{#{% if child.children|length > 0 %}#}
+					{#<ul class="treeview-menu {% if child.isCurrent %} active{% endif %}">#}
+						{#{% for subChild in child.children %}#}
+							{#<li class="{% if subChild.isCurrent %}active{% endif %}" >#}
+								{#<a href="{{ subChild.uri }}" class="pull-left">#}
+									{#<i class="{{ subChild.extras.icon|default('fa fa-angle-double-right') }}"></i>#}
+									{#<span>{{ subChild.label }}</span>#}
+								{#</a>#}
+								{#{% for subSubChild in subChild.children %}#}
+									{#<a href="{{ subSubChild.uri }}" class="pull-right" title="{{ subSubChild.label }}" style="padding-right: 8px;">#}
+										{#<i class="{{ subSubChild.extras.icon|default('fa fa-question') }}"></i>#}
+									{#</a>#}
+								{#{% endfor %}#}
+								{#<div class="clearfix"></div>#}
+							{#</li>#}
+						{#{% endfor %}#}
+					{#</ul>#}
+					{#{% endif %}#}
+				{#</li>#}
+			{#{% endfor %}#}
+		{#</ul>#}
 	{% endif %}
 {% endblock %}
 

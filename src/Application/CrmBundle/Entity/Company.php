@@ -21,45 +21,39 @@ class Company
     private $name;
 
     /**
-     * @var ContactInformation
-     */
-    private $mainContactInformation;
-
-    /**
      * @var string
      */
     private $sectorOfActivity;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var string
      */
-    private $memberships;
+    private $country;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var string
      */
-    private $websites;
+    private $website;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var string
      */
-    private $leads;
+    private $email;
 
     /**
-     * @var \DateTime
+     * @var string
      */
-    private $deletedAt;
+    private $phone1;
 
     /**
-     * Constructor
+     * @var string
      */
-    public function __construct()
-    {
-        $this->memberships = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->websites = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->mainContactInformation = new ContactInformation();
-        $this->leads = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $phone2;
+
+    /**
+     * @var string
+     */
+    private $fax;
 
     /**
      * Get id
@@ -95,29 +89,6 @@ class Company
     }
 
     /**
-     * Set mainContactInformation
-     *
-     * @param string $mainContactInformation
-     * @return Company
-     */
-    public function setMainContactInformation($mainContactInformation)
-    {
-        $this->mainContactInformation = $mainContactInformation;
-
-        return $this;
-    }
-
-    /**
-     * Get mainContactInformation
-     *
-     * @return string 
-     */
-    public function getMainContactInformation()
-    {
-        return $this->mainContactInformation;
-    }
-
-    /**
      * Set sectorOfActivity
      *
      * @param string $sectorOfActivity
@@ -141,121 +112,135 @@ class Company
     }
 
     /**
-     * Add memberships
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param mixed $website
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    }
+
+    /**
+     * Set email
      *
-     * @param \Application\CrmBundle\Entity\CompanyMembership $memberships
+     * @param string $email
+     *
      * @return Company
      */
-    public function addMembership(\Application\CrmBundle\Entity\CompanyMembership $memberships)
+    public function setEmail($email)
     {
-        $memberships->setCompany($this);
-        $this->memberships[] = $memberships;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * Remove memberships
+     * Get email
      *
-     * @param \Application\CrmBundle\Entity\CompanyMembership $memberships
+     * @return string
      */
-    public function removeMembership(\Application\CrmBundle\Entity\CompanyMembership $memberships)
+    public function getEmail()
     {
-        $this->memberships->removeElement($memberships);
-        $memberships->setCompany(null);
+        return $this->email;
     }
 
     /**
-     * Get memberships
+     * Set phone1
      *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getMemberships()
-    {
-        return $this->memberships;
-    }
-
-    /**
-     * Add websites
+     * @param string $phone1
      *
-     * @param \Application\CrmBundle\Entity\Website $websites
      * @return Company
      */
-    public function addWebsite(\Application\CrmBundle\Entity\Website $websites)
+    public function setPhone1($phone1)
     {
-        $this->websites[] = $websites;
+        $this->phone1 = $phone1;
 
         return $this;
     }
 
     /**
-     * Remove websites
+     * Get phone1
      *
-     * @param \Application\CrmBundle\Entity\Website $websites
+     * @return string
      */
-    public function removeWebsite(\Application\CrmBundle\Entity\Website $websites)
+    public function getPhone1()
     {
-        $this->websites->removeElement($websites);
+        return $this->phone1;
     }
 
     /**
-     * Get websites
+     * Set phone2
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @param string $phone2
+     *
+     * @return Company
      */
-    public function getWebsites()
+    public function setPhone2($phone2)
     {
-        return $this->websites;
+        $this->phone2 = $phone2;
+
+        return $this;
+    }
+
+    /**
+     * Get phone2
+     *
+     * @return string
+     */
+    public function getPhone2()
+    {
+        return $this->phone2;
+    }
+
+    /**
+     * Set fax
+     *
+     * @param string $fax
+     *
+     * @return Company
+     */
+    public function setFax($fax)
+    {
+        $this->fax = $fax;
+
+        return $this;
+    }
+
+    /**
+     * Get fax
+     *
+     * @return string
+     */
+    public function getFax()
+    {
+        return $this->fax;
     }
 
     function __toString()
     {
-        return $this->getName() ? $this->getName() : 'new';
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    /**
-     * @param \DateTime $deletedAt
-     */
-    public function setDeletedAt($deletedAt)
-    {
-        $this->deletedAt = $deletedAt;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLeads()
-    {
-        return $this->leads;
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\Collection $leads
-     */
-    public function setLeads($leads)
-    {
-        $this->leads = $leads;
-    }
-
-    public function addLead(\Application\CrmBundle\Entity\Lead $lead)
-    {
-        $lead->setCompany($this);
-        $this->websites[] = $lead;
-
-        return $this;
-    }
-
-    public function removeLead(\Application\CrmBundle\Entity\Lead $lead)
-    {
-        $lead->setCompany(null);
-        $this->websites->removeElement($lead);
+        return $this->getName() ? $this->getName() : '';
     }
 }

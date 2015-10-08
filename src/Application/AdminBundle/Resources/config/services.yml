@@ -8,3 +8,23 @@ services:
               - [setContainer, [@service_container]]
           tags:
               - { name: knp_menu.provider }
+
+
+     application.admin.form.type.delete_checkbox:
+         class: Application\AdminBundle\Form\Type\DeleteCheckboxType
+         tags:
+             - { name: form.type, alias: gb_delete_checkbox }
+
+     application.admin.form.type.open_button:
+         class: Application\AdminBundle\Form\Type\OpenButtonType
+         calls:
+             - [setPool, [@sonata.admin.pool]]
+         tags:
+             - { name: form.type, alias: gb_open_button }
+
+
+
+     sonata.admin.form.type.admin:
+         class: Application\AdminBundle\Form\Type\AdminType
+         tags:
+             - { name: form.type, alias: sonata_type_admin }

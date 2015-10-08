@@ -32,7 +32,7 @@ class Project
     /**
      * @var string
      */
-    private $status = ProjectStatus::PENDING;
+    private $status = ProjectStatus::ASSESSMENT;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -40,9 +40,9 @@ class Project
     private $memberships;
 
     /**
-     * @var \Application\CrmBundle\Entity\Lead
+     * @var \Application\CrmBundle\Entity\Client
      */
-    private $lead;
+    private $client;
 
     /**
      * @var \DateTime
@@ -218,21 +218,21 @@ class Project
         return $this->memberships;
     }
 
-    public function setLead(\Application\CrmBundle\Entity\Lead $lead = null)
+    public function setClient(\Application\CrmBundle\Entity\Client $client = null)
     {
-        $this->lead = $lead;
+        $this->client = $client;
 
         return $this;
     }
 
-    public function getLead()
+    public function getClient()
     {
-        return $this->lead;
+        return $this->client;
     }
 
     function __toString()
     {
-        return $this->getLead() . ' - ' . $this->getName();
+        return $this->getClient() . ' - ' . $this->getName();
     }
 
     /**

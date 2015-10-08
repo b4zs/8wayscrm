@@ -7,17 +7,18 @@ namespace Application\CrmBundle\Enum;
 class ProjectStatus
 {
 
-	const PENDING = 'pending';
-
-	const IN_PROGRESS = 'in progress';
-
-	const CLOSED = 'closed';
+	const ASSESSMENT    = 'assessment';
+	const QUOTATION     = 'quotation';
+	const PREPARATION   = 'Preparation';
+	const EXECUTION     = 'Execution';
+	const DELIVERED     = 'Delivered';
+	const SLEEPING      = 'Sleeping';
+	const CANCELLED     = 'Cancelled';
 
 	public static function getChoices()
 	{
-		$statuses = array(
-			self::PENDING, self::IN_PROGRESS, self::CLOSED,
-		);
+		$ref = new \ReflectionClass(__CLASS__);
+		$statuses = $ref->getConstants();
 
 		return array_combine($statuses, array_map('ucfirst', $statuses));
 	}

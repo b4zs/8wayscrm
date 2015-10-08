@@ -3,11 +3,13 @@
 namespace Application\CrmBundle\Admin;
 
 use Application\CrmBundle\Entity\Company;
+use Application\CrmBundle\Entity\Contact;
 use Application\CrmBundle\Entity\Individual;
-use Application\CrmBundle\Entity\Lead;
+use Application\CrmBundle\Entity\Client;
 use Application\CrmBundle\Entity\Person;
-use Application\CrmBundle\Enum\LeadStatus;
-use Application\CrmBundle\Enum\LeadType;
+use Application\CrmBundle\Entity\Project;
+use Application\CrmBundle\Enum\ClientStatus;
+use Application\CrmBundle\Enum\ClientType;
 use Application\UserBundle\Entity\User;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
@@ -16,9 +18,10 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class LeadAdmin extends Admin
+class ClientAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -29,8 +32,8 @@ class LeadAdmin extends Admin
 //            ->add('id')
 //            ->add('type')
 //            ->add('financialInformation')
-            ->add('type', null, array('label' => 'Type'), 'choice', array('choices' => LeadType::getChoices()))
-            ->add('status', null, array('label' => 'Status'), 'choice', array('choices' => LeadStatus::getChoices()))
+            ->add('type', null, array('label' => 'Type'), 'choice', array('choices' => ClientType::getChoices()))
+            ->add('status', null, array('label' => 'Status'), 'choice', array('choices' => ClientStatus::getChoices()))
 //            ->add('createdAt')
         ;
     }
@@ -44,7 +47,6 @@ class LeadAdmin extends Admin
             ->add('owner')
             ->add('type')
             ->add('status')
-            ->add('company')
             ->add('createdAt', null, array(
                 'label' => 'created',
             ))
@@ -67,46 +69,55 @@ class LeadAdmin extends Admin
     {
         $type = $this->getSubject() ? $this->getSubject()->getType() : null;
 
-        if (LeadType::CLIENT === $type || LeadType::SUPPLIER === $type) {
-            $formMapper->with(ucfirst($type) . ' information', array('class' => 'col-md-7',));
-
-            $formMapper->add('company', 'sonata_type_admin', array(
-                'label' => false,
-                'btn_delete' => false,
-                'btn_add' => false,
-            ), array(
-    //            'edit' => 'inline',
-                'link_parameters' => array(
-                    'parent_admin' => 'lead',
-                )
+        $formMapper->with('Company', array('class' => 'col-md-7',));
+            $formMapper->add('company', 'form', array(
+                'data_class'    => 'Application\\CrmBundle\\Entity\\Company',
+                'label'         => false,
             ));
-
-            $formMapper->end();
-        };
-
-        $formMapper->with('Lead', array('class' => 'col-md-5',));
-        $formMapper->add('type', 'choice', array(
-            'choices'   => LeadType::getChoices(),
-            'expanded'  => true,
-            'attr'      => array(
-                'class' => ' radio-inline list-inline btn-group',
-            ),
-        ));
-        $formMapper->add('status', 'choice', array(
-            'required'  => false,
-            'choices'   => LeadStatus::getChoices(),
-        ));
-        $formMapper->add('financialInformation', 'textarea', array(
-            'required'  => false,
-            'attr'      => array('rows' => '3'),
-        ));
-        $formMapper->add('owner', 'sonata_type_model_list', array(
-            'required'  => false,
-            'btn_add'   => false,
-            'btn_delete'=> false,
-            'btn_list'  => 'Select',
-        ));
+            $this->addCompanyFields($formMapper->get('company'));
         $formMapper->end();
+
+        $formMapper->with('Management', array('class' => 'col-md-5',));
+            $formMapper->add('owner', 'sonata_type_model_list', array(
+                'required'  => false,
+                'btn_add'   => false,
+                'btn_delete'=> 'Unlink',
+                'btn_list'  => 'Select',
+            ));
+            $formMapper->add('projectManager', 'sonata_type_model_list', array(
+                'required'  => false,
+                'btn_add'   => false,
+                'btn_delete'=> 'Unlink',
+                'btn_list'  => 'Select',
+            ));
+            $formMapper->add('referral', 'text', array(
+                'required'  => false,
+            ));
+            $formMapper->add('financialInformation', 'textarea', array(
+                'required'  => false,
+                'attr'      => array('rows' => '9'),
+            ));
+            $formMapper->add('status', 'choice', array(
+                'required'  => false,
+                'choices'   => ClientStatus::getChoices(),
+            ));
+        $formMapper->end();
+
+
+        if (ClientType::CLIENT === $type || ClientType::SUPPLIER === $type) {
+            $formMapper->with('Contact ', array('class' => 'col-md-12',));
+            $formMapper->add('contacts', 'sonata_type_collection', array(
+                'label'         => false,
+                'by_reference'  => false,
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'link_parameters' => array(
+                    'parent_admin'  => 'client',
+                ),
+            ));
+            $formMapper->end();
+        }
 
         $formMapper->with('Projects');
         $formMapper->add('projects', 'sonata_type_collection', array(
@@ -120,21 +131,6 @@ class LeadAdmin extends Admin
             ),
         ));
         $formMapper->end();
-
-        if (LeadType::CLIENT === $type || LeadType::SUPPLIER === $type) {
-            $formMapper->with('Contact Persons', array('class' => 'col-md-12',));
-            $formMapper->add('contactPersons', 'sonata_type_collection', array(
-                'label'         => false,
-                'by_reference'  => false,
-            ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-                'link_parameters' => array(
-                    'parent_admin'  => 'lead',
-                ),
-            ));
-            $formMapper->end();
-        }
     }
 
     /**
@@ -153,16 +149,14 @@ class LeadAdmin extends Admin
 
     public function getNewInstance()
     {
-        /** @var Lead $instance */
+        /** @var Client $instance */
         $instance = parent::getNewInstance();
 
         $container = $this->configurationPool->getContainer();
         $securityContext = $container->get('security.context');
         $user = $securityContext->getToken() ? $securityContext->getToken()->getUser() : null;
         if ($user instanceof User) {
-            if ($user->getPerson() instanceof Person) {
-                $instance->setOwner($user->getPerson());
-            }
+            $instance->setOwner($user);
         }
 
         if ($this->getRequest()) {
@@ -170,6 +164,9 @@ class LeadAdmin extends Admin
                 $instance->setType($type);
             }
         }
+
+        $instance->addContact(new Contact());
+//        $instance->addProject(new Project());
 
 
         return $instance;
@@ -196,7 +193,7 @@ class LeadAdmin extends Admin
     }
 
     /**
-     * @return Lead|null
+     * @return Client|null
      */
     public function getSubject()
     {
@@ -209,15 +206,31 @@ class LeadAdmin extends Admin
     public function getTemplate($name)
     {
         switch (true) {
-            case $name === 'edit' && $this->getSubject() && null === $this->getSubject()->getId():
-                return 'ApplicationCrmBundle:LeadAdmin:create.html.twig';
-                break;
+//            case $name === 'edit' && $this->getSubject() && null === $this->getSubject()->getId():
+//                return 'ApplicationCrmBundle:ClientAdmin:create.html.twig';
+//                break;
             case $name === 'edit' && $this->getSubject():
-                return 'ApplicationCrmBundle:LeadAdmin:edit.html.twig';
+                return 'ApplicationCrmBundle:ClientAdmin:edit.html.twig';
                 break;
             default:
                 return parent::getTemplate($name);
         };
+    }
+
+    private function addCompanyFields(FormBuilderInterface $companyField)
+    {
+//        var_dump($companyField);die;
+
+        $companyField
+            ->add('name')
+            ->add('sectorOfActivity', null, array('required' => false))
+            ->add('country', 'country', array('required' => false))
+            ->add('website', null, array('required' => false))
+            ->add('email', null, array('required' => false))
+            ->add('phone1', null, array('required' => false, 'label' => 'Line1',))
+            ->add('phone2', null, array('required' => false, 'label' => 'Line2',))
+            ->add('fax', null, array('required' => false))
+        ;
     }
 
 

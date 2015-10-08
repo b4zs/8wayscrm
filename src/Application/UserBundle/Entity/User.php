@@ -30,11 +30,6 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @var Person
-     */
-    protected $person;
-
-    /**
      * @var integer
      */
     protected $redmineUserId;

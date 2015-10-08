@@ -1,6 +1,6 @@
 Application\CrmBundle\Entity\ProjectMembership:
     type: entity
-    table: null
+    table: crm__project_membership
     id:
         id:
             type: integer
@@ -17,7 +17,7 @@ Application\CrmBundle\Entity\ProjectMembership:
         project:
             targetEntity: Application\CrmBundle\Entity\Project
             inversedBy: memberships
-        person:
-            targetEntity: Application\CrmBundle\Entity\Person
+        user:
+            targetEntity: Application\UserBundle\Entity\User
             inversedBy: projectMemberships
     lifecycleCallbacks: {  }

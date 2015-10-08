@@ -40,7 +40,7 @@ twig:
     form:
         resource:
             - 'form_div_layout.html.twig'
-#            - 'ApplicationQuotationGeneratorBundle::form.html.twig'
+            - 'ApplicationAdminBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:

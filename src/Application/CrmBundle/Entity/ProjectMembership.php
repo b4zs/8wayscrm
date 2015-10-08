@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Entity;
 
+use Application\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,9 +30,9 @@ class ProjectMembership
     private $project;
 
     /**
-     * @var \Application\CrmBundle\Entity\Person
+     * @var User
      */
-    private $person;
+    private $user;
 
     function __construct()
     {
@@ -109,9 +110,7 @@ class ProjectMembership
     }
 
     /**
-     * Get project
-     *
-     * @return \Application\CrmBundle\Entity\Project 
+     * @return Project
      */
     public function getProject()
     {
@@ -119,25 +118,20 @@ class ProjectMembership
     }
 
     /**
-     * Set person
-     *
-     * @param \Application\CrmBundle\Entity\Person $person
-     * @return ProjectMembership
+     * @return User
      */
-    public function setPerson(\Application\CrmBundle\Entity\Person $person = null)
+    public function getUser()
     {
-        $this->person = $person;
-
-        return $this;
+        return $this->user;
     }
 
     /**
-     * Get person
-     *
-     * @return \Application\CrmBundle\Entity\Person 
+     * @param User $user
      */
-    public function getPerson()
+    public function setUser($user)
     {
-        return $this->person;
+        $this->user = $user;
     }
+
+
 }

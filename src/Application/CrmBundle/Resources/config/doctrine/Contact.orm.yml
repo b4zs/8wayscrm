@@ -1,0 +1,31 @@
+Application\CrmBundle\Entity\Contact:
+    type: entity
+    table: crm__contact
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        role:
+            type: string
+            length: 255
+            nullable: true
+        note:
+            type: text
+            nullable: true
+        title:
+            type: text
+            nullable: true
+
+    manyToOne:
+        client:
+            targetEntity: Application\CrmBundle\Entity\Client
+            inversedBy: contacts
+    embedded:
+        person:
+            class: Application\CrmBundle\Entity\Person
+            gedmo:
+                - versioned
+    lifecycleCallbacks: {  }

@@ -1,16 +1,6 @@
 Application\CrmBundle\Entity\Company:
-    type: entity
-    table: null
-    id:
-        id:
-            type: integer
-            id: true
-            generator:
-                strategy: AUTO
-    gedmo:
-        soft_deleteable:
-            field_name: deletedAt
-            time_aware: false
+    type: embeddable
+
     fields:
         name:
             type: string
@@ -23,28 +13,30 @@ Application\CrmBundle\Entity\Company:
             type: string
             length: 255
             nullable: true
-        deletedAt:
-            type: datetime
+            type: string
+            length: 8
             nullable: true
-    manyToOne:
-        mainContactInformation:
-            targetEntity: Application\CrmBundle\Entity\ContactInformation
-            cascade: [all]
-    oneToMany:
-        memberships:
-            targetEntity: Application\CrmBundle\Entity\CompanyMembership
-            mappedBy: company
-            cascade: [all]
-            orphanRemoval: true
-        leads:
-            targetEntity: Application\CrmBundle\Entity\Lead
-            cascade: [all]
-            orphanRemoval: true
-            mappedBy: company
-    manyToMany:
-        websites:
-            targetEntity: Application\CrmBundle\Entity\Website
-            cascade: [all]
-            orphanRemoval: true
-
-    lifecycleCallbacks: {  }
+        country:
+            type: string
+            length: 8
+            nullable: true
+        website:
+            type: string
+            length: 255
+            nullable: true
+        email:
+            type: string
+            length: 255
+            nullable: true
+        phone1:
+            type: string
+            length: 255
+            nullable: true
+        phone2:
+            type: string
+            length: 255
+            nullable: true
+        fax:
+            type: string
+            length: 255
+            nullable: true

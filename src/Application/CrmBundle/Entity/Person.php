@@ -12,180 +12,407 @@ use Doctrine\ORM\Mapping as ORM;
 class Person
 {
     /**
-     * @var integer
+     * @var string
      */
-    private $id;
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $companyMemberships;
-
-    /**
-     * @var \Application\CrmBundle\Entity\PersonalData
-     */
-    private $personalData;
-
-    /**
-     * @var \Application\CrmBundle\Entity\ContactInformation
-     */
-    private $contactInformation;
-
-    /**
-     * @var Collection
-     */
-    private $projectMemberships;
-
-    /**
-     * @var User
-     */
-    private $user;
+    private $firstName;
 
     /**
      * @var string
      */
-    private $type;
+    private $lastName;
 
     /**
      * @var \DateTime
      */
-    private $deletedAt;
+    private $dateOfBirth;
 
     /**
-     * Constructor
+     * @var string
      */
-    public function __construct()
-    {
-        $this->personalData = new PersonalData();
-        $this->contactInformation = new ContactInformation();
-
-        $this->companyMemberships = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->projectMemberships = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $gender;
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * @var string
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $nationality;
 
     /**
-     * Add companyMemberships
-     *
-     * @param \Application\CrmBundle\Entity\CompanyMembership $companyMemberships
-     * @return Person
+     * @var string
      */
-    public function addCompanyMembership(\Application\CrmBundle\Entity\CompanyMembership $companyMemberships)
-    {
-        $this->companyMemberships[] = $companyMemberships;
-
-        return $this;
-    }
+    private $directLinePhone;
 
     /**
-     * Remove companyMemberships
-     *
-     * @param \Application\CrmBundle\Entity\CompanyMembership $companyMemberships
+     * @var string
      */
-    public function removeCompanyMembership(\Application\CrmBundle\Entity\CompanyMembership $companyMemberships)
-    {
-        $this->companyMemberships->removeElement($companyMemberships);
-    }
+    private $companyPhone;
 
     /**
-     * Get companyMemberships
-     *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @var string
      */
-    public function getCompanyMemberships()
-    {
-        return $this->companyMemberships;
-    }
+    private $privatePhone;
 
     /**
-     * Set personalData
-     *
-     * @param \Application\CrmBundle\Entity\PersonalData $personalData
-     * @return Person
+     * @var string
      */
-    public function setPersonalData(\Application\CrmBundle\Entity\PersonalData $personalData = null)
-    {
-        $this->personalData = $personalData;
-
-        return $this;
-    }
+    private $companyEmail;
 
     /**
-     * Get personalData
-     *
-     * @return \Application\CrmBundle\Entity\PersonalData 
+     * @var string
      */
-    public function getPersonalData()
-    {
-        return $this->personalData;
-    }
+    private $privateEmail;
 
     /**
-     * Set contactInformation
-     *
-     * @param \Application\CrmBundle\Entity\ContactInformation $contactInformation
-     * @return Person
+     * @var string
      */
-    public function setContactInformation(\Application\CrmBundle\Entity\ContactInformation $contactInformation = null)
-    {
-        $this->contactInformation = $contactInformation;
-
-        return $this;
-    }
+    private $skypeId;
 
     /**
-     * Get contactInformation
-     *
-     * @return \Application\CrmBundle\Entity\ContactInformation 
+     * @var string
      */
-    public function getContactInformation()
-    {
-        return $this->contactInformation;
-    }
+    private $facebookId;
+
+    /**
+     * @var string
+     */
+    private $twitter;
+
+    /**
+     * @var string
+     */
+    private $instagram;
+
+   
 
     function __toString()
     {
-        return $this->getPersonalData()->__toString();
+        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
     }
 
     /**
-     * @return User
+     * Set firstName
+     *
+     * @param string $firstName
+     *
+     * @return Person
      */
-    public function getUser()
+    public function setFirstName($firstName)
     {
-        return $this->user;
+        $this->firstName = $firstName;
+
+        return $this;
     }
 
     /**
-     * @param User $user
+     * Get firstName
+     *
+     * @return string
      */
-    public function setUser($user)
+    public function getFirstName()
     {
-        $this->user = $user;
+        return $this->firstName;
     }
 
     /**
+     * Set lastName
+     *
+     * @param string $lastName
+     *
+     * @return Person
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set dateOfBirth
+     *
+     * @param \DateTime $dateOfBirth
+     *
+     * @return Person
+     */
+    public function setDateOfBirth($dateOfBirth)
+    {
+        $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
+    }
+
+    /**
+     * Get dateOfBirth
+     *
      * @return \DateTime
      */
-    public function getDeletedAt()
+    public function getDateOfBirth()
     {
-        return $this->deletedAt;
+        return $this->dateOfBirth;
     }
 
     /**
-     * @param \DateTime $deletedAt
+     * Set gender
+     *
+     * @param string $gender
+     *
+     * @return Person
      */
-    public function setDeletedAt($deletedAt)
+    public function setGender($gender)
     {
-        $this->deletedAt = $deletedAt;
+        $this->gender = $gender;
+
+        return $this;
     }
 
+    /**
+     * Get gender
+     *
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set nationality
+     *
+     * @param string $nationality
+     *
+     * @return Person
+     */
+    public function setNationality($nationality)
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    /**
+     * Get nationality
+     *
+     * @return string
+     */
+    public function getNationality()
+    {
+        return $this->nationality;
+    }
+
+    /**
+     * Set companyPhone
+     *
+     * @param string $companyPhone
+     *
+     * @return Person
+     */
+    public function setCompanyPhone($companyPhone)
+    {
+        $this->companyPhone = $companyPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get companyPhone
+     *
+     * @return string
+     */
+    public function getCompanyPhone()
+    {
+        return $this->companyPhone;
+    }
+
+    /**
+     * Set privatePhone
+     *
+     * @param string $privatePhone
+     *
+     * @return Person
+     */
+    public function setPrivatePhone($privatePhone)
+    {
+        $this->privatePhone = $privatePhone;
+
+        return $this;
+    }
+
+    /**
+     * Get privatePhone
+     *
+     * @return string
+     */
+    public function getPrivatePhone()
+    {
+        return $this->privatePhone;
+    }
+
+    /**
+     * Set companyEmail
+     *
+     * @param string $companyEmail
+     *
+     * @return Person
+     */
+    public function setCompanyEmail($companyEmail)
+    {
+        $this->companyEmail = $companyEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get companyEmail
+     *
+     * @return string
+     */
+    public function getCompanyEmail()
+    {
+        return $this->companyEmail;
+    }
+
+    /**
+     * Set privateEmail
+     *
+     * @param string $privateEmail
+     *
+     * @return Person
+     */
+    public function setPrivateEmail($privateEmail)
+    {
+        $this->privateEmail = $privateEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get privateEmail
+     *
+     * @return string
+     */
+    public function getPrivateEmail()
+    {
+        return $this->privateEmail;
+    }
+
+    /**
+     * Set skypeId
+     *
+     * @param string $skypeId
+     *
+     * @return Person
+     */
+    public function setSkypeId($skypeId)
+    {
+        $this->skypeId = $skypeId;
+
+        return $this;
+    }
+
+    /**
+     * Get skypeId
+     *
+     * @return string
+     */
+    public function getSkypeId()
+    {
+        return $this->skypeId;
+    }
+
+    /**
+     * Set facebookId
+     *
+     * @param string $facebookId
+     *
+     * @return Person
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
+
+        return $this;
+    }
+
+    /**
+     * Get facebookId
+     *
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    /**
+     * Set twitter
+     *
+     * @param string $twitter
+     *
+     * @return Person
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+
+        return $this;
+    }
+
+    /**
+     * Get twitter
+     *
+     * @return string
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * Set instagram
+     *
+     * @param string $instagram
+     *
+     * @return Person
+     */
+    public function setInstagram($instagram)
+    {
+        $this->instagram = $instagram;
+
+        return $this;
+    }
+
+    /**
+     * Get instagram
+     *
+     * @return string
+     */
+    public function getInstagram()
+    {
+        return $this->instagram;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDirectLinePhone()
+    {
+        return $this->directLinePhone;
+    }
+
+    /**
+     * @param string $directLinePhone
+     */
+    public function setDirectLinePhone($directLinePhone)
+    {
+        $this->directLinePhone = $directLinePhone;
+    }
 }
