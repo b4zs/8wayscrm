@@ -2,6 +2,7 @@
 
 namespace Application\UserBundle\Admin;
 
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\UserBundle\Admin\Entity\UserAdmin as BaseUserAdmin;
 
@@ -39,4 +40,23 @@ class UserAdmin extends BaseUserAdmin
 				->end();
 		}
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function configureListFields(ListMapper $listMapper)
+	{
+		$listMapper
+			->addIdentifier('username')
+			->add('email')
+			->add('firstName', null, array('label' => 'First name'))
+			->add('lastName', null, array('label' => 'Last name'))
+			->add('groups')
+			->add('enabled', null, array('editable' => true))
+			->add('locked', null, array('editable' => true))
+			->add('createdAt')
+		;
+	}
+
+
 }

@@ -17,3 +17,12 @@ ul.sidebar-menu li.current > a {
     color: #fff;
     font-weight: bold;
 }
+
+ul.sidebar-menu li.sidemenu-pull-right {
+    margin-top: -1.35em;
+    margin-right: 1em;
+}
+
+ul.sidebar-menu li.sidemenu-pull-right a:hover {
+    background-color: #000000;
+}

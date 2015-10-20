@@ -24,7 +24,7 @@ class ClientStatus
 	{
 		return array(
 			self::COLD => array(
-				'icon' => 'fa fa-user-plus',
+				'icon' => 'fa fa-inbox',
 				'title'=> 'Cold',
 			),
 			self::HOT => array(
@@ -32,15 +32,15 @@ class ClientStatus
 				'title'=> 'Hot',
 			),
 			self::SLEEPING => array(
-				'icon'  => 'fa fa-bed',
+				'icon'  => 'fa fa-clock-o',
 				'title'=> 'Sleeping',
 			),
 			self::ACTIVE => array(
-				'icon'  => 'fa fa-bed',
+				'icon'  => 'fa fa-comments',
 				'title'=> 'Active',
 			),
 			self::ARCHIVED => array(
-				'icon'  => 'fa fa-bed',
+				'icon'  => 'fa fa-archive',
 				'title'=> 'Archived',
 			),
 			self::JUNK => array(

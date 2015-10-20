@@ -1,0 +1,7 @@
+
+{% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
+
+{% block navbar_title %}
+	<i class="{{ crm_get_project_status_icon(object.status) }}"></i>
+	{{ object }} <small>({{ object.status }})</small>
+{% endblock %}

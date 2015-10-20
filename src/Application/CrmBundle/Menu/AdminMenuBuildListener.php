@@ -24,6 +24,7 @@ class AdminMenuBuildListener extends ContainerAware
 
 		$this->addTeamMenu($menu);
 		$this->modifyClientsMenu($menu);
+		$this->modifySuppliersMenu($menu);
 
 		$this->reorderContactManager($menu);
 
@@ -52,7 +53,6 @@ class AdminMenuBuildListener extends ContainerAware
 	protected function modifyContactManagerMenu(MenuItem $menu)
 	{
 
-		$statuses = ProjectStatus::getChoices();
 		$mainMenuItem = $menu->getChild(self::CONTACT_MANAGER);
 
 
@@ -71,7 +71,7 @@ class AdminMenuBuildListener extends ContainerAware
 	}
 	protected function modifyProjectsMenu(MenuItem $menu)
 	{
-		$statuses = ProjectStatus::getChoices();
+		$statuses = ProjectStatus::getAllData();
 		$adminCode = 'application_crm.admin.project';
 		$this->createdMenuItems[$adminCode] = $mainMenuItem = $menu->getChild('Projects');
 
@@ -80,13 +80,14 @@ class AdminMenuBuildListener extends ContainerAware
 		$admin = $this->container->get($adminCode);
 		$mainMenuItem->setUri($admin->generateUrl('list'));
 
-		foreach ($statuses as $status) {
+		foreach ($statuses as $status => $statusData) {
 			$this->createdMenuItems[$adminCode.'#'.$status] = $statusItem = $this->getKnpMenuFactory()->createItem($status, array(
 				'uri' => $admin->generateUrl(
 					'list',
 					array('filter' => array('status' => array('type' => '', 'value' => $status,)))
 				),
 			));
+			$statusItem->setExtra('icon', $statusData['icon']);
 
 			$mainMenuItem->addChild($statusItem);
 		}
@@ -98,6 +99,7 @@ class AdminMenuBuildListener extends ContainerAware
 		$adminCode = 'application_crm.admin.client';
 
 		$mainAdminItem = $menu->getChild(self::CONTACT_MANAGER)->getChild($adminCode);
+		$mainAdminItem->setExtra('icon', 'fa fa-building');
 
 		/** @var ClientAdmin $admin */
 		$admin = $this->container->get($adminCode);
@@ -110,11 +112,17 @@ class AdminMenuBuildListener extends ContainerAware
 					array('filter' => array('status' => array('type' => '', 'value' => $status,)))
 				),
 			));
+			$mainAdminItem->addChild($statusItem);
 
 			if (!$createItemAdded) {
-				$this->createdMenuItems[$adminCode.'#create'] = $addLeadItem = $statusItem->addChild('Create lead');
+				$this->createdMenuItems[$adminCode.'#create'] = $addLeadItem = $mainAdminItem->addChild($adminCode.'.create');
 				$addLeadItem->setUri($admin->generateUrl('create'));
 				$addLeadItem->setExtra('icon', 'fa fa-plus');
+				$addLeadItem->setLabel('');
+				$addLeadItem->setAttributes(array(
+					'title' => 'Create lead',
+					'class' => 'pull-right sidemenu-pull-right'
+				));
 				$createItemAdded = true;
 			}
 
@@ -122,7 +130,6 @@ class AdminMenuBuildListener extends ContainerAware
 				$statusItem->setExtra('icon', 'fa fa-'.$statusData['icon']);
 			}
 
-			$mainAdminItem->addChild($statusItem);
 		}
 	}
 
@@ -187,14 +194,20 @@ class AdminMenuBuildListener extends ContainerAware
 			$teamItem->setName($adminCode.'.team');
 			$teamItem->setLabel('Team');
 			$teamItem->setParent(null);
+			$teamItem->setExtra('icon', 'fa fa-user');
 			$this->createdMenuItems[$adminCode] = $contactManagerItem->addChild($teamItem);
 
 			$admin = $this->container->get($adminCode);
-			$this->createdMenuItems[$adminCode.'#create'] = $createItem = $this->getKnpMenuFactory()->createItem('Create member', array(
+			$this->createdMenuItems[$adminCode.'#create'] = $createItem = $this->getKnpMenuFactory()->createItem('sonata.user.admin.user.team.create', array(
 				'uri'   => $admin->generateUrl('create'),
+				'label' => '',
+				'attributes' => array(
+					'title' => 'Create member',
+					'class' => 'pull-right sidemenu-pull-right'
+				)
 			));
-			$createItem->setExtra('icon', 'fa fa-plus');
-			$teamItem->addChild($createItem);
+			$createItem->setExtra('icon', 'fa fa-plus  fa-fw');
+			$contactManagerItem->addChild($createItem);
 		}
 	}
 
@@ -203,6 +216,7 @@ class AdminMenuBuildListener extends ContainerAware
 		$contactManagerItem = $menu->getChild(self::CONTACT_MANAGER);
 		$contactManagerItem->reorderChildren(array(
 			'sonata.user.admin.user.team',
+			'sonata.user.admin.user.team.create',
 			'application_crm.admin.client',
 			'application_crm.admin.supplier',
 		));
@@ -211,6 +225,15 @@ class AdminMenuBuildListener extends ContainerAware
 	private function isGranted($role)
 	{
 		return $this->container->get('security.authorization_checker')->isGranted($role);
+	}
+
+	private function modifySuppliersMenu($menu)
+	{
+		$adminCode = 'application_crm.admin.supplier';
+
+		$mainAdminItem = $menu->getChild(self::CONTACT_MANAGER)->getChild($adminCode);
+		$mainAdminItem->setExtra('icon', 'fa fa-support');
+
 	}
 
 

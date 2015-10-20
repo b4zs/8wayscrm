@@ -76,5 +76,17 @@ class User extends BaseUser
         return $this->projectMemberships;
     }
 
+    /**
+     * Returns a string representation
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getFirstname() || $this->getLastname()
+            ? $this->getFirstname() . ' ' . $this->getLastname()
+            : $this->getUsername();
+    }
+
 
 }

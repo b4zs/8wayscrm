@@ -43,3 +43,8 @@ services:
             - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_listener, event: menu.build.sonata_admin_sidebar, method: onAdminMenuBuild }
+
+    application_crm.twig.extension:
+        class: Application\CrmBundle\Twig\CrmBundleExtension
+        tags:
+            - { name: twig.extension }

@@ -159,4 +159,15 @@ class ProjectAdmin extends Admin
 
         return $parentAdmin;
     }
+
+    public function getTemplate($name)
+    {
+        switch (true) {
+            case $name === 'edit' && $this->getSubject():
+                return 'ApplicationCrmBundle:ProjectAdmin:edit.html.twig';
+                break;
+            default:
+                return parent::getTemplate($name);
+        };
+    }
 }
