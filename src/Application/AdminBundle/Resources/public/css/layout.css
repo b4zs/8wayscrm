@@ -1,0 +1,19 @@
+.skin-black .sidebar span{
+    color: #eee;
+}
+
+ul.sidebar-menu > li {
+    padding-top: 0.5em!important;
+}
+
+ul.sidebar-menu > li > span,
+ul.sidebar-menu > li > a {
+    font-size: 1.1em;
+    padding-left: 1em;
+}
+
+ul.sidebar-menu li.current > span,
+ul.sidebar-menu li.current > a {
+    color: #fff;
+    font-weight: bold;
+}

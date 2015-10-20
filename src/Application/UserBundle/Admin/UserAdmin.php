@@ -14,30 +14,29 @@ class UserAdmin extends BaseUserAdmin
 			->add('username')
 			->add('email')
 			->add('plainPassword', 'text', array(
-				'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
+				'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
+				'label'    => 'New password',
 			))
-			->end()
-			->with('Groups', array('class' => 'col-md-6'))
-			->add('groups', 'sonata_type_model', array(
-				'required' => false,
-				'expanded' => true,
-				'multiple' => true
-			))
-			->end()
+			->end();
+
+		$formMapper
 			->with('Profile', array('class' => 'col-md-6'))
-				->add('person', 'sonata_type_model_list', array(
-					'btn_list'      => 'Link to person',
-					'btn_add'       => 'Create new person',
-					'btn_delete'    => 'Unlink person',
-					'label'         => 'Associated person in "contact book"',
-					'required'      => false,
-				))
+				->add('firstname', 'text', array('required' => false))
+				->add('lastname', 'text', array('required' => false))
 				->add('locale', 'locale', array('required' => false))
 				->add('timezone', 'timezone', array('required' => false))
 			->end()
 		;
 
+		if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+			$formMapper
+				->with('Groups', array('class' => 'col-md-6'))
+				->add('groups', 'sonata_type_model', array(
+					'required' => false,
+					'expanded' => true,
+					'multiple' => true
+				))
+				->end();
+		}
 	}
-
-
 }

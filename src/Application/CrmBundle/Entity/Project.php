@@ -3,12 +3,14 @@
 namespace Application\CrmBundle\Entity;
 
 use Application\CrmBundle\Enum\ProjectStatus;
+use Core\LoggableEntityBundle\Model\LogExtraData;
+use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Project
  */
-class Project
+class Project implements LogExtraDataAware
 {
     /**
      * @var integer
@@ -18,11 +20,6 @@ class Project
      * @var string
      */
     private $name;
-
-    /**
-     * @var string
-     */
-    private $createdAt;
 
     /**
      * @var string
@@ -40,14 +37,29 @@ class Project
     private $memberships;
 
     /**
-     * @var \Application\CrmBundle\Entity\Client
+     * @var \Application\CrmBundle\Entity\AbstractClient
      */
     private $client;
 
     /**
      * @var \DateTime
      */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var \DateTime
+     */
     private $deletedAt;
+
+    /**
+     * @var LogExtraData|null
+     */
+    private $logExtraData;
 
     /**
      * Constructor
@@ -94,10 +106,10 @@ class Project
     /**
      * Set createdAt
      *
-     * @param string $createdAt
+     * @param \DateTime $createdAt
      * @return Project
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -107,7 +119,7 @@ class Project
     /**
      * Get createdAt
      *
-     * @return string 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -218,7 +230,7 @@ class Project
         return $this->memberships;
     }
 
-    public function setClient(\Application\CrmBundle\Entity\Client $client = null)
+    public function setClient(\Application\CrmBundle\Entity\AbstractClient $client = null)
     {
         $this->client = $client;
 
@@ -252,4 +264,21 @@ class Project
     }
 
 
+    /**
+     * @return LogExtraData|null
+     */
+    public function getLogExtraData()
+    {
+        return $this->logExtraData;
+    }
+
+    public function setLogExtraData(LogExtraData $logExtraData)
+    {
+        $this->logExtraData = $logExtraData;
+    }
+
+    public function setUpdatedAt(\DateTime $dateTime)
+    {
+        $this->updatedAt = $dateTime;
+    }
 }

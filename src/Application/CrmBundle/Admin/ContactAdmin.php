@@ -2,7 +2,7 @@
 
 namespace Application\CrmBundle\Admin;
 
-use Application\CrmBundle\Entity\Client;
+use Application\CrmBundle\Entity\AbstractClient;
 use Application\CrmBundle\Entity\Contact;
 use Application\UserBundle\Enum\Gender;
 use Sonata\AdminBundle\Admin\Admin;
@@ -61,28 +61,34 @@ class ContactAdmin extends Admin
 			    'data_class'    => null,
 			    'inherit_data'  => true,
 			    'label'         => $parentAdmin ? 'Personal' : null,
+			    'required'      => false,
 		    ));
 
 	        $formMapper->get('personal')
 		        ->add('title', 'text', array(
-			        'required'  => false,
+			        'required'      => false,
 		        ))
 		        ->add('firstName', 'text', array(
 					'property_path' => 'person.firstName',
+			        'required'      => true,
 				))
 				->add('lastName', 'text', array(
 					'property_path' => 'person.lastName',
+					'required'      => false,
 				))
 				->add('dateOfBirth', 'date', array(
 					'property_path' => 'person.dateOfBirth',
 					'widget'        => 'single_text',
+					'required'      => false,
 				))
 				->add('gender', 'choice', array(
 					'property_path' => 'person.gender',
 					'choices'       => Gender::getChoices(),
+					'required'      => true,
 				))
 				->add('nationality', 'country', array(
 					'property_path' => 'person.nationality',
+					'required'      => false,
 				));
 		$formMapper->end();
 
@@ -91,30 +97,37 @@ class ContactAdmin extends Admin
 			    'data_class'    => null,
 			    'inherit_data'  => true,
 			    'label'         => $parentAdmin ? 'Contact' : null,
+			    'required'      => false,
 		    ));
 	        $formMapper->get('contact')
 				->add('companyEmail', 'text', array(
 					'property_path' => 'person.companyEmail',
 					'label'         => 'Email (Pro)',
+					'required'      => false,
 				))
 				->add('privateEmail', 'text', array(
 					'property_path' => 'person.privateEmail',
 					'label'         => 'Email (Pte)',
+					'required'      => false,
 				))
 				->add('directLinePhone', 'text', array(
 					'property_path' => 'person.directLinePhone',
 					'label'         => 'Phone (line)',
+					'required'      => false,
 				))
 				->add('companyPhone', 'text', array(
 					'property_path' => 'person.companyPhone',
 					'label'         => 'Phone (Pro)',
+					'required'      => false,
 				))
 				->add('privatePhone', 'text', array(
 					'property_path' => 'person.privatePhone',
 					'label'         => 'Phone (Pte)',
+					'required'      => false,
 				))
 				->add('skypeId', 'text', array(
 					'property_path' => 'person.skypeId',
+					'required'      => false,
 				));
         $formMapper->end();
 
@@ -126,16 +139,20 @@ class ContactAdmin extends Admin
 			    'data_class'    => null,
 			    'inherit_data'  => true,
 			    'label'         => $parentAdmin ? 'Social' : null,
+			    'required'      => false,
 		    ));
 		    $formMapper->get('social')
 					->add('facebookId', 'text', array(
 						'property_path' => 'person.facebookId',
+						'required'      => false,
 					))
 					->add('twitter', 'text', array(
 						'property_path' => 'person.twitter',
+						'required'      => false,
 					))
 					->add('instagram', 'text', array(
 						'property_path' => 'person.instagram',
+						'required'      => false,
 					))
 				;
 		    $formMapper->end();
@@ -147,6 +164,7 @@ class ContactAdmin extends Admin
 		    'data_class'    => null,
 		    'inherit_data'  => true,
 		    'label'         => $parentAdmin ? 'Relation' : null,
+		    'required'      => false,
 	    ));
 	    $formMapper->get('relation')
 	        ->add('role', 'text', array(

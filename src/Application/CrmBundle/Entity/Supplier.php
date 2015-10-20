@@ -4,7 +4,7 @@
 namespace Application\CrmBundle\Entity;
 
 
-class Client extends AbstractClient
+class Supplier extends AbstractClient
 {
 
 

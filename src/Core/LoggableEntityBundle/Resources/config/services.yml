@@ -1,9 +1,21 @@
 services:
 
   core.loggable_entity.admin.extension:
-        class: Core\LoggableEntityBundle\Admin\Extension\LoggableEntityExtension
-        tags:
-            - { name: sonata.admin.extension, global: true }
+      class: Core\LoggableEntityBundle\Admin\Extension\LoggableEntityExtension
+      calls:
+          - [setEntityManager, [@doctrine.orm.default_entity_manager]]
+          - [setLoggableListener, [@gedmo.listener.loggable]]
+      tags:
+          - { name: sonata.admin.extension, global: true }
+          - { name: kernel.event_listener, event: sonata.block.event.sonata.admin.edit.form.bottom, method: onAdminEditFormBottom }
+
+  core.loggable_entity.block.entity_log:
+      class: Core\LoggableEntityBundle\Block\EntityLogBlockService
+      arguments: ['core.loggable_entity.block.entity_log', @templating]
+      calls:
+          - [setLoggableAdminExtension, [@core.loggable_entity.admin.extension]]
+      tags:
+          - { name: sonata.block }
 
 
   gedmo.listener.loggable:

@@ -1,5 +1,9 @@
 Application\CrmBundle\Entity\Company:
     type: embeddable
+    gedmo:
+        loggable:
+            logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry
+
 
     fields:
         name:
@@ -9,6 +13,8 @@ Application\CrmBundle\Entity\Company:
             type: string
             length: 255
             nullable: true
+            gedmo:
+                - versioned
         sectorOfActivity:
             type: string
             length: 255
@@ -16,27 +22,41 @@ Application\CrmBundle\Entity\Company:
             type: string
             length: 8
             nullable: true
+            gedmo:
+                - versioned
         country:
             type: string
             length: 8
             nullable: true
+            gedmo:
+                - versioned
         website:
             type: string
             length: 255
             nullable: true
+            gedmo:
+                - versioned
         email:
             type: string
             length: 255
             nullable: true
+            gedmo:
+                - versioned
         phone1:
             type: string
             length: 255
             nullable: true
+            gedmo:
+                - versioned
         phone2:
             type: string
             length: 255
             nullable: true
+            gedmo:
+                - versioned
         fax:
             type: string
             length: 255
             nullable: true
+            gedmo:
+                - versioned

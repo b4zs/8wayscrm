@@ -2,14 +2,14 @@
 
 namespace Application\CrmBundle\Admin;
 
+use Application\CrmBundle\Entity\Address;
 use Application\CrmBundle\Entity\Company;
 use Application\CrmBundle\Entity\Contact;
 use Application\CrmBundle\Entity\Individual;
-use Application\CrmBundle\Entity\Client;
+use Application\CrmBundle\Entity\AbstractClient;
 use Application\CrmBundle\Entity\Person;
 use Application\CrmBundle\Entity\Project;
 use Application\CrmBundle\Enum\ClientStatus;
-use Application\CrmBundle\Enum\ClientType;
 use Application\UserBundle\Entity\User;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
@@ -23,18 +23,26 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ClientAdmin extends Admin
 {
+
+
     /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-//            ->add('id')
-//            ->add('type')
+            ->add('company', 'doctrine_orm_callback', array(
+                'callback' => function($queryBuilder, $alias, $field, $value){
+                    $aliases = $queryBuilder->getRootAliases();
+                    $value = is_array($value) ? $value['value'] : null;
+                    $queryBuilder
+                        ->andWhere(current($aliases).'.company.name LIKE :company_filter')
+                        ->setParameter('company_filter', '%'.$value.'%');
+                }
+            ))
 //            ->add('financialInformation')
-            ->add('type', null, array('label' => 'Type'), 'choice', array('choices' => ClientType::getChoices()))
             ->add('status', null, array('label' => 'Status'), 'choice', array('choices' => ClientStatus::getChoices()))
-//            ->add('createdAt')
+            ->add('owner')
         ;
     }
 
@@ -45,7 +53,8 @@ class ClientAdmin extends Admin
     {
         $listMapper
             ->add('owner')
-            ->add('type')
+            ->addIdentifier('company', null, array(
+            ))
             ->add('status')
             ->add('createdAt', null, array(
                 'label' => 'created',
@@ -67,7 +76,6 @@ class ClientAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $type = $this->getSubject() ? $this->getSubject()->getType() : null;
 
         $formMapper->with('Company', array('class' => 'col-md-7',));
             $formMapper->add('company', 'form', array(
@@ -104,8 +112,7 @@ class ClientAdmin extends Admin
         $formMapper->end();
 
 
-        if (ClientType::CLIENT === $type || ClientType::SUPPLIER === $type) {
-            $formMapper->with('Contact ', array('class' => 'col-md-12',));
+        $formMapper->with('Contact ', array('class' => 'col-md-12',));
             $formMapper->add('contacts', 'sonata_type_collection', array(
                 'label'         => false,
                 'by_reference'  => false,
@@ -116,20 +123,32 @@ class ClientAdmin extends Admin
                     'parent_admin'  => 'client',
                 ),
             ));
-            $formMapper->end();
-        }
+        $formMapper->end();
+
+        $formMapper->with('Addresses', array('class' => 'col-md-12',));
+            $formMapper->add('addresses', 'sonata_type_collection', array(
+                'label'         => false,
+                'by_reference'  => false,
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'link_parameters' => array(
+                    'parent_admin'  => 'client',
+                ),
+            ));
+        $formMapper->end();
 
         $formMapper->with('Projects');
-        $formMapper->add('projects', 'sonata_type_collection', array(
-            'label'         => false,
-            'by_reference'  => false,
-        ), array(
-            'edit' => 'inline',
-            'inline' => 'table',
-            'link_parameters' => array(
-                'parent_admin'  => 'lead',
-            ),
-        ));
+            $formMapper->add('projects', 'sonata_type_collection', array(
+                'label'         => false,
+                'by_reference'  => false,
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'link_parameters' => array(
+                    'parent_admin'  => 'lead',
+                ),
+            ));
         $formMapper->end();
     }
 
@@ -140,7 +159,6 @@ class ClientAdmin extends Admin
     {
         $showMapper
             ->add('id')
-            ->add('type')
             ->add('financialInformation')
             ->add('status')
             ->add('createdAt')
@@ -149,7 +167,7 @@ class ClientAdmin extends Admin
 
     public function getNewInstance()
     {
-        /** @var Client $instance */
+        /** @var AbstractClient $instance */
         $instance = parent::getNewInstance();
 
         $container = $this->configurationPool->getContainer();
@@ -159,32 +177,12 @@ class ClientAdmin extends Admin
             $instance->setOwner($user);
         }
 
-        if ($this->getRequest()) {
-            if ($type = $this->getRequestTypeForCreate()) {
-                $instance->setType($type);
-            }
-        }
-
         $instance->addContact(new Contact());
+        $instance->addAddress(new Address());
 //        $instance->addProject(new Project());
 
 
         return $instance;
-    }
-
-    public function getRequestTypeForCreate()
-    {
-        if ($this->getRequest() instanceof Request) {
-            $type = $this->getRequest()->get('type');
-            if (!$type) {
-                $uniqid = $this->getUniqid();
-                $type = $this->getRequest()->request->get($uniqid.'[type]', null, true);
-            }
-
-            return $type;
-        };
-
-        return null;
     }
 
     protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
@@ -193,7 +191,7 @@ class ClientAdmin extends Admin
     }
 
     /**
-     * @return Client|null
+     * @return AbstractClient|null
      */
     public function getSubject()
     {
@@ -231,6 +229,26 @@ class ClientAdmin extends Admin
             ->add('phone2', null, array('required' => false, 'label' => 'Line2',))
             ->add('fax', null, array('required' => false))
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function preUpdate($object)
+    {
+        if ($object instanceof AbstractClient) {
+            $object->setUpdatedAt(new \DateTime());
+        }
+    }
+
+    public function getDefaultSortValues($class)
+    {
+        return array(
+            '_sort_order' => 'DESC',
+            '_sort_by'    => 'updatedAt',
+            '_page'       => 1,
+            '_per_page'   => 25,
+        );
     }
 
 

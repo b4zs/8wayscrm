@@ -17,11 +17,23 @@ class ProjectAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
             ->add('name')
 //            ->add('createdAt')
 //            ->add('description')
-            ->add('status', null, array('label' => ' '), 'hidden')
+            ->add('status', null, array('label' => 'Status'), 'choice', array(
+                'choices' => ProjectStatus::getChoices(),
+            ))
+            ->add('client', 'doctrine_orm_callback', array(
+                'callback' => function($queryBuilder, $alias, $field, $value){
+                    $aliases = $queryBuilder->getRootAliases();
+                    $value = is_array($value) ? $value['value'] : null;
+                    $queryBuilder
+                        ->innerJoin(current($aliases).'.client', 'client')
+                        ->andWhere('client.company.name LIKE :company_filter')
+                        ->setParameter('company_filter', '%'.$value.'%');
+                }
+            ))
+            ->add('id')
         ;
     }
 
@@ -31,9 +43,9 @@ class ProjectAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
+            ->addIdentifier('id')
+            ->addIdentifier('name')
             ->add('client')
-            ->add('name')
             ->add('status')
             ->add('createdAt')
             ->add('_action', 'actions', array(
@@ -54,11 +66,16 @@ class ProjectAdmin extends Admin
 
 
         $formMapper->with('Project', array('class' => 'col-md-6'));
+            $formMapper->add('name');
+
             if ('lead' !== $parentAdmin) {
-                $formMapper->add('client', 'sonata_type_model_list', array(), array());
+                $formMapper->add('client', 'sonata_type_model_list', array(
+                    'btn_add' => false,
+                    'btn_delete' => false,
+                    'btn_list' => 'Select',
+                ), array());
             }
 
-            $formMapper->add('name');
         $formMapper->end();
 
         $formMapper->with('Info', array('class' => 'col-md-6'));

@@ -28,3 +28,9 @@ services:
          class: Application\AdminBundle\Form\Type\AdminType
          tags:
              - { name: form.type, alias: sonata_type_admin }
+
+     sonata.admin.block.admin_list:
+         class: Application\AdminBundle\Block\AdminListBlockService
+         arguments: ['sonata.admin.block.admin_list', @templating, @sonata.admin.pool]
+         tags:
+             - { name: sonata.block }

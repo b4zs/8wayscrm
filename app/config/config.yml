@@ -92,6 +92,7 @@ sonata_admin:
     title: 8Ways CRM
     templates:
         dashboard: SonataAdminBundle:Core:dashboard.html.twig
+        user_block: ApplicationAdminBundle:Core:user_block.html.twig
     assets:
             stylesheets:
                 - bundles/applicationadmin/fontawesome/css/font-awesome.min.css
@@ -105,6 +106,7 @@ sonata_admin:
                 - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
                 - bundles/sonataadmin/css/styles.css
                 - bundles/sonataadmin/css/layout.css
+                - bundles/applicationadmin/css/layout.css
             javascripts:
                 - bundles/sonataadmin/vendor/jquery/dist/jquery.min.js
                 - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js

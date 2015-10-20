@@ -1,6 +1,6 @@
-Application\CrmBundle\Entity\Project:
+Application\CrmBundle\Entity\AbstractClient:
     type: entity
-    table: crm__project
+    table: crm__client
     id:
         id:
             type: integer
@@ -12,21 +12,24 @@ Application\CrmBundle\Entity\Project:
             field_name: deletedAt
             time_aware: false
         loggable:
-            logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry
+          logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry
+
+    inheritanceType: single_table
+    discriminatorColumn:
+        name: type
+        type: string
+
     fields:
-        name:
+        financialInformation:
             type: string
             length: 255
-            gedmo:
-                - versioned
-        description:
-            type: text
             nullable: true
             gedmo:
                 - versioned
         status:
             type: string
             length: '16'
+            nullable: true
             gedmo:
                 - versioned
         createdAt:
@@ -34,21 +37,15 @@ Application\CrmBundle\Entity\Project:
         updatedAt:
             type: datetime
             nullable: true
+            gedmo:
+                timestampable:
+                    on: update
         deletedAt:
             type: datetime
             nullable: true
-    manyToOne:
-        client:
-            targetEntity: Application\CrmBundle\Entity\Client
-            inversedBy: projects
-            gedmo:
-                - versioned
-    oneToMany:
-        memberships:
-            targetEntity: Application\CrmBundle\Entity\ProjectMembership
-            mappedBy: project
-            cascade: [all]
-            orphanRemoval: true
-            gedmo:
-                - versioned
+        referral:
+            type: string
+            length: 255
+            nullable: true
+
     lifecycleCallbacks: {  }

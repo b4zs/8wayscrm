@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Entity;
 
+use Application\CrmBundle\Enum\AddressType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +29,9 @@ class Address
      */
     private $city;
 
+    /** @var  string */
+    private $postalCode;
+
     /**
      * @var string
      */
@@ -37,6 +41,17 @@ class Address
      * @var string
      */
     private $streetNumber;
+
+    private $postbox;
+
+    private $name;
+
+    private $type = AddressType::OFFICE;
+
+    /**
+     * @var AbstractClient
+     */
+    private $client;
 
 
     /**
@@ -163,4 +178,86 @@ class Address
     {
         return $this->streetNumber;
     }
+
+    /**
+     * @return AbstractClient
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param AbstractClient $client
+     */
+    public function setClient($client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostalCode()
+    {
+        return $this->postalCode;
+    }
+
+    /**
+     * @param string $postalCode
+     */
+    public function setPostalCode($postalCode)
+    {
+        $this->postalCode = $postalCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostbox()
+    {
+        return $this->postbox;
+    }
+
+    /**
+     * @param mixed $postbox
+     */
+    public function setPostbox($postbox)
+    {
+        $this->postbox = $postbox;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+
 }

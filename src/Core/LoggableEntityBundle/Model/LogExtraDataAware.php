@@ -13,5 +13,5 @@ interface LogExtraDataAware
 
 	public function setLogExtraData(LogExtraData $logExtraData);
 
-	public function setUpdatedAt(\DateTime $datTime);
+	public function setUpdatedAt(\DateTime $dateTime);
 }

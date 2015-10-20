@@ -12,6 +12,9 @@
 namespace Application\UserBundle\Entity;
 
 use Application\CrmBundle\Entity\Person;
+use Application\CrmBundle\Entity\ProjectMembership;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 
 /**
@@ -35,6 +38,17 @@ class User extends BaseUser
     protected $redmineUserId;
 
     /**
+     * @var Collection|ProjectMembership[]
+     */
+    protected $projectMemberships;
+
+    public function __construct()
+    {
+        $this->projectMemberships = new ArrayCollection();
+    }
+
+
+    /**
      * Get id
      *
      * @return integer $id
@@ -44,19 +58,23 @@ class User extends BaseUser
         return $this->id;
     }
 
-    /**
-     * @return Person
-     */
-    public function getPerson()
+    public function addProjectMembership(ProjectMembership $projectMembership)
     {
-        return $this->person;
+        $this->projectMemberships->add($projectMembership);
+    }
+
+    public function removeProjectMembership(ProjectMembership $projectMembership)
+    {
+        $this->projectMemberships->remove($projectMembership);
     }
 
     /**
-     * @param Person $person
+     * @return \Application\CrmBundle\Entity\ProjectMembership[]|Collection
      */
-    public function setPerson($person)
+    public function getProjectMemberships()
     {
-        $this->person = $person;
+        return $this->projectMemberships;
     }
+
+
 }

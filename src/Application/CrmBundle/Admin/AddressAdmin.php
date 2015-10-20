@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Admin;
 
+use Application\CrmBundle\Enum\AddressType;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -51,14 +52,36 @@ class AddressAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
+        $formMapper->add('first', 'form', array(
+            'label'         => 'Country/City',
+            'inherit_data'  => true,
+            'required'      => false,
+        ));
+        $formMapper->get('first')
             ->add('country', 'country', array(
                 'required' => false,
             ))
-            ->add('state', null, array(
+            ->add('city', null, array(
                 'required' => false,
             ))
-            ->add('city', null, array(
+            ->add('postalCode', null, array(
+                'required' => false,
+            ))
+            ->add('postbox', null, array(
+                'required' => false,
+            ))
+        ;
+
+        $formMapper->add('second', 'form', array(
+            'label'         => 'Street/number',
+            'inherit_data'  => true,
+            'required'      => false,
+        ));
+        $formMapper->get('second')
+            ->add('type', 'choice', array(
+                'required' => false,
+                'choices'  => AddressType::getChoices(),
+                'label'    => 'Address type',
                 'required' => false,
             ))
             ->add('street', null, array(
@@ -67,6 +90,9 @@ class AddressAdmin extends Admin
             ->add('streetNumber', null, array(
                 'required' => false,
             ))
+//            ->add('name', null, array(
+//                'required' => false,
+//            ))
         ;
     }
 

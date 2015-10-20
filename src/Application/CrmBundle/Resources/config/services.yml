@@ -4,7 +4,7 @@ services:
         class: Application\CrmBundle\Admin\ContactAdmin
         arguments: [~, Application\CrmBundle\Entity\Contact, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Contact Persons }
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Contact Persons, show_in_dashboard: false }
 #
 
     application_crm.admin.address:
@@ -17,7 +17,13 @@ services:
         class: Application\CrmBundle\Admin\ClientAdmin
         arguments: [~, Application\CrmBundle\Entity\Client, ApplicationCrmBundle:ClientAdmin]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Clients, label: Clients }
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Clients }
+
+    application_crm.admin.supplier:
+        class: Application\CrmBundle\Admin\SupplierAdmin
+        arguments: [~, Application\CrmBundle\Entity\Supplier, ApplicationCrmBundle:ClientAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Suppliers }
 
     application_crm.admin.project:
         class: Application\CrmBundle\Admin\ProjectAdmin

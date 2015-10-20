@@ -1,4 +1,4 @@
-Application\CrmBundle\Entity\Client:
+Application\CrmBundle\Entity\Supplier:
     type: entity
     gedmo:
         loggable:

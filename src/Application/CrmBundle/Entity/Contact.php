@@ -25,7 +25,7 @@ class Contact
 
 
     /**
-     * @var \Application\CrmBundle\Entity\Client
+     * @var \Application\CrmBundle\Entity\AbstractClient
      */
     private $client;
 
@@ -55,7 +55,7 @@ class Contact
     }
 
     /**
-     * @return Client
+     * @return AbstractClient
      */
     public function getClient()
     {
@@ -63,7 +63,7 @@ class Contact
     }
 
     /**
-     * @param Client $client
+     * @param AbstractClient $client
      */
     public function setClient($client)
     {
