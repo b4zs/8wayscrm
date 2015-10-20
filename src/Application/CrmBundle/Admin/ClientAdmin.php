@@ -150,6 +150,20 @@ class ClientAdmin extends Admin
                 ),
             ));
         $formMapper->end();
+
+        $formMapper->with('Files');
+            $formMapper->add('fileset.galleryHasMedias', 'sonata_type_collection', array(
+                'label'                 => false,
+                'by_reference'          => false,
+                'cascade_validation'    => true,
+            ), array(
+                'edit'              => 'inline',
+                'inline'            => 'table',
+                'sortable'          => 'position',
+                'link_parameters'   => array('context' => 'default'),
+                'admin_code'        => 'sonata.media.admin.gallery_has_media',
+            ));
+        $formMapper->end();
     }
 
     /**

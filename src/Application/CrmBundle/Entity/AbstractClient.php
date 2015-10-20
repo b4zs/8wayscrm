@@ -3,10 +3,13 @@
 namespace Application\CrmBundle\Entity;
 
 use Application\CrmBundle\Enum\ClientStatus;
+use Application\MediaBundle\Entity\Gallery;
 use Application\UserBundle\Entity\User;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
 class AbstractClient implements LogExtraDataAware
 {
@@ -60,7 +63,10 @@ class AbstractClient implements LogExtraDataAware
      */
     protected $company;
 
-
+    /**
+     * @var Gallery
+     */
+    protected $fileset;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -417,6 +423,32 @@ class AbstractClient implements LogExtraDataAware
         $address->setClient(null);
     }
 
+    /**
+     * @return Gallery
+     */
+    public function getFileset()
+    {
+        return $this->fileset;
+    }
+
+    /**
+     * @param Gallery $fileset
+     */
+    public function setFileset($fileset)
+    {
+        $this->fileset = $fileset;
+    }
 
 
+    public function updateFilesetName(LifecycleEventArgs $eventArgs)
+    {
+        if ($eventArgs->hasChangedField('company.name')) {
+            $this->getFileset()->setName($this->getCompany()->getName());
+        }
+    }
+
+    public function addGalleryHasMedias(GalleryHasMediaInterface $galleryHasMedia)
+    {
+        $this->getFileset()->addGalleryHasMedias($galleryHasMedia);
+    }
 }

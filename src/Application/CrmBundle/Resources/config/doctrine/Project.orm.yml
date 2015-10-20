@@ -43,6 +43,10 @@ Application\CrmBundle\Entity\Project:
             inversedBy: projects
             gedmo:
                 - versioned
+        fileset:
+            targetEntity: Application\MediaBundle\Entity\Gallery
+            cascade: [all]
+
     oneToMany:
         memberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership

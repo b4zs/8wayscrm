@@ -33,7 +33,9 @@ class OpenButtonType extends AbstractType
 			'required'      => false,
 			'label'         => 'Open',
 			'attr'          => array(
-				'class' => 'btn btn-info',
+				'class'     => 'btn btn-success btn-sm',
+				'target'    => '_blank',
+				'title'     => 'Open detail in new tab',
 			),
 		));
 	}

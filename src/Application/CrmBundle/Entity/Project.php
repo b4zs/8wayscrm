@@ -3,9 +3,11 @@
 namespace Application\CrmBundle\Entity;
 
 use Application\CrmBundle\Enum\ProjectStatus;
+use Application\MediaBundle\Entity\Gallery;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Doctrine\ORM\Mapping as ORM;
+use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
 /**
  * Project
@@ -61,12 +63,16 @@ class Project implements LogExtraDataAware
      */
     private $logExtraData;
 
+    /** @var  Gallery */
+    private $fileset;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->memberships = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fileset = new Gallery();
         $this->createdAt = new \DateTime();
     }
 
@@ -88,6 +94,10 @@ class Project implements LogExtraDataAware
      */
     public function setName($name)
     {
+        if ($this->getFileset() instanceof Gallery && in_array($this->getFileset()->getName(), array(null, $this->getName()))) {
+            $this->getFileset()->setName($name);
+        }
+
         $this->name = $name;
 
         return $this;
@@ -280,5 +290,26 @@ class Project implements LogExtraDataAware
     public function setUpdatedAt(\DateTime $dateTime)
     {
         $this->updatedAt = $dateTime;
+    }
+
+    /**
+     * @return Gallery
+     */
+    public function getFileset()
+    {
+        return $this->fileset;
+    }
+
+    /**
+     * @param Gallery $fileset
+     */
+    public function setFileset($fileset)
+    {
+        $this->fileset = $fileset;
+    }
+
+    public function addGalleryHasMedias(GalleryHasMediaInterface $galleryHasMedia)
+    {
+        $this->getFileset()->addGalleryHasMedias($galleryHasMedia);
     }
 }

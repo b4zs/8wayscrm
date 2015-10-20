@@ -28,6 +28,12 @@ class GalleryHasMedia extends BaseGalleryHasMedia
      */
     protected $id;
 
+    public function __construct()
+    {
+        $this->enabled = true;
+    }
+
+
     /**
      * Get id
      *

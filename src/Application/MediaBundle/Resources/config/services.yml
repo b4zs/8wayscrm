@@ -1,0 +1,2 @@
+parameters:
+  sonata.media.admin.gallery_has_media.class: Application\MediaBundle\Admin\GalleryHasMediaAdmin

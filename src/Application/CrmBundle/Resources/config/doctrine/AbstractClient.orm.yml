@@ -47,5 +47,10 @@ Application\CrmBundle\Entity\AbstractClient:
             type: string
             length: 255
             nullable: true
+    manyToOne:
+        fileset:
+            targetEntity: Application\MediaBundle\Entity\Gallery
+            cascade: [all]
 
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        preUpdate: [updateFilesetName]

@@ -29,6 +29,18 @@ class Gallery extends BaseGallery
     protected $id;
 
     /**
+     * {@inheritdoc}
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->defaultFormat = 'big';
+        $this->context = 'default';
+        $this->enabled = true;
+    }
+
+
+    /**
      * Get id
      *
      * @return integer $id

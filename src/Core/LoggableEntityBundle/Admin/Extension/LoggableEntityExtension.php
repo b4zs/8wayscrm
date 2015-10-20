@@ -45,7 +45,8 @@ class LoggableEntityExtension extends AdminExtension
 
 	public function configureFormFields(FormMapper $form)
 	{
-		if (!$this->shouldUseExtension($form->getAdmin())) {
+		if ('form' !== $form->getFormBuilder()->getType()->getName() //avoid execution in case of custom formtypes
+			|| !$this->shouldUseExtension($form->getAdmin())) {
 			return;
 		}
 

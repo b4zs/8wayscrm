@@ -91,18 +91,38 @@ class ProjectAdmin extends Admin
 
         if (null === $parentAdmin) {
             $formMapper->with('Members', array('col-md-12'));
-            $formMapper->add('memberships', 'sonata_type_collection', array(
-                'label'         => false,
-                'by_reference'  => false,
-            ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-                'link_parameters' => array(
-                    'parent_admin'  => 'project',
-                ),
-            ));
+                $formMapper->add('memberships', 'sonata_type_collection', array(
+                    'label'         => false,
+                    'by_reference'  => false,
+                ), array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    'link_parameters' => array(
+                        'parent_admin'  => 'project',
+                    ),
+                ));
+            $formMapper->end();
+
+            $formMapper->with('Files');
+                $formMapper->add('fileset.galleryHasMedias', 'sonata_type_collection', array(
+                    'label'                 => false,
+                    'by_reference'          => false,
+                    'cascade_validation'    => true,
+                ), array(
+                    'edit'              => 'inline',
+                    'inline'            => 'table',
+                    'sortable'          => 'position',
+                    'link_parameters'   => array('context' => 'default'),
+                    'admin_code'        => 'sonata.media.admin.gallery_has_media',
+                ));
+            $formMapper->end();
+        } else {
+            $disabled = !$this->getSubject()->getId();
+            $formMapper->with('open');
+            $formMapper->add('_open', 'gb_open_button', array('required' => false, 'mapped' => false, 'label' => 'Details', 'disabled' => $disabled));
             $formMapper->end();
         }
+
 
 
     }
