@@ -37,6 +37,9 @@ class UserAdmin extends BaseUserAdmin
 					'expanded' => true,
 					'multiple' => true
 				))
+				->add('enabled', null, array(
+					'required' => false,
+				))
 				->end();
 		}
 	}
