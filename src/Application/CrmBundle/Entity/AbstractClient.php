@@ -101,6 +101,7 @@ class AbstractClient implements LogExtraDataAware
         $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->fileset = new Gallery();
     }
 
     /**
