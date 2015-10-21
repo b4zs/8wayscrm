@@ -87,6 +87,10 @@ class ClientAdmin extends Admin
         $formMapper->end();
 
         $formMapper->with('Management', array('class' => 'col-md-5',));
+            $formMapper->add('status', 'choice', array(
+                'required'  => false,
+                'choices'   => ClientStatus::getChoices(),
+            ));
             $formMapper->add('owner', 'sonata_type_model_list', array(
                 'required'  => false,
                 'btn_add'   => false,
@@ -105,10 +109,6 @@ class ClientAdmin extends Admin
             $formMapper->add('financialInformation', 'textarea', array(
                 'required'  => false,
                 'attr'      => array('rows' => '9'),
-            ));
-            $formMapper->add('status', 'choice', array(
-                'required'  => false,
-                'choices'   => ClientStatus::getChoices(),
             ));
         $formMapper->end();
 
