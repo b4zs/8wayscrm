@@ -126,7 +126,7 @@ class ProjectAdmin extends Admin
                 ));
             $formMapper->end();
         } else {
-            $disabled = !$this->getSubject()->getId();
+            $disabled = !$this->getSubject() || !$this->getSubject()->getId();
             $formMapper->with('open');
             $formMapper->add('_open', 'gb_open_button', array('required' => false, 'mapped' => false, 'label' => 'Details', 'disabled' => $disabled));
             $formMapper->end();
