@@ -3,15 +3,18 @@
 namespace Application\CrmBundle\Entity;
 
 use Application\CrmBundle\Enum\ClientStatus;
+use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\MediaBundle\Entity\Gallery;
+use Application\UserBundle\Entity\Group;
 use Application\UserBundle\Entity\User;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\GroupInterface;
 use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
-class AbstractClient implements LogExtraDataAware
+class AbstractClient implements LogExtraDataAware, OwnerGroupAware
 {
     /**
      * @var integer
@@ -90,6 +93,11 @@ class AbstractClient implements LogExtraDataAware
     private $updatedAt;
 
     private $logExtraData;
+
+    /**
+     * @var Group
+     */
+    protected $ownerGroup;
 
     /**
      * Constructor
@@ -443,13 +451,27 @@ class AbstractClient implements LogExtraDataAware
 
     public function updateFilesetName(LifecycleEventArgs $eventArgs)
     {
-        if ($eventArgs->hasChangedField('company.name')) {
-            $this->getFileset()->setName($this->getCompany()->getName());
-        }
+        $this->getFileset()->setName($this->getCompany()->getName());
     }
 
     public function addGalleryHasMedias(GalleryHasMediaInterface $galleryHasMedia)
     {
         $this->getFileset()->addGalleryHasMedias($galleryHasMedia);
+    }
+
+    /**
+     * @return Group
+     */
+    public function getOwnerGroup()
+    {
+        return $this->ownerGroup;
+    }
+
+    /**
+     * @param Group $ownerGroup
+     */
+    public function setOwnerGroup(GroupInterface $ownerGroup)
+    {
+        $this->ownerGroup = $ownerGroup;
     }
 }

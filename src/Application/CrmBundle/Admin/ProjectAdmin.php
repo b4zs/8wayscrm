@@ -179,4 +179,14 @@ class ProjectAdmin extends Admin
                 return parent::getTemplate($name);
         };
     }
+
+    public function isGranted($name, $object = null)
+    {
+        return parent::isGranted($name, $object)
+            && ($name === 'EDIT' && $object)
+            ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
+            : true
+            ;
+    }
+
 }

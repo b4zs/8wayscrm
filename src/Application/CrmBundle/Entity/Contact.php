@@ -2,12 +2,15 @@
 
 namespace Application\CrmBundle\Entity;
 
+use Application\CrmBundle\Model\OwnerGroupAware;
+use Application\UserBundle\Entity\Group;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\GroupInterface;
 
 /**
  * CompanyMembership
  */
-class Contact
+class Contact implements OwnerGroupAware
 {
     /**
      * @var integer
@@ -38,6 +41,11 @@ class Contact
      * @var string
      */
     private $note;
+
+    /**
+     * @var Group
+     */
+    private $ownerGroup;
 
     function __construct()
     {
@@ -152,6 +160,22 @@ class Contact
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return Group
+     */
+    public function getOwnerGroup()
+    {
+        return $this->ownerGroup;
+    }
+
+    /**
+     * @param Group $ownerGroup
+     */
+    public function setOwnerGroup(GroupInterface $ownerGroup)
+    {
+        $this->ownerGroup = $ownerGroup;
     }
 
 

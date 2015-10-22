@@ -33,6 +33,12 @@ class User extends BaseUser
     protected $id;
 
     /**
+     * @var Group
+     */
+    private $primaryGroup;
+
+
+    /**
      * @var integer
      */
     protected $redmineUserId;
@@ -47,8 +53,8 @@ class User extends BaseUser
         parent::__construct();
         $this->projectMemberships = new ArrayCollection();
         $this->enabled = true;
+        $this->setRoles(array('ROLE_SONATA_ADMIN', 'ROLE_SALES', 'ROLE_ADMIN'));
     }
-
 
     /**
      * Get id
@@ -88,6 +94,22 @@ class User extends BaseUser
         return $this->getFirstname() || $this->getLastname()
             ? $this->getFirstname() . ' ' . $this->getLastname()
             : $this->getUsername();
+    }
+
+    /**
+     * @return Group
+     */
+    public function getPrimaryGroup()
+    {
+        return $this->primaryGroup;
+    }
+
+    /**
+     * @param Group $primaryGroup
+     */
+    public function setPrimaryGroup($primaryGroup)
+    {
+        $this->primaryGroup = $primaryGroup;
     }
 
 

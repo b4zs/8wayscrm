@@ -30,3 +30,7 @@ ul.sidebar-menu li.sidemenu-pull-right.sidemenu-pull-up {
 ul.sidebar-menu li.sidemenu-pull-right a:hover {
     background-color: #000000;
 }
+
+.box-danger > .box.box-success {
+    border-top-color: #f56954;
+}

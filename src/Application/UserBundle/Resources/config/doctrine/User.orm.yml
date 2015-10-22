@@ -12,7 +12,9 @@ Application\UserBundle\Entity\User:
             column: redmine_user_id
             type: integer
             nullable: true
-
+    manyToOne:
+        primaryGroup:
+            targetEntity: Application\UserBundle\Entity\Group
     oneToMany:
         projectMemberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership

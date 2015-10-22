@@ -57,6 +57,7 @@ class UserAdmin extends BaseUserAdmin
 //					'expanded' => true,
 //					'multiple' => true
 				))
+				->add('primaryGroup', null, array('required' => true, 'label' => 'Primary group'))
 				->end();
 		}
 

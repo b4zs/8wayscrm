@@ -44,6 +44,14 @@ services:
         tags:
             - { name: kernel.event_listener, event: menu.build.sonata_admin_sidebar, method: onAdminMenuBuild }
 
+    application_crm.admin.extension.owner_group_manager:
+        class: Application\CrmBundle\Admin\Extension\OwnerGroupManagerExtension
+        calls:
+            - [setTokenStorage, [@security.token_storage]]
+            - [setAuthorizationChecker, [@security.authorization_checker]]
+        tags:
+            - { name: sonata.admin.extension, global: true }
+
     application_crm.twig.extension:
         class: Application\CrmBundle\Twig\CrmBundleExtension
         tags:

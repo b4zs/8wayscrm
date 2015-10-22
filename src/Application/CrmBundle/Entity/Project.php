@@ -3,16 +3,21 @@
 namespace Application\CrmBundle\Entity;
 
 use Application\CrmBundle\Enum\ProjectStatus;
+use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\MediaBundle\Entity\Gallery;
+use Application\UserBundle\Entity\Group;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\GroupInterface;
 use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
 /**
  * Project
  */
-class Project implements LogExtraDataAware
+class Project implements LogExtraDataAware, OwnerGroupAware
 {
     /**
      * @var integer
@@ -67,6 +72,11 @@ class Project implements LogExtraDataAware
     private $fileset;
 
     /**
+     * @var Group
+     */
+    private $ownerGroup;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -94,10 +104,6 @@ class Project implements LogExtraDataAware
      */
     public function setName($name)
     {
-        if ($this->getFileset() instanceof Gallery && in_array($this->getFileset()->getName(), array(null, $this->getName()))) {
-            $this->getFileset()->setName($name);
-        }
-
         $this->name = $name;
 
         return $this;
@@ -311,5 +317,26 @@ class Project implements LogExtraDataAware
     public function addGalleryHasMedias(GalleryHasMediaInterface $galleryHasMedia)
     {
         $this->getFileset()->addGalleryHasMedias($galleryHasMedia);
+    }
+
+    /**
+     * @return Group
+     */
+    public function getOwnerGroup()
+    {
+        return $this->ownerGroup;
+    }
+
+    /**
+     * @param Group $ownerGroup
+     */
+    public function setOwnerGroup(GroupInterface $ownerGroup)
+    {
+        $this->ownerGroup = $ownerGroup;
+    }
+
+    public function updateFilesetName(LifecycleEventArgs $eventArgs)
+    {
+        $this->getFileset()->setName($this->getName());
     }
 }

@@ -46,7 +46,8 @@ Application\CrmBundle\Entity\Project:
         fileset:
             targetEntity: Application\MediaBundle\Entity\Gallery
             cascade: [all]
-
+        ownerGroup:
+            targetEntity: Application\UserBundle\Entity\Group
     oneToMany:
         memberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership
@@ -55,4 +56,6 @@ Application\CrmBundle\Entity\Project:
             orphanRemoval: true
             gedmo:
                 - versioned
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [updateFilesetName]
+        preUpdate: [updateFilesetName]
