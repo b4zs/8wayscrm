@@ -23,6 +23,10 @@ ul.sidebar-menu li.sidemenu-pull-right {
     margin-right: 1em;
 }
 
+ul.sidebar-menu li.sidemenu-pull-right.sidemenu-pull-up {
+    margin-top: -2.30em;
+}
+
 ul.sidebar-menu li.sidemenu-pull-right a:hover {
     background-color: #000000;
 }

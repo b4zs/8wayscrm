@@ -40,8 +40,15 @@ class ClientAdmin extends Admin
                         ->setParameter('company_filter', '%'.$value.'%');
                 }
             ))
-//            ->add('financialInformation')
-            ->add('status', null, array('label' => 'Status'), 'choice', array('choices' => ClientStatus::getChoices()))
+            ->add(
+                'status',
+                'doctrine_orm_choice',
+                array(
+                    'label' => 'Status', 'multiple' => true,
+                ),
+                'choice',
+                array('choices' => ClientStatus::getChoices(), 'multiple' => true,)
+            )
             ->add('owner')
         ;
     }
@@ -56,12 +63,15 @@ class ClientAdmin extends Admin
             ->addIdentifier('company', null, array(
                 'label' => 'Client',
             ))
-            ->add('status')
+            ->add('status', 'choice', array(
+                'editable' => true,
+                'choices'  => ClientStatus::getChoices(),
+            ))
 //            ->add('createdAt', null, array(
 //                'label' => 'created',
 //            ))
             ->add('updatedAt', null, array(
-                'label' => 'updated',
+                'label' => 'Updated',
             ))
             ->add('_action', 'actions', array(
                 'actions' => array(

@@ -20,9 +20,15 @@ class ProjectAdmin extends Admin
             ->add('name')
 //            ->add('createdAt')
 //            ->add('description')
-            ->add('status', null, array('label' => 'Status'), 'choice', array(
-                'choices' => ProjectStatus::getChoices(),
-            ))
+            ->add(
+                'status',
+                'doctrine_orm_choice',
+                array(
+                    'label' => 'Status', 'multiple' => true,
+                ),
+                'choice',
+                array('choices' => ProjectStatus::getChoices(), 'multiple' => true,)
+            )
             ->add('client', 'doctrine_orm_callback', array(
                 'callback' => function($queryBuilder, $alias, $field, $value){
                     $aliases = $queryBuilder->getRootAliases();
@@ -46,7 +52,10 @@ class ProjectAdmin extends Admin
             ->addIdentifier('id')
             ->addIdentifier('name')
             ->add('client')
-            ->add('status')
+            ->add('status', 'choice', array(
+                'editable' => true,
+                'choices'  => ProjectStatus::getChoices(),
+            ))
             ->add('createdAt')
             ->add('_action', 'actions', array(
                 'actions' => array(
@@ -79,14 +88,14 @@ class ProjectAdmin extends Admin
         $formMapper->end();
 
         $formMapper->with('Info', array('class' => 'col-md-6'));
+            $formMapper->add('status', 'choice', array(
+                'choices' => ProjectStatus::getChoices(),
+            ));
             $formMapper
                 ->add('description', 'textarea', array(
                     'required' => false,
                 ))
             ;
-            $formMapper->add('status', 'choice', array(
-                'choices' => ProjectStatus::getChoices(),
-            ));
         $formMapper->end();
 
         if (null === $parentAdmin) {

@@ -19,7 +19,7 @@ class ProjectMembershipAdmin extends Admin
             ->add('id')
             ->add('project')
             ->add('role')
-            ->add('person')
+            ->add('user')
         ;
     }
 
@@ -32,7 +32,7 @@ class ProjectMembershipAdmin extends Admin
             ->add('id')
             ->add('project')
             ->add('role')
-            ->add('person')
+            ->add('user')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -49,8 +49,8 @@ class ProjectMembershipAdmin extends Admin
     {
         $parentAdmin = $this->getParentAdmin($formMapper);
 
-        if ($parentAdmin !== 'person') {
-            $formMapper->add('person', 'sonata_type_model_list', array(
+        if ($parentAdmin !== 'user') {
+            $formMapper->add('user', 'sonata_type_model_list', array(
                 'required'      => true,
                 'btn_delete'    => false,
                 'btn_add'       => false,
