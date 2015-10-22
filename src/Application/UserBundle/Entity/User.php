@@ -113,4 +113,15 @@ class User extends BaseUser
     }
 
 
+    public function buildGroups()
+    {
+        $g = $this->getGroups()->toArray();
+        $g[] = $this->getPrimaryGroup();
+        $g = array_filter($g);
+        $g = array_unique($g);
+        $g = array_map(function($g){ return $g->getName();}, $g);
+
+        return implode(', ', $g);
+    }
+
 }

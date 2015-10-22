@@ -91,7 +91,7 @@ class UserAdmin extends BaseUserAdmin
 			->add('email')
 			->add('firstName', null, array('label' => 'First name'))
 			->add('lastName', null, array('label' => 'Last name'))
-			->add('groups')
+			->add('buildGroups', null, array('label' => 'Groups',))
 			->add('enabled', null, array('editable' => true))
 			->add('locked', null, array('editable' => true))
 			->add('createdAt')
