@@ -33,10 +33,12 @@ class ProjectAdmin extends Admin
                 'callback' => function($queryBuilder, $alias, $field, $value){
                     $aliases = $queryBuilder->getRootAliases();
                     $value = is_array($value) ? $value['value'] : null;
-                    $queryBuilder
-                        ->innerJoin(current($aliases).'.client', 'client')
-                        ->andWhere('client.company.name LIKE :company_filter')
-                        ->setParameter('company_filter', '%'.$value.'%');
+                    if (!empty($value)) {
+                        $queryBuilder
+                            ->innerJoin(current($aliases).'.client', 'client')
+                            ->andWhere('client.company.name LIKE :company_filter')
+                            ->setParameter('company_filter', '%'.$value.'%');
+                    }
                 }
             ))
             ->add('id')
