@@ -8,7 +8,8 @@ use FOS\UserBundle\Model\GroupInterface;
 
 interface OwnerGroupAware
 {
-	public function getOwnerGroup();
-	public function setOwnerGroup(GroupInterface $group);
+	public function getGroups();
+	public function addGroup(GroupInterface $group);
+	public function removeGroup(GroupInterface $group);
 
 }

@@ -89,6 +89,8 @@ swiftmailer:
     spool:     { type: memory }
 
 sonata_admin:
+    security:
+        handler: sonata.admin.security.handler.role
     title: 8Ways CRM
     templates:
         dashboard: SonataAdminBundle:Core:dashboard.html.twig
@@ -119,6 +121,7 @@ sonata_admin:
                 - bundles/sonataadmin/jquery/jquery.confirmExit.js
                 - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js
                 - bundles/sonataadmin/vendor/select2/select2.min.js
+                - bundles/sonataadmin/vendor/AdminLTE/js/AdminLTE/app.js
                 - bundles/sonataadmin/App.js
                 - bundles/sonataadmin/Admin.js
                 - bundles/applicationadmin/App.js

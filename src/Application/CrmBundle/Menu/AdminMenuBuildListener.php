@@ -25,17 +25,13 @@ class AdminMenuBuildListener extends ContainerAware
 		$this->addTeamMenu($menu);
 		$this->modifyClientsMenu($menu);
 		$this->modifySuppliersMenu($menu);
-
 		$this->reorderContactManager($menu);
-
 		$this->modifyProjectsMenu($menu);
 
-
-		$this->removeSystemTables($menu);
-		$this->removeMediaLibrary($menu);
-
 		if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+			$this->removeMediaLibrary($menu);
 			$this->removeUsers($menu);
+			$this->removeSystemTables($menu);
 		}
 
 		$this->markActiveMenuItem();
@@ -106,6 +102,7 @@ class AdminMenuBuildListener extends ContainerAware
 					'list',
 					array('filter' => array('status' => array('type' => '', 'value' => array($status),)))
 				),
+				'label' => ucfirst($status),
 			));
 			$statusItem->setExtra('icon', $statusData['icon']);
 
@@ -223,8 +220,10 @@ class AdminMenuBuildListener extends ContainerAware
 	private function addTeamMenu(MenuItem $menu)
 	{
 		$adminCode = 'sonata.user.admin.user';
-		$userItem = $menu->getChild('sonata_user')->getChild($adminCode);
-		if ($userItem) {
+		$admin = $this->container->get($adminCode);
+
+		$userItem = $menu->getChild('sonata_user') ? $menu->getChild('sonata_user')->getChild($adminCode) : null;
+		if ($userItem instanceof MenuItem && $admin->isGranted('LIST')) {
 			$contactManagerItem = $menu->getChild(self::CONTACT_MANAGER);
 			$teamItem = clone $userItem;
 			$teamItem->setName($adminCode.'.team');
@@ -233,7 +232,6 @@ class AdminMenuBuildListener extends ContainerAware
 			$teamItem->setExtra('icon', 'fa fa-user');
 			$this->createdMenuItems[$adminCode] = $contactManagerItem->addChild($teamItem);
 
-			$admin = $this->container->get($adminCode);
 			$this->createdMenuItems[$adminCode.'#create'] = $createItem = $this->getKnpMenuFactory()->createItem('sonata.user.admin.user.team.create', array(
 				'uri'   => $admin->generateUrl('create'),
 				'label' => '',
@@ -250,12 +248,12 @@ class AdminMenuBuildListener extends ContainerAware
 	private function reorderContactManager(MenuItem $menu)
 	{
 		$contactManagerItem = $menu->getChild(self::CONTACT_MANAGER);
-		$contactManagerItem->reorderChildren(array(
+		$contactManagerItem->reorderChildren(array_intersect(array(
 			'sonata.user.admin.user.team',
 			'sonata.user.admin.user.team.create',
 			'application_crm.admin.client',
 			'application_crm.admin.supplier',
-		));
+		), array_keys($contactManagerItem->getChildren())));
 	}
 
 	private function isGranted($role)

@@ -13,6 +13,7 @@ namespace Application\UserBundle\Entity;
 
 use Application\CrmBundle\Entity\Person;
 use Application\CrmBundle\Entity\ProjectMembership;
+use Application\CrmBundle\Model\OwnerGroupAware;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
@@ -25,7 +26,7 @@ use Sonata\UserBundle\Entity\BaseUser as BaseUser;
  *
  * @author <yourname> <youremail>
  */
-class User extends BaseUser
+class User extends BaseUser implements OwnerGroupAware
 {
     /**
      * @var integer $id

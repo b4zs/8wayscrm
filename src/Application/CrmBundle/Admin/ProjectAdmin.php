@@ -183,10 +183,11 @@ class ProjectAdmin extends Admin
     public function isGranted($name, $object = null)
     {
         return parent::isGranted($name, $object)
-            && ($name === 'EDIT' && $object)
-            ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
-            : true
-            ;
+            && (
+                ($name === 'EDIT' && $object)
+                ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
+                : true
+            );
     }
 
 }

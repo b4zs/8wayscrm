@@ -23,7 +23,8 @@ Application\CrmBundle\Entity\Contact:
         client:
             targetEntity: Application\CrmBundle\Entity\Client
             inversedBy: contacts
-        ownerGroup:
+    manyToMany:
+        groups:
             targetEntity: Application\UserBundle\Entity\Group
     embedded:
         person:

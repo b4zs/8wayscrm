@@ -4,6 +4,8 @@ namespace Application\CrmBundle\Entity;
 
 use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\UserBundle\Entity\Group;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 
@@ -43,13 +45,14 @@ class Contact implements OwnerGroupAware
     private $note;
 
     /**
-     * @var Group
+     * @var Group[]|Collection
      */
-    private $ownerGroup;
+    private $groups;
 
     function __construct()
     {
         $this->person = new Person();
+        $this->groups = new ArrayCollection();
     }
 
     /**
@@ -162,21 +165,21 @@ class Contact implements OwnerGroupAware
         $this->title = $title;
     }
 
-    /**
-     * @return Group
-     */
-    public function getOwnerGroup()
+    public function getGroups()
     {
-        return $this->ownerGroup;
+        return $this->groups;
     }
 
-    /**
-     * @param Group $ownerGroup
-     */
-    public function setOwnerGroup(GroupInterface $ownerGroup)
+    public function addGroup(GroupInterface $group)
     {
-        $this->ownerGroup = $ownerGroup;
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+        }
     }
 
+    public function removeGroup(GroupInterface $group)
+    {
+        $this->groups->removeElement($group);
+    }
 
 }

@@ -20,6 +20,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ClientAdmin extends Admin
 {
@@ -240,7 +241,12 @@ class ClientAdmin extends Admin
     private function addCompanyFields(FormBuilderInterface $companyField)
     {
         $companyField
-            ->add('name')
+            ->add('name', null, array(
+                'required'      => true,
+                'constraints'   => array(
+                    new NotBlank(),
+                )
+            ))
             ->add('sectorOfActivity', null, array('required' => false))
             ->add('country', 'country', array('required' => false))
             ->add('website', null, array('required' => false))
@@ -274,9 +280,10 @@ class ClientAdmin extends Admin
     public function isGranted($name, $object = null)
     {
         return parent::isGranted($name, $object)
-            && ($name === 'EDIT' && $object)
-                ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
-                : true
-        ;
+        && (
+        ($name === 'EDIT' && $object)
+            ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
+            : true
+        );
     }
 }

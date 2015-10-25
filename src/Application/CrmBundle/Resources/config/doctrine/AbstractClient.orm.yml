@@ -51,6 +51,9 @@ Application\CrmBundle\Entity\AbstractClient:
         fileset:
             targetEntity: Application\MediaBundle\Entity\Gallery
             cascade: [all]
+    manyToMany:
+        groups:
+            targetEntity: Application\UserBundle\Entity\Group
 
     lifecycleCallbacks:
         prePersist: [updateFilesetName]

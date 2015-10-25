@@ -14,8 +14,6 @@ Application\CrmBundle\Entity\Supplier:
             targetEntity: Application\UserBundle\Entity\User
             gedmo:
                 - versioned
-        ownerGroup:
-            targetEntity: Application\UserBundle\Entity\Group
         projectManager:
             targetEntity: Application\UserBundle\Entity\User
             gedmo:

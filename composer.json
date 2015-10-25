@@ -6,6 +6,12 @@
   "autoload": {
     "psr-4": { "": "src/", "SymfonyStandard\\": "app/SymfonyStandard/" }
   },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://gitlab.assist01.gbart.h3.hu/satis/"
+    }
+  ],
   "require": {
     "php": ">=5.3.9",
     "symfony/symfony": "2.7.*",
@@ -28,7 +34,9 @@
     "sonata-project/media-bundle": "~2.3",
     "sonata-project/user-bundle": "~2.2",
     "gedmo/doctrine-extensions": "^2.4",
-    "stof/doctrine-extensions-bundle": "^1.2"
+    "stof/doctrine-extensions-bundle": "^1.2",
+    "sonata/security-bundle": "dev-master@dev",
+    "sonata/tools-bundle": "dev-master@dev"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"

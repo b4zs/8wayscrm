@@ -8,6 +8,7 @@ use Application\MediaBundle\Entity\Gallery;
 use Application\UserBundle\Entity\Group;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -72,9 +73,9 @@ class Project implements LogExtraDataAware, OwnerGroupAware
     private $fileset;
 
     /**
-     * @var Group
+     * @var Group[]|Collection
      */
-    private $ownerGroup;
+    private $groups;
 
     /**
      * Constructor
@@ -82,6 +83,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware
     public function __construct()
     {
         $this->memberships = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fileset = new Gallery();
         $this->createdAt = new \DateTime();
     }
@@ -319,24 +321,25 @@ class Project implements LogExtraDataAware, OwnerGroupAware
         $this->getFileset()->addGalleryHasMedias($galleryHasMedia);
     }
 
-    /**
-     * @return Group
-     */
-    public function getOwnerGroup()
-    {
-        return $this->ownerGroup;
-    }
-
-    /**
-     * @param Group $ownerGroup
-     */
-    public function setOwnerGroup(GroupInterface $ownerGroup)
-    {
-        $this->ownerGroup = $ownerGroup;
-    }
-
     public function updateFilesetName(LifecycleEventArgs $eventArgs)
     {
         $this->getFileset()->setName($this->getName());
+    }
+
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(GroupInterface $group)
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+        }
+    }
+
+    public function removeGroup(GroupInterface $group)
+    {
+        $this->groups->removeElement($group);
     }
 }

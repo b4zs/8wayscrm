@@ -3,6 +3,8 @@
 use Application\AdminBundle\ApplicationAdminBundle;
 use Application\MediaBundle\ApplicationMediaBundle;
 use Application\UserBundle\ApplicationUserBundle;
+use Core\SecurityBundle\CoreSecurityBundle;
+use Core\ToolsBundle\CoreToolsBundle;
 use FOS\RestBundle\FOSRestBundle;
 use FOS\UserBundle\FOSUserBundle;
 use Gedmo\DoctrineExtensions;
@@ -38,6 +40,9 @@ class AppKernel extends Kernel
 	        new SonataBlockBundle(),
 	        new SonataDoctrineORMAdminBundle(),
             new Application\CrmBundle\ApplicationCrmBundle(),
+//            new CoreSecurityBundle(),
+//            new CoreToolsBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
 
             ///media
             // ...

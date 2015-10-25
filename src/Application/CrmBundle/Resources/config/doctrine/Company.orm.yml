@@ -9,7 +9,6 @@ Application\CrmBundle\Entity\Company:
         name:
             type: string
             length: 255
-            nullable: true
             type: string
             length: 255
             nullable: true

@@ -8,8 +8,10 @@ use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\UserBundle\Entity\User;
 use Doctrine\Common\Util\Debug;
 use FOS\UserBundle\Model\GroupInterface;
+use FOS\UserBundle\Model\UserInterface;
 use Sonata\AdminBundle\Admin\AdminExtension;
 use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Validator\ErrorElement;
@@ -26,26 +28,27 @@ class OwnerGroupManagerExtension extends AdminExtension
 
 	public function alterNewInstance(AdminInterface $admin, $object)
 	{
-		if ($object instanceof OwnerGroupAware && null !== ($group = $this->fetchGroup()) && !$this->isGranted('ROLE_SUPER_ADMIN')) {
-			$object->setOwnerGroup($group);
+		if ($object instanceof OwnerGroupAware && null !== ($group = $this->fetchGroupOfCurrentUser()) && !$this->isGranted('ROLE_SUPER_ADMIN')) {
+			$object->addGroup($group);
 		}
 	}
 
 	public function preUpdate(AdminInterface $admin, $object)
 	{
-		if ($object instanceof OwnerGroupAware && null !== ($group = $this->fetchGroup()) && !$this->isGranted('ROLE_SUPER_ADMIN')) {
-			$object->setOwnerGroup($group);
+		if ($object instanceof OwnerGroupAware && null !== ($group = $this->fetchGroupOfCurrentUser()) && !$this->isGranted('ROLE_SUPER_ADMIN')) {
+			$object->addGroup($group);
 		}
 	}
 
 	public function configureQuery(AdminInterface $admin, ProxyQueryInterface $query, $context = 'list')
 	{
-		if (in_array('Application\\CrmBundle\\Model\\OwnerGroupAware', class_implements($admin->getClass())) && !$this->isGranted('ROLE_SUPER_ADMIN')) {
+		if ($this->isActiveOnAdmin($admin) && !$this->isGranted('ROLE_SUPER_ADMIN')) {
 			$rootAliases = $query->getRootAliases();
 
 			if ($group = $this->getGroupsOfCurrentUser()) {
 				$query
-					->andWhere(current($rootAliases).'.ownerGroup IN (:owner_group_filter)')
+					->innerJoin(current($rootAliases).'.groups', 'groups')
+					->andWhere('groups.id IN (:owner_group_filter)')
 					->setParameter('owner_group_filter', $group);
 			} else {
 				$query->andWhere('1=0');
@@ -55,17 +58,30 @@ class OwnerGroupManagerExtension extends AdminExtension
 
 	public function configureFormFields(FormMapper $form)
 	{
-		if ($form->getAdmin()->getSubject() instanceof OwnerGroupAware && $this->isGranted('ROLE_SUPER_ADMIN')) {
+		if ($form->getAdmin()->getSubject() instanceof OwnerGroupAware && $this->isGranted('ROLE_SUPER_ADMIN') && !$form->getAdmin()->getSubject()instanceof UserInterface) {
 			$form->end();
 			$form->with('Administration', array('class' => 'col-md-12 box-danger'));
-			$form->add('ownerGroup', null, array(
-				'label' => 'Owner group',
+			$form->add('groups', null, array(
+				'label' => 'Group',
 			));
 			$form->end();
 		}
 	}
 
-	private function fetchGroup()
+	/**
+	 * {@inheritdoc}
+	 */
+	public function configureListFields(ListMapper $list)
+	{
+		if ($this->isActiveOnAdmin($list->getAdmin()) && $this->isGranted('ROLE_SUPER_ADMIN')){
+			$list->add('groups', null, array(
+				'label' => 'Groups (SA)'
+			));
+		};
+	}
+
+
+	private function fetchGroupOfCurrentUser()
 	{
 		if ($this->tokenStorage->getToken() && $user = $this->tokenStorage->getToken()->getUser()) {
 			if ($user instanceof User) {
@@ -82,10 +98,10 @@ class OwnerGroupManagerExtension extends AdminExtension
 			if ($this->isGranted('ROLE_SUPER_ADMIN')) {
 				return true;
 			} else {
-				$requestedGroupId = $object->getOwnerGroup() ? $object->getOwnerGroup()->getId() : null;
-				$availableGroupIds= array_map(function($g) { return $g->getId(); }, $this->getGroupsOfCurrentUser());
-//				echo '<pre>#'.$object->getId();Debug::dump($object, 1);Debug::dump($object->getOwnerGroup());var_dump($requestedGroupId, $availableGroupIds);die;
-				return in_array($requestedGroupId, $availableGroupIds);
+				$extractId = function ($g) { return $g->getId(); };
+				$requestedGroupIds = array_map($extractId, $object->getGroups()->toArray());
+				$availableGroupIds= array_map($extractId, $this->getGroupsOfCurrentUser());
+				return count(array_intersect($requestedGroupIds, $availableGroupIds)) > 0;
 			}
 		}
 		return $this->authorizationChecker->isGranted($role, $object);
@@ -112,5 +128,10 @@ class OwnerGroupManagerExtension extends AdminExtension
 		}
 
 		return array();
+	}
+
+	private function isActiveOnAdmin(AdminInterface $admin)
+	{
+		return in_array('Application\\CrmBundle\\Model\\OwnerGroupAware', class_implements($admin->getClass()));
 	}
 }
