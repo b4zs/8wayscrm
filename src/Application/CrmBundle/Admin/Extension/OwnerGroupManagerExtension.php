@@ -30,13 +30,17 @@ class OwnerGroupManagerExtension extends AdminExtension
 	{
 		if ($object instanceof OwnerGroupAware && null !== ($group = $this->fetchGroupOfCurrentUser()) && !$this->isGranted('ROLE_SUPER_ADMIN')) {
 			$object->addGroup($group);
+
+			if ($object instanceof User) {
+				$object->setPrimaryGroup($group);
+			}
 		}
 	}
 
 	public function preUpdate(AdminInterface $admin, $object)
 	{
 		if ($object instanceof OwnerGroupAware && null !== ($group = $this->fetchGroupOfCurrentUser()) && !$this->isGranted('ROLE_SUPER_ADMIN')) {
-			$object->addGroup($group);
+//			$object->addGroup($group);
 		}
 	}
 

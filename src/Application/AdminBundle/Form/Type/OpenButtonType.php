@@ -52,9 +52,13 @@ class OpenButtonType extends AbstractType
 		if ($class) {
 			$admin = $this->pool->getAdminByClass($class);
 			$object = $form->getData();
-			if ($object->getId() && $admin->isGranted('SHOW', $object)) {
+			if ($object->getId() && $admin->isGranted('EDIT', $object)) {
 				$view->vars['url'] = $admin->generateObjectUrl('edit', $object);
 			}
+		}
+
+		if (empty($view->vars['url'])) {
+			$view->vars['attr']['class'].=' disabled';
 		}
 	}
 

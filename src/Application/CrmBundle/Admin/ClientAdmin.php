@@ -281,7 +281,7 @@ class ClientAdmin extends Admin
     {
         return parent::isGranted($name, $object)
         && (
-        ($name === 'EDIT' && $object)
+            (in_array($name, array('EDIT', 'SHOW', 'DELETE')) && $object)
             ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
             : true
         );

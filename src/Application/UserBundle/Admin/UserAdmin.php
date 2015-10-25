@@ -66,7 +66,7 @@ class UserAdmin extends BaseUserAdmin
 						'style' => 'width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;',
 					),
 				))
-				->add('primaryGroup', null, array('required' => true, 'label' => 'Primary group'))
+				->add('primaryGroup', null, array('required' => false, 'label' => 'Primary group'))
 				->end();
 		} else {
 			$formMapper->remove('groups');
