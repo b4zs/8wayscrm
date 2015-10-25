@@ -314,7 +314,7 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware
         return $this->owner;
     }
 
-    public function setOwner(User $owner)
+    public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
     }

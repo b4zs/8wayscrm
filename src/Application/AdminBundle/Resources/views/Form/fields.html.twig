@@ -4,5 +4,5 @@
 {% endblock %}
 
 {% block gb_open_button_widget %}
-	<a href="{{ admin_pool.getAdminByClass(subject_class).generateObjectUrl('edit', form.vars.data) }}" {{ block('widget_attributes') }}>{{ form.vars.label|trans }}</a>
+	<a {% if url is defined %}href="{{ url }}"{% else %}disabled="disabled"{% endif %} {{ block('widget_attributes') }}>{{ form.vars.label|trans }}</a>
 {% endblock %}

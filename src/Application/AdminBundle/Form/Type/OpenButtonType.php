@@ -45,10 +45,17 @@ class OpenButtonType extends AbstractType
 	 */
 	public function buildView(FormView $view, FormInterface $form, array $options)
 	{
-		$view->vars['admin_pool'] = $this->pool;
-		$view->vars['subject_class'] = $form->getData()
+		$class = $form->getData()
 			? ClassUtils::getClass($form->getData())
 			: null;
+
+		if ($class) {
+			$admin = $this->pool->getAdminByClass($class);
+			$object = $form->getData();
+			if ($object->getId() && $admin->isGranted('SHOW', $object)) {
+				$view->vars['url'] = $admin->generateObjectUrl('edit', $object);
+			}
+		}
 	}
 
 	/**
