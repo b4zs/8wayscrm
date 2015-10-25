@@ -46,11 +46,24 @@ services:
 
     application_crm.admin.extension.owner_group_manager:
         class: Application\CrmBundle\Admin\Extension\OwnerGroupManagerExtension
-        calls:
-            - [setTokenStorage, [@security.token_storage]]
-            - [setAuthorizationChecker, [@security.authorization_checker]]
+        arguments:
+            - @application_crm.security.helper
         tags:
             - { name: sonata.admin.extension, global: true }
+
+    application_crm.security.helper:
+        class: Application\CrmBundle\Security\CrmSecurityHelper
+        arguments:
+            - @security.token_storage
+            - @security.authorization_checker
+
+    application_crm.eventy_listener.owner_group_setter:
+        class: Application\CrmBundle\EventListener\OwnerGroupSetterListener
+        lazy: true
+        arguments:
+            - @application_crm.security.helper
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
 
     application_crm.twig.extension:
         class: Application\CrmBundle\Twig\CrmBundleExtension
