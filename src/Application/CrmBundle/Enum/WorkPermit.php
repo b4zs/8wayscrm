@@ -18,6 +18,6 @@ class WorkPermit
 	{
 		$constants = (new \ReflectionClass(__CLASS__))->getConstants();
 
-		return array_map(function($v){ return str_replace('_',' ', $v); }, array_flip($constants));
+		return array_map(function($v){ return strtolower(str_replace('_',' ', $v)); }, array_flip($constants));
 	}
 }
