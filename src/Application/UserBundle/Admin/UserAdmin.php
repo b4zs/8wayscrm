@@ -23,7 +23,7 @@ class UserAdmin extends BaseUserAdmin
 			->end();
 
 
-		$formMapper->with('Base', array('class' => 'col-md-12'))
+		$formMapper->with('Basic info', array('class' => 'col-md-12'))
 			->add('gender', 'sonata_user_gender', array(
 				'required' => true,
 				'translation_domain' => $this->getTranslationDomain()
