@@ -12,10 +12,55 @@ Application\UserBundle\Entity\User:
             column: redmine_user_id
             type: integer
             nullable: true
+        title:
+            type: string
+            lenght: 32
+            nullable: true
+        nationality:
+            type: string
+            lenght: 32
+            nullable: true
+        workPermit:
+            type: integer
+            nullable: true
+        privateEmail:
+            type: string
+            lenght: 256
+            nullable: true
+        workLine:
+            type: string
+            lenght: 256
+            nullable: true
+        workMobileLine:
+            type: string
+            lenght: 256
+            nullable: true
+        privateHomeLine:
+            type: string
+            lenght: 256
+            nullable: true
+        privateMobileLine:
+            type: string
+            lenght: 256
+            nullable: true
+        privateAddress:
+            type: string
+            lenght: 256
+            nullable: true
+        holidaysRemaining:
+            type: integer
+            lenght: 32
+            nullable: true
     manyToOne:
         primaryGroup:
             targetEntity: Application\UserBundle\Entity\Group
+        fileset:
+            targetEntity: Application\MediaBundle\Entity\Gallery
+            cascade: [all]
     oneToMany:
         projectMemberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership
             mappedBy: user
+    lifecycleCallbacks:
+        prePersist: [updateFilesetName]
+        preUpdate: [updateFilesetName]

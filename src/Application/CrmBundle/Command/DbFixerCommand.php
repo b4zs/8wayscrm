@@ -3,6 +3,7 @@
 namespace Application\CrmBundle\Command;
 
 use Application\MediaBundle\Entity\Gallery;
+use Application\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,6 +33,15 @@ class DbFixerCommand extends ContainerAwareCommand
 		foreach ($em->getRepository('ApplicationCrmBundle:Client')->findAll() as $client) {
 			if (!$client->getFileset()) {
 				$client->setFileset($this->createGallery($client->getCompany()->getName()));
+				$em->flush();
+			}
+		}
+		$em->clear();
+
+		/** @var User $user */
+		foreach ($em->getRepository('ApplicationUserBundle:User')->findAll() as $user) {
+			if (!$user->getFileset()) {
+				$user->setFileset($this->createGallery($user->__toString()));
 				$em->flush();
 			}
 		}

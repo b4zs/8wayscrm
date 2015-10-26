@@ -2,16 +2,18 @@
 
 namespace Application\UserBundle\Admin;
 
+use Application\CrmBundle\Enum\WorkPermit;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\UserBundle\Admin\Entity\UserAdmin as BaseUserAdmin;
+use Symfony\Component\Intl\Intl;
 
 class UserAdmin extends BaseUserAdmin
 {
 	protected function configureFormFields(FormMapper $formMapper)
 	{
 		$formMapper
-			->with('General', array('class' => 'col-md-6'))
+			->with('General', array('class' => 'col-md-12'))
 			->add('username')
 			->add('email')
 			->add('plainPassword', 'text', array(
@@ -21,24 +23,39 @@ class UserAdmin extends BaseUserAdmin
 			->end();
 
 
-		$formMapper->with('Profile', array('class' => 'col-md-6'))
-			->add('dateOfBirth', 'birthday', array('required' => false, 'widget' => 'single_text',))
-			->add('firstname', null, array('required' => false))
-			->add('lastname', null, array('required' => false))
-			->add('website', 'url', array('required' => false))
-			->add('biography', 'text', array('required' => false))
+		$formMapper->with('Base', array('class' => 'col-md-12'))
 			->add('gender', 'sonata_user_gender', array(
 				'required' => true,
 				'translation_domain' => $this->getTranslationDomain()
 			))
-			->add('locale', 'locale', array('required' => false))
-			->add('timezone', 'timezone', array('required' => false))
-			->add('phone', null, array('required' => false))
+			->add('title', 'text', array('label' => 'Title', 'required' => false))
+			->add('dateOfBirth', 'birthday', array('required' => false, 'widget' => 'single_text',))
+			->add('firstname', null, array('required' => false))
+			->add('lastname', null, array('required' => false))
+
+
+		->end();
+
+		$formMapper->with('Formal', array('class' => 'col-md-12'))
+			->add('nationality', 'choice', array('label' => 'Nationality (language)', 'required' => false,'choices' => Intl::getLanguageBundle()->getLanguageNames()))
+			->add('workPermit', 'choice', array('label' => 'Work Permit', 'required' => false, 'choices' => WorkPermit::getChoices()))
+		->end();
+
+		$formMapper->with('Contact', array('class' => 'col-md-12'))
+			->add('privateEmail',       'text', array('label' =>'Private Email',      'required' => false))
+			->add('workLine',           'text', array('label' =>'Work Line',          'required' => false))
+			->add('workMobileLine',     'text', array('label' =>'Work Mobile Line',    'required' => false))
+			->add('privateHomeLine',    'text', array('label' =>'Private Home Line',   'required' => false))
+			->add('privateMobileLine',  'text', array('label' =>'Private Mobile Line', 'required' => false))
+		->end();
+
+		$formMapper->with('Private', array('class' => 'col-md-12'))
+			->add('privateAddress',     'text', array('label' =>'Private Address',    'required' => false))
+			->add('holidaysRemaining',  'text', array('label' =>'Holidays Remaining', 'required' => false))
 		->end();
 
 
-
-		$formMapper->with('Social', array('class' => 'col-md-6'))
+		$formMapper->with('Social', array('class' => 'col-md-12'))
 			->add('facebookUid', null, array('required' => false))
 			->add('facebookName', null, array('required' => false))
 			->add('twitterUid', null, array('required' => false))
@@ -47,10 +64,25 @@ class UserAdmin extends BaseUserAdmin
 			->add('gplusName', null, array('required' => false))
 		->end();
 
+		$formMapper->with('Documents', array('class' => 'col-md-12',));
+		$formMapper->add('fileset.galleryHasMedias', 'sonata_type_collection', array(
+			'label'                 => false,
+			'by_reference'          => false,
+			'cascade_validation'    => true,
+		), array(
+			'edit'              => 'inline',
+			'inline'            => 'table',
+			'sortable'          => 'position',
+			'link_parameters'   => array('context' => 'default'),
+			'admin_code'        => 'sonata.media.admin.gallery_has_media',
+		));
+		$formMapper->end();
+
+
 
 		if ($this->isGranted('ROLE_SUPER_ADMIN')) {
 			$formMapper
-				->with('Groups', array('class' => 'col-md-6'))
+				->with('Groups', array('class' => 'col-md-12'))
 //				->add('groups', 'sonata_type_collection', array(
 //					'required'  => false,
 //					'label'     => false,

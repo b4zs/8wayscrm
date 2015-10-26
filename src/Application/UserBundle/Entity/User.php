@@ -14,8 +14,11 @@ namespace Application\UserBundle\Entity;
 use Application\CrmBundle\Entity\Person;
 use Application\CrmBundle\Entity\ProjectMembership;
 use Application\CrmBundle\Model\OwnerGroupAware;
+use Application\MediaBundle\Entity\Gallery;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 
 /**
@@ -38,16 +41,38 @@ class User extends BaseUser implements OwnerGroupAware
      */
     private $primaryGroup;
 
+    protected $title;
 
     /**
      * @var integer
      */
     protected $redmineUserId;
 
+    /** @var  string */
+    protected $nationality;
+
     /**
      * @var Collection|ProjectMembership[]
      */
     protected $projectMemberships;
+
+    private $workPermit;
+
+    private $privateEmail;
+
+    private $workLine;
+
+    private $workMobileLine;
+
+    private $privateHomeLine;
+
+    private $privateMobileLine;
+
+    private $privateAddress;
+
+    private $holidaysRemaining;
+
+    private $fileset;
 
     public function __construct()
     {
@@ -55,6 +80,7 @@ class User extends BaseUser implements OwnerGroupAware
         $this->projectMemberships = new ArrayCollection();
         $this->enabled = true;
         $this->setRoles(array('ROLE_SONATA_ADMIN', 'ROLE_SALES', 'ROLE_ADMIN'));
+        $this->fileset = new Gallery();
     }
 
     /**
@@ -124,5 +150,208 @@ class User extends BaseUser implements OwnerGroupAware
 
         return implode(', ', $g);
     }
+
+    /**
+     * @return string
+     */
+    public function getNationality()
+    {
+        return $this->nationality;
+    }
+
+    /**
+     * @param string $nationality
+     */
+    public function setNationality($nationality)
+    {
+        $this->nationality = $nationality;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRedmineUserId()
+    {
+        return $this->redmineUserId;
+    }
+
+    /**
+     * @param int $redmineUserId
+     */
+    public function setRedmineUserId($redmineUserId)
+    {
+        $this->redmineUserId = $redmineUserId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrivateEmail()
+    {
+        return $this->privateEmail;
+    }
+
+    /**
+     * @param mixed $privateEmail
+     */
+    public function setPrivateEmail($privateEmail)
+    {
+        $this->privateEmail = $privateEmail;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWorkLine()
+    {
+        return $this->workLine;
+    }
+
+    /**
+     * @param mixed $workLine
+     */
+    public function setWorkLine($workLine)
+    {
+        $this->workLine = $workLine;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWorkMobileLine()
+    {
+        return $this->workMobileLine;
+    }
+
+    /**
+     * @param mixed $workMobileLine
+     */
+    public function setWorkMobileLine($workMobileLine)
+    {
+        $this->workMobileLine = $workMobileLine;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrivateHomeLine()
+    {
+        return $this->privateHomeLine;
+    }
+
+    /**
+     * @param mixed $privateHomeLine
+     */
+    public function setPrivateHomeLine($privateHomeLine)
+    {
+        $this->privateHomeLine = $privateHomeLine;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrivateMobileLine()
+    {
+        return $this->privateMobileLine;
+    }
+
+    /**
+     * @param mixed $privateMobileLine
+     */
+    public function setPrivateMobileLine($privateMobileLine)
+    {
+        $this->privateMobileLine = $privateMobileLine;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrivateAddress()
+    {
+        return $this->privateAddress;
+    }
+
+    /**
+     * @param mixed $privateAddress
+     */
+    public function setPrivateAddress($privateAddress)
+    {
+        $this->privateAddress = $privateAddress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHolidaysRemaining()
+    {
+        return $this->holidaysRemaining;
+    }
+
+    /**
+     * @param mixed $holidaysRemaining
+     */
+    public function setHolidaysRemaining($holidaysRemaining)
+    {
+        $this->holidaysRemaining = $holidaysRemaining;
+    }
+
+    /**
+     * @return Gallery
+     */
+    public function getFileset()
+    {
+        return $this->fileset;
+    }
+
+    /**
+     * @param Gallery $fileset
+     */
+    public function setFileset($fileset)
+    {
+        $this->fileset = $fileset;
+    }
+
+    public function updateFilesetName(LifecycleEventArgs $eventArgs)
+    {
+        $this->getFileset()->setName($this->__toString());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWorkPermit()
+    {
+        return $this->workPermit;
+    }
+
+    /**
+     * @param mixed $workPermit
+     */
+    public function setWorkPermit($workPermit)
+    {
+        $this->workPermit = $workPermit;
+    }
+
+    public function addGalleryHasMedias(GalleryHasMediaInterface $galleryHasMedia)
+    {
+        $this->getFileset()->addGalleryHasMedias($galleryHasMedia);
+    }
+
 
 }
