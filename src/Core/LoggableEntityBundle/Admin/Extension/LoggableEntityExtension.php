@@ -3,6 +3,7 @@
 namespace Core\LoggableEntityBundle\Admin\Extension;
 
 use Application\CrmBundle\Entity\AbstractClient;
+use Core\LoggableEntityBundle\Entity\LogEntry;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Doctrine\ORM\EntityManager;
@@ -119,7 +120,8 @@ class LoggableEntityExtension extends AdminExtension
 			throw new \InvalidArgumentException('ID parameter is not valid');
 		}
 
-		$loggableEntryClassname = $this->loggableListener->getLogEntryClassnameForClass($this->entityManager, $className);
+//		$loggableEntryClassname = $this->loggableListener->getLogEntryClassnameForClass($this->entityManager, $className);
+		$loggableEntryClassname = get_class(new LogEntry());
 
 		/** @var LogEntryRepository $repository */
 		$repository = $this->entityManager->getRepository($loggableEntryClassname);
