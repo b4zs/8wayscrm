@@ -8,11 +8,11 @@ Application\CrmBundle\Entity\Project:
             generator:
                 strategy: AUTO
     gedmo:
+        loggable:
+            logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry
         soft_deleteable:
             field_name: deletedAt
             time_aware: false
-        loggable:
-            logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry
     fields:
         name:
             type: string

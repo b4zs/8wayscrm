@@ -29,6 +29,11 @@ class EntityLogBlockService extends BaseBlockService
 			->getResult();
 
 
+		$q = $this
+			->loggableAdminExtension
+			->buildLogEntriesQueryForEntity($className, $id);
+		var_dump($entries, $className, $id, $q->getDQL(), $q->getSQL());die;
+
 		return $this->renderResponse($blockContext->getTemplate(), array(
 			'block_context'  => $blockContext,
 			'block'          => $blockContext->getBlock(),
