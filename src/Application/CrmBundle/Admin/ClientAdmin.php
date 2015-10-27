@@ -233,6 +233,9 @@ class ClientAdmin extends Admin
             case $name === 'edit' && $this->getSubject():
                 return 'ApplicationCrmBundle:ClientAdmin:edit.html.twig';
                 break;
+            case $name === 'list':
+                return 'ApplicationCrmBundle:ClientAdmin:list.html.twig';
+                break;
             default:
                 return parent::getTemplate($name);
         };

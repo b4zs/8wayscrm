@@ -34,3 +34,15 @@ ul.sidebar-menu li.sidemenu-pull-right a:hover {
 .box-danger > .box.box-success {
     border-top-color: #f56954;
 }
+
+.sonata-filter-form-navbar {
+    padding-top: 10px;
+}
+
+.sonata-filter-form-navbar input,
+.sonata-filter-form-navbar .btn {
+    margin-left: 10px;
+}
+.sonata-filter-form-navbar button.btn {
+    margin-left: 20px;
+}
