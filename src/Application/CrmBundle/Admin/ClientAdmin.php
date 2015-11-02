@@ -10,6 +10,7 @@ use Application\CrmBundle\Entity\AbstractClient;
 use Application\CrmBundle\Entity\Person;
 use Application\CrmBundle\Entity\Project;
 use Application\CrmBundle\Enum\ClientStatus;
+use Application\CrmBundle\Enum\Country;
 use Application\CrmBundle\Enum\SectorOfActivity;
 use Application\UserBundle\Entity\User;
 use Knp\Menu\ItemInterface as MenuItemInterface;
@@ -255,7 +256,10 @@ class ClientAdmin extends Admin
                 'required' => false,
                 'choices' => SectorOfActivity::getChoices(),
             ))
-            ->add('country', 'country', array('required' => false))
+            ->add('country', 'country', array(
+                'required' => false,
+                'preferred_choices' => Country::getPreferredChoices(),
+            ))
             ->add('website', null, array('required' => false))
             ->add('email', null, array('required' => false))
             ->add('phone1', null, array('required' => false, 'label' => 'Line1',))
