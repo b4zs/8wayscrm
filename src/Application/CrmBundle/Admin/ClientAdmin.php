@@ -10,6 +10,7 @@ use Application\CrmBundle\Entity\AbstractClient;
 use Application\CrmBundle\Entity\Person;
 use Application\CrmBundle\Entity\Project;
 use Application\CrmBundle\Enum\ClientStatus;
+use Application\CrmBundle\Enum\SectorOfActivity;
 use Application\UserBundle\Entity\User;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
@@ -250,7 +251,10 @@ class ClientAdmin extends Admin
                     new NotBlank(),
                 )
             ))
-            ->add('sectorOfActivity', null, array('required' => false))
+            ->add('sectorOfActivity', 'choice', array(
+                'required' => false,
+                'choices' => SectorOfActivity::getChoices(),
+            ))
             ->add('country', 'country', array('required' => false))
             ->add('website', null, array('required' => false))
             ->add('email', null, array('required' => false))
