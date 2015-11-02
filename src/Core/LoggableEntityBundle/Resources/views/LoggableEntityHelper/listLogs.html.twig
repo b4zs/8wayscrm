@@ -4,7 +4,7 @@
 		{% for index, entry in logEntries %}
 		<li class="list-group-item" style="padding-top: 0px;" id="update-{{ 1+index }}">
 			<div class="row" style="border-bottom: 1px solid #ddd; padding-bottom: 3px; color: #333;background-color: #f5f5f5; border-color: #ddd;">
-				<div class="col-md-4"><a href="#update-{{ 1+index }}">#{{ 1+index }}</a> - <small>{{ entry.customAction ? entry.customAction : entry.action }}</small></div>
+				<div class="col-md-4"><a href="#update-{{ entry.version }}">#{{ entry.version }}</a> - <small>{{ entry.customAction ? entry.customAction : entry.action }}</small></div>
 				<div class="col-md-8 text-right">{{ entry.username }} - {{ entry.loggedAt|localizeddate() }}</div>
 			</div>
 			<div class="row">

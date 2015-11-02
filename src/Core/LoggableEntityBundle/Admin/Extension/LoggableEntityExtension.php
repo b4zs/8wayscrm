@@ -136,7 +136,7 @@ class LoggableEntityExtension extends AdminExtension
 			->andWhere('log.objectId = :id')
 			->setParameter('class', $className)
 			->setParameter('id', $id)
-			->orderBy('log.version', 'ASC')
+			->orderBy('log.version', 'DESC')
 			->getQuery();
 	}
 
