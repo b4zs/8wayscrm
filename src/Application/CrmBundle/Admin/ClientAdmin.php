@@ -64,7 +64,7 @@ class ClientAdmin extends Admin
         $listMapper
             ->add('owner')
             ->addIdentifier('company', null, array(
-                'label' => 'Client',
+                'label' => $this->getClassnameLabel(),
             ))
             ->add('status', 'choice', array(
                 'editable' => true,
