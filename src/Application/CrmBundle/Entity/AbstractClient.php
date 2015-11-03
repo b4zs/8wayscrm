@@ -25,7 +25,7 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware
     /**
      * @var string
      */
-    private $type = 'client';
+    private $type;
 
     /**
      * @var User
@@ -46,11 +46,6 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware
      * @var string
      */
     private $financialInformation;
-
-    /**
-     * @var string
-     */
-    private $status = ClientStatus::COLD;
 
     /**
      * @var \DateTime
@@ -168,29 +163,6 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware
     public function getFinancialInformation()
     {
         return $this->financialInformation;
-    }
-
-    /**
-     * Set status
-     *
-     * @param string $status
-     * @return AbstractClient
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return string 
-     */
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     /**

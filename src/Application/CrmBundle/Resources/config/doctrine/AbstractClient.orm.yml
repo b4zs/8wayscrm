@@ -26,12 +26,6 @@ Application\CrmBundle\Entity\AbstractClient:
             nullable: true
             gedmo:
                 - versioned
-        status:
-            type: string
-            length: '16'
-            nullable: true
-            gedmo:
-                - versioned
         createdAt:
             type: datetime
         updatedAt:
@@ -54,7 +48,25 @@ Application\CrmBundle\Entity\AbstractClient:
     manyToMany:
         groups:
             targetEntity: Application\UserBundle\Entity\Group
-
+    oneToMany:
+        contacts:
+            targetEntity: Application\CrmBundle\Entity\Contact
+            mappedBy: client
+            cascade: [all]
+            gedmo:
+                - versioned
+        projects:
+            targetEntity: Application\CrmBundle\Entity\Project
+            mappedBy: client
+            cascade: [all]
+            gedmo:
+                - versioned
+        addresses:
+            targetEntity: Application\CrmBundle\Entity\Address
+            mappedBy: client
+            cascade: [all]
+            gedmo:
+                - versioned
     lifecycleCallbacks:
         prePersist: [updateFilesetName]
         preUpdate: [updateFilesetName]
