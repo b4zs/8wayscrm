@@ -410,7 +410,7 @@ class ImportClientsCommand extends ContainerAwareCommand
 
 	private function getTargetGroup()
 	{
-		$targetGroup = $this->getEntityManager()->getRepository('ApplicationUserBundle:Group')->findOneBy(array(
+		return $this->getEntityManager()->getRepository('ApplicationUserBundle:Group')->findOneBy(array(
 			'name' => '8ways',
 		));
 	}
