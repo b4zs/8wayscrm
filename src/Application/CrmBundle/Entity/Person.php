@@ -415,4 +415,17 @@ class Person
     {
         $this->directLinePhone = $directLinePhone;
     }
+
+    public function getFullName()
+    {
+        $name = array_filter(array($this->getFirstName(), $this->getLastName()));
+        return implode(' ', $name);
+    }
+
+    public function setFullName($name)
+    {
+        $name = explode(' ', $name);
+        $this->setFirstName(array_shift($name));
+        $this->setLastName(implode(' ', $name));
+    }
 }

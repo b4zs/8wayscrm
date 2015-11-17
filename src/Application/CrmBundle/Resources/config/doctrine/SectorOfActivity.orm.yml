@@ -1,0 +1,14 @@
+Application\CrmBundle\Entity\SectorOfActivity:
+    type: entity
+    table: crm__sector_of_activity
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }
