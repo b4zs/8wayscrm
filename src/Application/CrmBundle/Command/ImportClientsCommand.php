@@ -123,6 +123,9 @@ class ImportClientsCommand extends ContainerAwareCommand
 			$client->getCompany()->setName($name);
 		}
 
+		//group
+		$client->addGroup($this->getTargetGroup());
+
 		//website
 		$client->getCompany()->setWebsite($row['website']);
 
@@ -403,6 +406,13 @@ class ImportClientsCommand extends ContainerAwareCommand
 		$sectorsRepository = $this->getEntityManager()->getRepository('ApplicationCrmBundle:SectorOfActivity');
 
 		$sectorsRepository->clear();
+	}
+
+	private function getTargetGroup()
+	{
+		$targetGroup = $this->getEntityManager()->getRepository('ApplicationUserBundle:Group')->findOneBy(array(
+			'name' => '8ways',
+		));
 	}
 
 
