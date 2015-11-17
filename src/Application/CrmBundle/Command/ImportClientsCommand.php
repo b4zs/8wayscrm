@@ -130,8 +130,11 @@ class ImportClientsCommand extends ContainerAwareCommand
 		$client->setOwner($this->fetchUser($row['sales']));
 
 		//activity
-		$client->getCompany()->setSectorOfActivity($row['activity']);
-		$this->ensureSector($client->getCompany()->getSectorOfActivity());
+		if ($row['activity']) {
+			$client->getCompany()->setSectorOfActivity($row['activity']);
+			$this->ensureSector($client->getCompany()->getSectorOfActivity());
+		}
+
 
 		//person of contact
 		$contact = null;
