@@ -19,3 +19,4 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     static_domain: 8wayscrm.localhost
+    sonata_admin.title: sonata crm
