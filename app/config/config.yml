@@ -91,7 +91,7 @@ swiftmailer:
 sonata_admin:
     security:
         handler: sonata.admin.security.handler.role
-    title: BossMedia CRM
+    title: %sonata_admin.title%
     templates:
         dashboard: SonataAdminBundle:Core:dashboard.html.twig
         user_block: ApplicationAdminBundle:Core:user_block.html.twig
