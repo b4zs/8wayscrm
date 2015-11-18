@@ -4,6 +4,7 @@ namespace Application\CrmBundle\Admin;
 
 use Application\CrmBundle\Entity\AbstractClient;
 use Application\CrmBundle\Entity\Contact;
+use Application\CrmBundle\Enum\Country;
 use Application\UserBundle\Enum\Gender;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -87,8 +88,9 @@ class ContactAdmin extends Admin
 					'required'      => true,
 				))
 				->add('nationality', 'country', array(
-					'property_path' => 'person.nationality',
-					'required'      => false,
+					'property_path'     => 'person.nationality',
+					'required'          => false,
+					'preferred_choices' => Country::getPreferredChoices(),
 				));
 		$formMapper->end();
 

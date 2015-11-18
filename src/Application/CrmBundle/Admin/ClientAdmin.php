@@ -10,7 +10,10 @@ use Application\CrmBundle\Entity\AbstractClient;
 use Application\CrmBundle\Entity\Person;
 use Application\CrmBundle\Entity\Project;
 use Application\CrmBundle\Enum\ClientStatus;
+use Application\CrmBundle\Enum\Country;
+use Application\CrmBundle\Enum\SectorOfActivity;
 use Application\UserBundle\Entity\User;
+use Doctrine\ORM\EntityRepository;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -62,7 +65,7 @@ class ClientAdmin extends Admin
         $listMapper
             ->add('owner')
             ->addIdentifier('company', null, array(
-                'label' => 'Client',
+                'label' => $this->getClassnameLabel(),
             ))
             ->add('status', 'choice', array(
                 'editable' => true,
@@ -250,8 +253,14 @@ class ClientAdmin extends Admin
                     new NotBlank(),
                 )
             ))
-            ->add('sectorOfActivity', null, array('required' => false))
-            ->add('country', 'country', array('required' => false))
+            ->add('sectorOfActivity', 'choice', array(
+                'required' => false,
+                'choices' => $this->buildSectorOfActivityChoices(),
+            ))
+            ->add('country', 'country', array(
+                'required' => false,
+                'preferred_choices' => Country::getPreferredChoices(),
+            ))
             ->add('website', null, array('required' => false))
             ->add('email', null, array('required' => false))
             ->add('phone1', null, array('required' => false, 'label' => 'Line1',))
@@ -288,5 +297,23 @@ class ClientAdmin extends Admin
             ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
             : true
         );
+    }
+
+    private function buildSectorOfActivityChoices()
+    {
+        /** @var EntityRepository $repository */
+        $repository = $this->configurationPool->getContainer()->get('doctrine')->getRepository('ApplicationCrmBundle:SectorOfActivity');
+        $all = $repository
+            ->createQueryBuilder('s')
+            ->select('s.name')
+            ->getQuery()
+            ->execute();
+
+        $choices = array();
+        foreach ($all as $item) {
+            $choices[$item['name']] = $item['name'];
+        }
+
+        return $choices;
     }
 }

@@ -18,6 +18,12 @@ class CrmBundleExtension extends \Twig_Extension
 				$l = ClientStatus::getAllData();
 				return $l[$status]['icon'];
 			}),
+			new \Twig_SimpleFunction('crm_get_object_type', function($object){
+				$c = get_class($object);
+				$c = explode('\\', $c);
+
+				return end($c);
+			}),
 		);
 	}
 

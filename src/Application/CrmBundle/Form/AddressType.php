@@ -2,6 +2,7 @@
 
 namespace Application\CrmBundle\Form;
 
+use Application\CrmBundle\Enum\Country;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,7 +16,10 @@ class AddressType
     public function buildForm($builder, array $options)
     {
         $builder
-            ->add('country')
+            ->add('country', 'country', array(
+                'required' => true,
+                'preferred_choices' => Country::getPreferredChoices(),
+            ))
             ->add('state')
             ->add('city')
             ->add('street')
