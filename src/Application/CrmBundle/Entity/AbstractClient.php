@@ -265,7 +265,7 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware
     /**
      * Get contactPersons
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection|Contact[]
      */
     public function getContacts()
     {

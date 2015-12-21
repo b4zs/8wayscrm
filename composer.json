@@ -37,7 +37,8 @@
     "stof/doctrine-extensions-bundle": "^1.2",
     "sonata/security-bundle": "dev-master@dev",
     "sonata/tools-bundle": "dev-master@dev",
-    "ocramius/proxy-manager": "~1.0"
+    "ocramius/proxy-manager": "~1.0",
+    "phpoffice/phpexcel": "^1.8"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"

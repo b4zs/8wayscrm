@@ -88,4 +88,12 @@ class LogEntry extends AbstractLogEntry
 	{
 		$this->extraData = $extraData;
 	}
+
+	public function setLoggedAt(\DateTime $value = null)
+	{
+		if (null === $value) {
+			$value = new \DateTime();
+		}
+		$this->loggedAt = $value;
+	}
 }

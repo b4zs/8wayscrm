@@ -13,6 +13,7 @@ use Application\CrmBundle\Enum\ClientStatus;
 use Application\CrmBundle\Enum\Country;
 use Application\CrmBundle\Enum\SectorOfActivity;
 use Application\UserBundle\Entity\User;
+use Doctrine\ORM\EntityRepository;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -254,7 +255,7 @@ class ClientAdmin extends Admin
             ))
             ->add('sectorOfActivity', 'choice', array(
                 'required' => false,
-                'choices' => SectorOfActivity::getChoices(),
+                'choices' => $this->buildSectorOfActivityChoices(),
             ))
             ->add('country', 'country', array(
                 'required' => false,
@@ -296,5 +297,23 @@ class ClientAdmin extends Admin
             ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
             : true
         );
+    }
+
+    private function buildSectorOfActivityChoices()
+    {
+        /** @var EntityRepository $repository */
+        $repository = $this->configurationPool->getContainer()->get('doctrine')->getRepository('ApplicationCrmBundle:SectorOfActivity');
+        $all = $repository
+            ->createQueryBuilder('s')
+            ->select('s.name')
+            ->getQuery()
+            ->execute();
+
+        $choices = array();
+        foreach ($all as $item) {
+            $choices[$item['name']] = $item['name'];
+        }
+
+        return $choices;
     }
 }

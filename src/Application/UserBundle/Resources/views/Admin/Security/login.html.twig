@@ -1,0 +1,110 @@
+{% extends '@SonataUser/Admin/Security/login.html.twig' %}
+
+{% block body_attributes %}class="sonata-bc skin-black fixed login"{% endblock %}
+
+{% block sonata_header %}{% endblock %}
+
+{% block sonata_wrapper %}
+    <section class="content">
+        {% block sonata_admin_content %}
+
+            {% block notice %}
+                {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
+            {% endblock notice %}
+
+            {% if _preview is not empty %}
+                <div class="sonata-ba-preview">{{ _preview|raw }}</div>
+            {% endif %}
+
+            {% if _content is not empty %}
+                <div class="sonata-ba-content">{{ _content|raw }}</div>
+            {% endif %}
+
+            {% if _show is not empty %}
+                <div class="sonata-ba-show">{{ _show|raw }}</div>
+            {% endif %}
+
+            {% if _form is not empty %}
+                <div class="sonata-ba-form">{{ _form|raw }}</div>
+            {% endif %}
+
+            {% if _list_table is not empty or _list_filters is not empty %}
+                <div class="row">
+                    <div class="sonata-ba-list {% if _list_filters|trim %}col-md-10{% else %}col-md-12{% endif %}">
+                        {{ _list_table|raw }}
+                    </div>
+
+                    {% if _list_filters|trim %}
+                        <div class="sonata-ba-filter col-md-2">
+                            {{ _list_filters|raw }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endblock sonata_admin_content %}
+    </section>
+{% endblock sonata_wrapper %}
+
+{% block content %}
+    <div class="login panel panel-default col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+        <div class="panel-heading text-center">
+            {% block logo %}
+                {% spaceless %}
+                    <div class="logo">
+                        {% if 'single_image' == admin_pool.getOption('title_mode') or 'both' == admin_pool.getOption('title_mode') %}
+                            <img src="{{ asset(admin_pool.titlelogo) }}" alt="{{ admin_pool.title }}">
+                        {% endif %}
+                        {% if 'single_text' == admin_pool.getOption('title_mode') or 'both' == admin_pool.getOption('title_mode') %}
+                            <h1>{{ admin_pool.title }}</h1>
+                        {% endif %}
+                    </div>
+                {% endspaceless %}
+            {% endblock %}
+        </div>
+        <div class="panel-body">
+            <form action="{{ path("sonata_user_admin_security_check") }}" method="post" class="form-horizontal">
+
+                {% if error %}
+                    <div class="alert alert-danger">{{ error|trans({}, 'SonataUserBundle') }}</div>
+                {% endif %}
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+                <div class="form-group">
+                    <label for="username" class="col-sm-3 control-label">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+
+                    <div class="col-sm-9">
+                        <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="col-sm-3 control-label">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+
+                    <div class="col-sm-9">
+                        <input type="password" id="password" name="_password" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <div class="checkbox">
+                            <label for="remember_me">
+                                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                                {{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="submit" class="btn btn-default" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
