@@ -57,8 +57,10 @@ Application\UserBundle\Entity\User:
         fileset:
             targetEntity: Application\MediaBundle\Entity\Gallery
             cascade: [all]
+    oneToOne:
         objectIdentity:
             targetEntity: Application\ObjectIdentityBundle\Entity\ObjectIdentity
+            inversedBy: user
     oneToMany:
         projectMemberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership

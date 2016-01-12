@@ -12,6 +12,9 @@ Application\ObjectIdentityBundle\Entity\ObjectIdentity:
             targetEntity: Application\CrmBundle\Entity\Project
         abstractClient:
             targetEntity: Application\CrmBundle\Entity\AbstractClient
+        user:
+            targetEntity: Application\UserBundle\Entity\User
+            mappedBy: objectIdentity
     manyToMany:
         notes:
             targetEntity: Octet\Ticketing\Bundle\Entity\Note
