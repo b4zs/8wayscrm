@@ -35,10 +35,12 @@
     "sonata-project/user-bundle": "~2.2",
     "gedmo/doctrine-extensions": "^2.4",
     "stof/doctrine-extensions-bundle": "^1.2",
+    "sonata/object-identity-bundle": "dev-master@dev",
     "sonata/security-bundle": "dev-master@dev",
     "sonata/tools-bundle": "dev-master@dev",
     "ocramius/proxy-manager": "~1.0",
-    "phpoffice/phpexcel": "^1.8"
+    "phpoffice/phpexcel": "^1.8",
+    "octet/ticketing": "dev-master"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"

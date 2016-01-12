@@ -5,18 +5,24 @@ namespace Application\CrmBundle\Entity;
 use Application\CrmBundle\Enum\ClientStatus;
 use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\MediaBundle\Entity\Gallery;
+use Application\ObjectIdentityBundle\Entity\ObjectIdentity;
+use Application\ObjectIdentityBundle\Model\ObjectIdentityAwareTrait;
 use Application\UserBundle\Entity\Group;
 use Application\UserBundle\Entity\User;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
+use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
+use Core\ObjectIdentityBundle\Model\ObjectIdentityInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
-class AbstractClient implements LogExtraDataAware, OwnerGroupAware
+class AbstractClient implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
 {
+    use ObjectIdentityAwareTrait;
+
     /**
      * @var integer
      */
@@ -451,4 +457,11 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware
     }
 
 
+    /**
+     * @return string
+     */
+    public function getCanonicalName()
+    {
+        return $this->getCompany()->getName();
+    }
 }

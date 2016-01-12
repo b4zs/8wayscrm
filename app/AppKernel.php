@@ -10,6 +10,7 @@ use FOS\UserBundle\FOSUserBundle;
 use Gedmo\DoctrineExtensions;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
+use Octet\Ticketing\Bundle\OctetTicketingBundle;
 use Sonata\AdminBundle\SonataAdminBundle;
 use Sonata\BlockBundle\SonataBlockBundle;
 use Sonata\CoreBundle\SonataCoreBundle;
@@ -59,8 +60,13 @@ class AppKernel extends Kernel
             new ApplicationAdminBundle(),
 
             new Core\LoggableEntityBundle\CoreLoggableEntityBundle(),
+            new Core\ToolsBundle\CoreToolsBundle(),
 
-            //You need to add this dependency to make media functional
+            new OctetTicketingBundle(),
+
+            new Core\ObjectIdentityBundle\CoreObjectIdentityBundle(),
+            new Application\ObjectIdentityBundle\ApplicationObjectIdentityBundle(),
+
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

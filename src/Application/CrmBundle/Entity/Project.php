@@ -5,6 +5,7 @@ namespace Application\CrmBundle\Entity;
 use Application\CrmBundle\Enum\ProjectStatus;
 use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\MediaBundle\Entity\Gallery;
+use Application\ObjectIdentityBundle\Model\ObjectIdentityAwareTrait;
 use Application\UserBundle\Entity\Group;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
@@ -20,6 +21,8 @@ use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
  */
 class Project implements LogExtraDataAware, OwnerGroupAware
 {
+    use ObjectIdentityAwareTrait;
+
     /**
      * @var integer
      */
