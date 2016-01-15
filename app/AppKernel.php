@@ -61,12 +61,14 @@ class AppKernel extends Kernel
 
             new Core\LoggableEntityBundle\CoreLoggableEntityBundle(),
             new Core\ToolsBundle\CoreToolsBundle(),
-
+            new Octet\MessageBusBundle\OctetMessageBusBundle(),
+            new SimpleBus\AsynchronousBundle\SimpleBusAsynchronousBundle(),
+            new SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle(),
+            new SimpleBus\SymfonyBridge\SimpleBusEventBusBundle(),
             new OctetTicketingBundle(),
 
             new Core\ObjectIdentityBundle\CoreObjectIdentityBundle(),
             new Application\ObjectIdentityBundle\ApplicationObjectIdentityBundle(),
-
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

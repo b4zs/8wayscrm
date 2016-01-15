@@ -35,7 +35,6 @@ use Sonata\UserBundle\Entity\BaseUser as BaseUser;
  */
 class User extends BaseUser implements
     OwnerGroupAware,
-    \Octet\Ticketing\Lib\Model\UserInterface,
     ObjectIdentityAware
 {
     use ObjectIdentityAwareTrait;

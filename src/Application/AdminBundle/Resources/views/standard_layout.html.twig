@@ -114,4 +114,8 @@
 	</style>
 {% endblock %}
 
-
+{% block sonata_wrapper %}
+	{{ parent() }}
+	{{ sonata_block_include_stylesheets('screen') }}
+	{{ sonata_block_include_javascripts('screen') }}
+{% endblock %}

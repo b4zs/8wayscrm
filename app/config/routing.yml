@@ -20,3 +20,8 @@ app_index:
     path: /
     defaults:
         _controller: ApplicationCrmBundle:Default:index
+
+
+ticketing_reminder_api:
+    resource: @OctetTicketingBundle/Resources/config/routing_reminder.yml
+    prefix: /api/reminders

@@ -13,5 +13,6 @@
 
 {% block side_bar_nav %}
 	{{ sonata_block_render_event('render_reminders', { context: [object] }) }}
+	{{ sonata_block_render_event('render_reminders', { context: [object.owner] }) }}
 	{{ parent() }}
 {% endblock side_bar_nav %}

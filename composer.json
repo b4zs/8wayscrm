@@ -40,7 +40,8 @@
     "sonata/tools-bundle": "dev-master@dev",
     "ocramius/proxy-manager": "~1.0",
     "phpoffice/phpexcel": "^1.8",
-    "octet/ticketing": "dev-master"
+    "octet/ticketing": "dev-master",
+    "octet/message-bus": "dev-master"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"
@@ -81,5 +82,7 @@
     "branch-alias": {
       "dev-master": "2.7-dev"
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable" : true
 }
