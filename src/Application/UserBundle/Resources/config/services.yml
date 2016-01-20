@@ -1,2 +1,8 @@
 parameters:
   sonata.user.admin.user.class: Application\UserBundle\Admin\UserAdmin
+
+services:
+    application_user.model_builder.user_index:
+        class: Application\UserBundle\ModelBuilder\UserIndexBuilder
+        tags:
+            - { name: model_builder, class: 'Application\UserBundle\Entity\User' }

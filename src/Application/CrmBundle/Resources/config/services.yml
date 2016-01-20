@@ -69,3 +69,13 @@ services:
         class: Application\CrmBundle\Twig\CrmBundleExtension
         tags:
             - { name: twig.extension }
+
+    application_crm.model_builder.client_index:
+        class: Application\CrmBundle\ModelBuilder\ClientIndexBuilder
+        tags:
+            - { name: model_builder, class: 'Application\CrmBundle\Entity\Client' }
+
+    application_crm.model_builder.project_index:
+        class: Application\CrmBundle\ModelBuilder\ProjectIndexBuilder
+        tags:
+            - { name: model_builder, class: 'Application\CrmBundle\Entity\Project' }

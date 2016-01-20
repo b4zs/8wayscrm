@@ -9,6 +9,7 @@ use Application\ObjectIdentityBundle\Model\ObjectIdentityAwareTrait;
 use Application\UserBundle\Entity\Group;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
+use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -19,7 +20,7 @@ use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 /**
  * Project
  */
-class Project implements LogExtraDataAware, OwnerGroupAware
+class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
 {
     use ObjectIdentityAwareTrait;
 
@@ -345,4 +346,10 @@ class Project implements LogExtraDataAware, OwnerGroupAware
     {
         $this->groups->removeElement($group);
     }
+
+    public function getCanonicalName()
+    {
+        return $this->getName();
+    }
+
 }
