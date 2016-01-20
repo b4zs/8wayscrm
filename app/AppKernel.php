@@ -69,6 +69,7 @@ class AppKernel extends Kernel
 
             new Core\ObjectIdentityBundle\CoreObjectIdentityBundle(),
             new Application\ObjectIdentityBundle\ApplicationObjectIdentityBundle(),
+            new Octet\ReferenceObjectBundle\OctetReferenceObjectBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

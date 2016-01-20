@@ -41,7 +41,8 @@
     "ocramius/proxy-manager": "~1.0",
     "phpoffice/phpexcel": "^1.8",
     "octet/ticketing": "dev-master",
-    "octet/message-bus": "dev-master"
+    "octet/message-bus": "dev-master",
+    "octet/reference-object": "dev-master"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"

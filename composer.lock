@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7a67c142ebdef5e75c79ca7bf6054fe6",
-    "content-hash": "1b42c35ab9eecb70db97bc131b7ba630",
+    "hash": "14acc5313634b7f200675b5128b26e9c",
+    "content-hash": "4802ef6469784f24a4080da7d4f81570",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2340,7 +2340,7 @@
             "source": {
                 "type": "git",
                 "url": "http://gitlab.assist01.gbart.h3.hu/octet/message-bus.git",
-                "reference": "d81e07d90df3349c143f5723834212c7d9941b65"
+                "reference": "357e21f658655d451a73a8267fb9394d0a27bfbe"
             },
             "require": {
                 "ramsey/uuid": "*",
@@ -2362,7 +2362,30 @@
                 "simple-bus",
                 "symfony"
             ],
-            "time": "2016-01-14 16:24:22"
+            "time": "2016-01-18 10:40:47"
+        },
+        {
+            "name": "octet/reference-object",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "http://gitlab.assist01.gbart.h3.hu/octet/reference-object.git",
+                "reference": "edd30f4a2d8e57b14b6754ae48bb0dee502cc596"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Octet\\ReferenceObjectBundle\\": "bundle"
+                }
+            },
+            "description": "Doctrine extension bundle, for persisting dynamic relations",
+            "keywords": [
+                "doctrine",
+                "dynamic object",
+                "reference",
+                "relation"
+            ],
+            "time": "2016-01-19 14:11:38"
         },
         {
             "name": "octet/ticketing",
@@ -2370,7 +2393,7 @@
             "source": {
                 "type": "git",
                 "url": "http://gitlab.assist01.gbart.h3.hu/octet/ticketing.git",
-                "reference": "97964bf3ad71b6121bc9edcc2d1517c266fd9b3f"
+                "reference": "4aaf2f83cbe4753ebbfc898caf5f25edd26ac471"
             },
             "require": {
                 "friendsofsymfony/rest-bundle": "~1.7",
@@ -2394,7 +2417,7 @@
                 "task",
                 "ticket"
             ],
-            "time": "2016-01-15 11:38:57"
+            "time": "2016-01-19 00:47:47"
         },
         {
             "name": "paragonie/random_compat",
@@ -4432,16 +4455,16 @@
         },
         {
             "name": "symfony/swiftmailer-bundle",
-            "version": "v2.3.10",
+            "version": "v2.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/swiftmailer-bundle.git",
-                "reference": "de5a2ddcaf91d2e44c19161e0fe8ed88022ceb51"
+                "reference": "5e1a90f28213231ceee19c953bbebc5b5b95c690"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/de5a2ddcaf91d2e44c19161e0fe8ed88022ceb51",
-                "reference": "de5a2ddcaf91d2e44c19161e0fe8ed88022ceb51",
+                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/5e1a90f28213231ceee19c953bbebc5b5b95c690",
+                "reference": "5e1a90f28213231ceee19c953bbebc5b5b95c690",
                 "shasum": ""
             },
             "require": {
@@ -4485,7 +4508,7 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
-            "time": "2016-01-14 10:25:38"
+            "time": "2016-01-15 16:41:20"
         },
         {
             "name": "symfony/symfony",
@@ -4929,7 +4952,8 @@
         "sonata/security-bundle": 20,
         "sonata/tools-bundle": 20,
         "octet/ticketing": 20,
-        "octet/message-bus": 20
+        "octet/message-bus": 20,
+        "octet/reference-object": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

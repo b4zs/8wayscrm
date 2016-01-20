@@ -21,8 +21,12 @@ app_index:
     defaults:
         _controller: ApplicationCrmBundle:Default:index
 
+object_identity:
+    resource: '@CoreObjectIdentityBundle/Resources/config/routing.yml'
+    prefix: /
 
-ticketing_reminder_api:
-    resource: @OctetTicketingBundle/Resources/config/routing_reminder.yml
-    prefix: /api/
-    type: rest
+
+#ticketing_reminder_api:
+#    resource: @OctetTicketingBundle/Resources/config/routing_reminder.yml
+#    prefix: /api/
+#    type: rest
