@@ -61,6 +61,7 @@ Application\UserBundle\Entity\User:
         objectIdentity:
             targetEntity: Application\ObjectIdentityBundle\Entity\ObjectIdentity
             inversedBy: user
+            cascade: ["persist"]
     oneToMany:
         projectMemberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership
