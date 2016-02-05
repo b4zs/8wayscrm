@@ -1,0 +1,3 @@
+application_redmine_integration_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ApplicationRedmineIntegrationBundle:Default:index }

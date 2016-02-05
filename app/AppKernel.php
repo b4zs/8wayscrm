@@ -70,6 +70,7 @@ class AppKernel extends Kernel
             new Core\ObjectIdentityBundle\CoreObjectIdentityBundle(),
             new Application\ObjectIdentityBundle\ApplicationObjectIdentityBundle(),
             new Octet\ReferenceObjectBundle\OctetReferenceObjectBundle(),
+            new Application\RedmineIntegrationBundle\ApplicationRedmineIntegrationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
