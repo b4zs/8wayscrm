@@ -11,8 +11,7 @@ use Octet\Ticketing\Bundle\Entity\ReminderRelatedTrait;
 class ObjectIdentity
 	extends \Core\ObjectIdentityBundle\Entity\ObjectIdentity
 	implements
-		\Octet\Ticketing\Lib\Model\NoteRelatedInterface,
-		\Octet\Ticketing\Lib\Model\ReminderRelatedInterface
+		\Octet\Ticketing\Lib\Model\NoteRelatedInterface
 {
 	use ReminderRelatedTrait;
 	use NoteRelatedTrait;

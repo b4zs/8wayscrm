@@ -115,7 +115,12 @@
 {% endblock %}
 
 {% block sonata_wrapper %}
+	{% set block_event_options = { context: { admin: admin|default(null) } } %}
+	{{ sonata_block_render_event('wrapper.pre', block_event_options) }}
 	{{ parent() }}
+	{{ sonata_block_render_event('wrapper.post', block_event_options) }}
+	{{ sonata_block_render_event('assets', block_event_options) }}
+
 	{{ sonata_block_include_stylesheets('screen') }}
 	{{ sonata_block_include_javascripts('screen') }}
 {% endblock %}

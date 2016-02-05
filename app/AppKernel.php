@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use Application\AdminBundle\ApplicationAdminBundle;
 use Application\MediaBundle\ApplicationMediaBundle;

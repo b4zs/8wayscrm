@@ -26,7 +26,7 @@ object_identity:
     prefix: /
 
 
-#ticketing_reminder_api:
-#    resource: @OctetTicketingBundle/Resources/config/routing_reminder.yml
-#    prefix: /api/
-#    type: rest
+ticketing_notes_helper:
+    resource: @OctetTicketingBundle/Resources/config/routing_note.yml
+    prefix: /ticketing/notes/
+

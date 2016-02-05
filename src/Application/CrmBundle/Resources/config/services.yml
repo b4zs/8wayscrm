@@ -79,3 +79,10 @@ services:
         class: Application\CrmBundle\ModelBuilder\ProjectIndexBuilder
         tags:
             - { name: model_builder, class: 'Application\CrmBundle\Entity\Project' }
+
+    application_crm.mailer:
+        class: Application\CrmBundle\Mailer\CrmMailer
+        calls:
+            - [setContainer, [@service_container]]
+        tags:
+            - { name: command_handler, handles: octet_ticketing_send_reminder_notification, method: handleSendReminderNotificationCommand }
