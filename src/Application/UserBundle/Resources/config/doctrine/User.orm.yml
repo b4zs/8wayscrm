@@ -51,6 +51,10 @@ Application\UserBundle\Entity\User:
             type: integer
             lenght: 32
             nullable: true
+        redmineAuthToken:
+            type: string
+            length: 128
+            nullable: true
     manyToOne:
         primaryGroup:
             targetEntity: Application\UserBundle\Entity\Group

@@ -1,6 +1,6 @@
 application_reminde_integration:
-    resource: "@ApplicationRemindeIntegrationBundle/Resources/config/routing.yml"
-    prefix:   /
+    resource: "@ApplicationRedmineIntegrationBundle/Resources/config/routing.yml"
+    prefix:   /admin/redmine
 
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'

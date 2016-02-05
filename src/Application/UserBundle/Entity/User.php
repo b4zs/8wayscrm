@@ -82,6 +82,8 @@ class User extends BaseUser implements
 
     private $fileset;
 
+    private $redmineAuthToken;
+
     public function __construct()
     {
         parent::__construct();
@@ -409,6 +411,16 @@ class User extends BaseUser implements
     public function getCanonicalName()
     {
         return $this->getUsernameCanonical();
+    }
+
+    public function getRedmineAuthToken()
+    {
+        return $this->redmineAuthToken;
+    }
+
+    public function setRedmineAuthToken($redmineAuthToken)
+    {
+        $this->redmineAuthToken = $redmineAuthToken;
     }
 
 }
