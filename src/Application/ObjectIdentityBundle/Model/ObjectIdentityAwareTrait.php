@@ -13,6 +13,11 @@ trait ObjectIdentityAwareTrait
 	/** @var  ObjectIdentity */
 	private $objectIdentity;
 
+	protected function initObjectIdentity()
+	{
+		$this->objectIdentity = new ObjectIdentity($this);
+	}
+
 
 	/** @return ObjectIdentity|\Core\ObjectIdentityBundle\Entity\ObjectIdentity */
 	public function getObjectIdentity()

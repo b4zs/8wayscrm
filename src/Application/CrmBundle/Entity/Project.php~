@@ -1,0 +1,16 @@
+<?php
+
+namespace Application\CrmBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Project
+ */
+class Project
+{
+    /**
+     * @var integer
+     */
+    private $id;
+}

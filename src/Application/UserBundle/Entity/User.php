@@ -87,11 +87,11 @@ class User extends BaseUser implements
     public function __construct()
     {
         parent::__construct();
-        $this->objectIdentity = new ObjectIdentity($this);
         $this->projectMemberships = new ArrayCollection();
         $this->enabled = true;
         $this->setRoles(array('ROLE_SONATA_ADMIN', 'ROLE_SALES', 'ROLE_ADMIN'));
         $this->fileset = new Gallery();
+        $this->initObjectIdentity();
     }
 
     /**

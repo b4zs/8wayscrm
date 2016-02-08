@@ -113,6 +113,7 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware, ObjectIdenti
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->fileset = new Gallery();
+        $this->initObjectIdentity();
     }
 
     /**

@@ -90,6 +90,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fileset = new Gallery();
         $this->createdAt = new \DateTime();
+        $this->initObjectIdentity();
     }
 
     /**

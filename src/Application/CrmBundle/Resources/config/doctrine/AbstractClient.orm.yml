@@ -47,6 +47,7 @@ Application\CrmBundle\Entity\AbstractClient:
             cascade: [all]
         objectIdentity:
             targetEntity: Application\ObjectIdentityBundle\Entity\ObjectIdentity
+            cascade: [all]
     manyToMany:
         groups:
             targetEntity: Application\UserBundle\Entity\Group
