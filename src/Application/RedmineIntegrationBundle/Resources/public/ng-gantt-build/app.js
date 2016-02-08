@@ -266,7 +266,23 @@ angular.module('ng-gantt', [
     .state('condensedgantt', {
       url: "/project/:projectId/condensedgantt",
       templateUrl: 'views/condensed-gantt.html',
-      controller: 'CondensedGanttCtrl'
+      controller: 'CondensedGanttCtrl',
+      resolve: {
+        projectIds: function($stateParams) {
+          return [$stateParams.projectId];
+        }
+      }
+    })
+
+    .state('demo', {
+      url: "/",
+      templateUrl: 'views/condensed-gantt.html',
+      controller: 'CondensedGanttCtrl',
+      resolve: {
+        projectIds: function() {
+          return [ 203, 442, 489 ];
+        }
+      }
     });
 
 
@@ -348,7 +364,7 @@ angular.module('ng-gantt', [
 
   if (User.getUser()) {
     Restangular.setDefaultRequestParams({ key: User.apiKey() });
-    $state.go('projects');
+    $state.go('demo');
   } else
     $state.go('login');
 });
@@ -363,25 +379,30 @@ angular.module('ng-gantt', [
  * Controller of the condensed gantt
  */
 angular.module('ng-gantt')
-  .controller('CondensedGanttCtrl', function ($scope, Restangular, $stateParams, RedmineBaseUrl, $compile, moment, _, PrepareIssues, $timeout, $window) {
+  .controller('CondensedGanttCtrl', function ($scope, Restangular, RedmineBaseUrl, $compile, moment, _, PrepareIssues, $timeout, $window, projectIds, $q) {
+
+    function projectId(rowId) {
+      return "project_" + rowId;
+    }
 
     var destroyOpenProjectListener = $scope.$on('openProject', function(e, projectRowScope) {
-      var projectId = projectRowScope.row.model.id;
+      var rowId = projectRowScope.row.model.id;
+      var projectId = projectRowScope.row.model.projectId;
       var projectParent = projectRowScope.row.model.parent;
-      Restangular.all('issues').getList({ project_id: projectId, limit: 100, include: 'relations' }).then(
+      Restangular.all('issues').getList({ project_id: projectId, limit: 100, include: 'relations', status_id: '*' }).then(
         function(issues) {
-          if (projectParent) $scope.$broadcast('projectOpened', projectId);
+          $scope.$broadcast('projectOpened', projectId);
 
-          var newRows = PrepareIssues(issues, projectId);
+          var newRows = PrepareIssues(issues, rowId, projectId);
           var filteredRows = _.filter($scope.data, function(ganttRow) {
             // never get rid of the 'project rows'
-            // TODO: mark the project rows explicitly
-            if (ganttRow.hasOwnProperty('parent')) return true;
+            if (ganttRow.isProject) return true;
 
             // keep the rows under the opened project
             //console.log('keeping row: ', ganttRow.projectId == projectId);
             return ganttRow.projectId == projectId;
           });
+
           $scope.data = filteredRows.concat(newRows);
           $scope.openedProject = projectId;
 
@@ -395,10 +416,9 @@ angular.module('ng-gantt')
     });
 
     var destroyCloseProjectListener = $scope.$on('closeProject', function (e, projectRowScope) {
-      var projectId = projectRowScope.row.model.id;
+      var projectId = projectRowScope.row.model.projectId;
       $scope.data = _.filter($scope.data, function(ganttRow) {
-        // TODO: mark the project rows explicitly
-        if (ganttRow.hasOwnProperty('parent')) return true;
+        if (ganttRow.isProject) return true;
 
         return ganttRow.projectId != projectId;
       });
@@ -430,29 +450,32 @@ angular.module('ng-gantt')
       $scope.toggleMenu();
     };
 
+    /*
+    var filterRowsFunc = function (rows) {
+      return _.filter(rows, function(row) { return $scope.filterRowFunc(row) });
+    };*/
+
     $scope.filterRowFunc = function (row) {
       var rowValue = $scope.filter.row;
       var categoryValue = $scope.filter.category;
       var rowVisibleByRowFilter = true;
       var rowVisibleByCategoryFilter = true;
 
-      // do not hide the opened project's rows
-      if (row.model.projectId == $scope.openedProject) {
-        rowVisibleByRowFilter = true;
-      } else if (rowValue !== undefined && rowValue != '') {
+      if (rowValue !== undefined && rowValue != '') {
         rowVisibleByRowFilter = row.model.name.indexOf(rowValue) > -1;
       }
 
       if (categoryValue !== undefined && categoryValue != '') {
         if (row.model.condensedGroups === undefined) {
-          //console.log('hiding row', row.model.name);
-          rowVisibleByCategoryFilter = true;
+          console.log('hiding row', row.model.name, row.model.projectId);
+          rowVisibleByCategoryFilter = false;
         } else {
           rowVisibleByCategoryFilter =
             _.chain(row.model.condensedGroups)
               .map(function (group) {
-                return $scope.isActiveLifecycleCategory(group) && group.name.substr(0, 1) == categoryValue
+                return group.name.substr(0, 1) == categoryValue && $scope.isActiveLifecycleCategory(group)
               })
+              //.tap(function(a) { console.log(a)})
               .any()
               .value();
         }
@@ -497,14 +520,17 @@ angular.module('ng-gantt')
         }
       },
       rowContent: '<i class="fa fa-align-justify"></i> {{row.model.name}}',
-      taskContent : '<i class="fa fa-tasks"></i> <a href="'+RedmineBaseUrl+'/issues/{{task.model.id}}" target="_blank">{{task.model.name}}</a>',
+      taskContent : '<i class="fa fa-tasks"></i> <a href="'+RedmineBaseUrl+'/issues/{{task.model.issueId}}" target="_blank">{{task.model.name}}</a>',
       columnWidth: 18,
       currentDate: 'line',
-      currentDateValue: new Date(2015, 5, 12)//, 9, 0, 0)
+      currentDateValue: new Date(moment().format("YYYY"), moment().format("MM")-1, moment().format("DD"))
+      //currentDateValue: new Date(2015, 5, 12)//, 9, 0, 0)
     };
 
     $scope.registerApi = function(api) {
       $scope.api = api;
+
+      //api.rows.addRowFilter(filterRowsFunc);
 
       api.core.on.ready($scope, function(api) {
         api.directives.on.new($scope, function(dName, dScope, dElement, dAttrs, dController) {
@@ -514,8 +540,20 @@ angular.module('ng-gantt')
           }
         });
 
-        Restangular.one('ganttprojects', $stateParams.projectId).getList().then(function(projects) {
-          projectsLoaded(projects);
+        var promises = [];
+        _.each(projectIds, function(projectId) {
+          var promise = Restangular.one('ganttprojects', projectId).getList();
+          promises.push(promise);
+        });
+
+        $q.all(promises).then(function(data) {
+          var allProjects = _.chain(data)
+                             .map(function(projectRestangular) { return projectRestangular.plain(); })
+                             .flatten()
+                             .filter(function(project) { return _.contains(projectIds, project.id) })
+                             .value();
+
+          projectsLoaded(allProjects);
 
           // collapse this way or need to override another tree tmpl..
           $timeout(function() {
@@ -529,16 +567,17 @@ angular.module('ng-gantt')
     };
 
     function projectsLoaded(projects) {
-      //console.log(projects);
       var data = [];
 
       _.each(projects, function(project) {
         var condensedProjectRow = {
-          id: project.id,
-          name: project.name || "project " + project.id,
+          isProject: true,
+          projectId: project.id,
+          id: projectId(project.id),
+          name: project.name || "project " + project.projectId,
           groups: false,
           classes: ['gantt-row-lifecycle'],
-          parent: project.parent_id,
+          parent: projectId(project.parent_id),
           details: {
             projectManager: project.project_manager || '-',
             reportedStatus: project.reported_status,
@@ -575,7 +614,17 @@ angular.module('ng-gantt')
         data.push(condensedProjectRow);
       });
 
+      setGanttSpan(projects);
+
       $scope.data = data;
+    }
+
+    function setGanttSpan(projects) {
+      var projectStartDate = _.min(projects, function(cp) { return new Date(cp.start_date) }).start_date;
+      var projectDueDate = _.max(projects, function(cp) { return new Date(cp.due_date) }).due_date;
+
+      $scope.options.fromDate = projectStartDate;
+      $scope.options.toDate = projectDueDate;
     }
   });
 
@@ -602,7 +651,8 @@ angular.module('ng-gantt')
     $scope.$on("projectOpened", function (e, projectId) {
       if (!isProjectRow()) return;
 
-      if ($scope.row.model.parent && $scope.row.model.id != projectId) {
+      console.log("projectOpened", projectId)
+      if ($scope.row.model.id != projectId) {
         $scope.closeProject();
       }
     });
@@ -647,7 +697,7 @@ angular.module('ng-gantt')
                 var user = response.data.user;
                 User.setUser(user);
                 Restangular.setDefaultRequestParams({ key: user.api_key });
-                $state.go('projects');
+                $state.go('demo');
             }, function(){
                 $window.alert('Wrong username or password!');
             });
@@ -664,28 +714,7 @@ angular.module('ng-gantt')
  * Controller of the project gantt
  */
 angular.module('ng-gantt')
-.controller('ProjectGanttCtrl', function ($scope, Restangular, $stateParams, RedmineBaseUrl, $compile, moment, _, PrepareIssues) {
-    $scope.timeFrames = {
-        'day': {
-            start: moment('10:00', 'HH:mm'),
-            end: moment('18:00', 'HH:mm'),
-            working: true,
-            default: true
-        },
-        'weekend': {
-            working: false
-        }
-    };
-
-    $scope.dateFrames = {
-        'weekend': {
-            evaluator: function(date) {
-                return date.isoWeekday() === 6 || date.isoWeekday() === 7;
-            },
-            targets: ['weekend']
-        }
-    };
-
+.controller('ProjectGanttCtrl', function ($scope, Restangular, $stateParams, RedmineBaseUrl, $compile, moment, _, PrepareIssues, $window, $timeout) {
     $scope.registerApi = function(api) {
         $scope.api = api;
 
@@ -698,9 +727,18 @@ angular.module('ng-gantt')
                 }
             });
 
-            Restangular.all('issues').getList({ project_id: $stateParams.projectId, limit: 100, include: 'relations' })
+            Restangular.all('issues').getList({ project_id: $stateParams.projectId, limit: 100, include: 'relations', status_id: '*' })
                 .then(function(issues) {
+
+                    // hacky solution; expand-to-fit attribute seems to have problems
+                    //expandGanttTimeSpan(issues);
+
                     $scope.data = PrepareIssues(issues);
+                  console.log($scope.data)
+
+                    $timeout(function() {
+                        $scope.api.side.setWidth(undefined);
+                    }, 0);
                 });
         });
     };
@@ -726,10 +764,51 @@ angular.module('ng-gantt')
     ];
 
     $scope.options = {
-        contextMenuOptions: contextMenuOptions,
+        // if the whole project's span is less than about 4 months, expand it by setting the dates explicitly
+        //fromDate: new Date(2016,0,20),
+        //toDate: new Date(2016,4,20),
+        columnWidth: 18,
+        currentDate: 'line',
+        timeFrames: {
+            'day': {
+                start: moment('10:00', 'HH:mm'),
+                end: moment('18:00', 'HH:mm'),
+                working: true,
+                default: true
+            },
+            'weekend': {
+                working: false
+            }
+        },
+
+        dateFrames: {
+            'weekend': {
+                evaluator: function(date) {
+                    return date.isoWeekday() === 6 || date.isoWeekday() === 7;
+                },
+                targets: ['weekend']
+            }
+        },
+
+        //contextMenuOptions: contextMenuOptions,
         rowContent: '<i class="fa fa-align-justify"></i> {{row.model.name}}',
-        taskContent : '<i class="fa fa-tasks"></i> <span ng-context-menu="contextMenuOptions"><a href="'+RedmineBaseUrl+'/issues/{{task.model.id}}" target="_blank">{{task.model.name}}</a></span>',
+        taskContent : '<i class="fa fa-tasks"></i> <span ng-context-menu="contextMenuOptions"><a href="'+RedmineBaseUrl+'/issues/{{task.model.issueId}}" target="_blank">{{task.model.name}}</a></span>',
     };
+
+    $scope.maxHeight = function() {
+        return $window.innerHeight;
+    };
+
+    function expandGanttTimeSpan(issues) {
+        var start = moment(_.min(issues, function(issue) { return moment(issue.start_date) }).start_date);
+        var end = moment(_.max(issues, function(issue) { return moment(issue.due_date) }).due_date);
+
+        var durationDays = moment.duration(end.diff(start)).asDays();
+        if (durationDays < 130) {
+          $scope.options.fromDate = start.calendar();
+          $scope.options.toDate = start.add(130, 'days').calendar();
+        }
+    }
 });
 
 'use strict';
@@ -847,18 +926,18 @@ angular.module('ng-gantt')
 'use strict';
 
 angular.module('ng-gantt')
-.directive('inview', function ($document, $compile) {
-    var getViewPortWidth = function() {
-        var d = $document[0];
-        return d.documentElement.clientWidth || d.documentElement.getElementById('body')[0].clientWidth;
+.directive('inview', function () {
+    var getGanttBodyRight = function() {
+        return document.querySelector('.gantt-body').getClientRects()[0].right;
     };
-    
+
     return {
         link: function(scope, element) {
             scope.$watch(
                 function() {
-                    var clientRect = element[0].getClientRects()[0];
-                    return clientRect.right <= getViewPortWidth();
+                    var clientRects = element[0].getClientRects();
+                    if (clientRects.length == 0) return true;
+                    return clientRects[0].right <= getGanttBodyRight();
                 },
                 function(newInviewStatus, oldInviewStatus) {
                     if (! newInviewStatus) {
@@ -875,7 +954,7 @@ angular.module('ng-gantt')
 
 angular.module('ng-gantt')
   .factory('PrepareIssues', function() {
-    return function (issues, root) {
+    return function (issues, root, rootId) {
       /* debug
        console.log(issues);
        _.each(issues, function (issue) {
@@ -892,36 +971,42 @@ angular.module('ng-gantt')
       var issuesByLifecycle = getIssuesByLifecycle(issues);
 
       _.each(_.keys(issuesByLifecycle).sort(), function (lifecycle) {
-        var lifecycleRow = { id: lifecycle + root, name: lifecycle, groups: true, classes: 'gantt-row-lifecycle', projectId: root };
+        var lifecycleRow = { id: lifecycleId(lifecycle, root), name: lifecycle, groups: true, classes: 'gantt-row-lifecycle', projectId: rootId };
         if (root) lifecycleRow.parent = root;
 
-        var sortedLifecycleChildIssues = _.sortBy(issuesByLifecycle[lifecycle], function (issue) {
-          return getCustomFieldValue(issue, 'Position');
-        });
+        var sortedLifecycleChildIssues =
+          _.chain(issuesByLifecycle[lifecycle])
+          .sortBy(function (issue) {
+            return getCustomFieldValue(issue, 'Position');
+          })
+          .sortBy(function(issue) {
+            return moment(issue.start_date);
+          }).value();
 
         _.each(sortedLifecycleChildIssues, function (issue) {
-          var parent = issue.parent ? _.findWhere(issues, {id: issue.parent.id}).subject : lifecycle + root;
+          var parent = issue.parent ? rowId(_.findWhere(issues, {id: issue.parent.id}).id) : lifecycleId(lifecycle, root);
 
           var assigneeRole = getCustomFieldValue(issue, 'Assignee role');
 
-          var dependencies = getIssueDependencyParameters(issue, issuesDependencies);
+          var dependencies = getTaskDependencyParameters(issue, issuesDependencies);
 
           var row =
           {
-            id: issue.id,
+            id: rowId(issue.id),
             name: issue.subject,
             parent: parent,
-            projectId: root,
+            projectId: rootId,
             tasks: [
               {
-                id: issue.id,
+                issueId : issue.id,
+                id: taskId(issue.id),
                 name: issue.subject,
                 from: issue.start_date,
-                to: issue.due_date,
+                to: issue.due_date || issue.start_date,
                 type: issue.tracker.name,
                 status: issue.status.name,
                 priority: issue.priority.name,
-                assignee: { role: assigneeRole, fullname: issue.assigned_to.name },
+                assignee: { role: assigneeRole, fullname: (issue.assigned_to && issue.assigned_to.name) || '-' },
                 progress: { percent: issue.done_ratio, classes: ['ng-gantt-progress'] },
                 classes: getAssigneeClass(assigneeRole),
                 dependencies: dependencies
@@ -939,12 +1024,24 @@ angular.module('ng-gantt')
       return data;
     };
 
-    function getIssueDependencyParameters(issue, issuesDependencies) {
+    function lifecycleId(lifecycle, root) {
+      return (root || 'root') + '_lifecycle_' + lifecycle;
+    }
+
+    function rowId(issueId) {
+      return 'row_' + issueId;
+    }
+
+    function taskId(issueId) {
+      return 'task_' + issueId;
+    }
+
+    function getTaskDependencyParameters(issue, issuesDependencies) {
       var issueDependencies = _.findWhere(issuesDependencies, {id: issue.id});
       if (issueDependencies === undefined) return [];
 
       return _.map(issueDependencies.dependencies, function(dependencyId) {
-        return { from: dependencyId };
+        return { from: taskId(dependencyId) };
       });
     }
 

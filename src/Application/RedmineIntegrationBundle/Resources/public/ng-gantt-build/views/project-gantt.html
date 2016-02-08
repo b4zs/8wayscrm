@@ -1,8 +1,8 @@
 
-<div gantt="gantt" headers="['month', 'day']" time-frames="timeFrames" date-frames="dateFrames" time-frames-non-working-mode="&quot;cropped&quot;" data="data" api="registerApi" options="options">
+<div gantt="gantt" headers="['month', 'day']" time-frames="options.timeFrames" date-frames="options.dateFrames" time-frames-non-working-mode="&quot;cropped&quot;" data="data" api="registerApi" options="options" currentDate="options.currentDate" column-width="options.columnWidth" max-height="maxHeight()" from-date="options.fromDate" to-date="options.toDate">
   <gantt-tree></gantt-tree>
   <gantt-tooltips template-url="views/tooltips.tmpl.html"></gantt-tooltips>
   <gantt-groups template-url="views/taskgroup.tmpl.html"></gantt-groups>
   <gantt-progress></gantt-progress>
-  <gantt-dependencies js-plumb-defaults="{ Connector: [ &quot;Flowchart&quot;, { stub: 10 } ], ConnectionsDetachable: false, ConnectionOverlays: [[&quot;Arrow&quot;, { location:1, length: 7, width: 7 }]], PaintStyle: { lineWidth: 0.8, strokeStyle:&quot;#000&quot; } }" endpoints="[ { anchor: [ 0.8, 1, 0, 1 ], isSource: true, enabled: false, endpoint: &quot;Blank&quot; }, { anchor: &quot;Left&quot;, isTarget: true, enabled: false, endpoint: &quot;Blank&quot; } ]"> </gantt-dependencies>
+  <gantt-dependencies js-plumb-defaults="{ Connector: [ &quot;Flowchart&quot;, { stub: 10 } ], ConnectionsDetachable: false, ConnectionOverlays: [[&quot;Arrow&quot;, { location:1, length: 7, width: 7 }]], PaintStyle: { lineWidth: 0.8, strokeStyle:&quot;#000&quot; } }" endpoints="[ { anchor: [ 0.8, 1, 0, 1 ], isSource: true, enabled: false, endpoint: &quot;Blank&quot;, maxConnections: 100 }, { anchor: &quot;Left&quot;, isTarget: true, enabled: false, endpoint: &quot;Blank&quot;, maxConnections: 100 } ]"></gantt-dependencies>
 </div>

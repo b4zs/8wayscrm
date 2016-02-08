@@ -45198,7 +45198,7 @@ $provide.value("$locale", {
 }.call(this));
 
 /*
-Project: angular-gantt v1.2.11 - Gantt chart component for AngularJS
+Project: angular-gantt v1.2.10 - Gantt chart component for AngularJS
 Authors: Marco Schweighauser, Rémi Alvergnat
 License: MIT
 Homepage: https://www.angular-gantt.com
@@ -48628,19 +48628,7 @@ Github: https://github.com/angular-gantt/angular-gantt.git
         };
 
         Scroll.prototype.getBordersWidth = function() {
-            if (this.$element === undefined) {
-               return undefined;
-            }
-
-            if (this.$element[0].clientWidth) {
-               return this.$element[0].offsetWidth - this.$element[0].clientWidth;
-            } else {
-               //fix for IE11
-               var borderLeft = window.getComputedStyle(this.$element[0]).getPropertyValue('border-left-width') ? window.getComputedStyle(this.$element[0]).getPropertyValue('border-left-width').match(/\d+/)[0] : 0;
-               var borderRight = window.getComputedStyle(this.$element[0]).getPropertyValue('border-right-width') ? window.getComputedStyle(this.$element[0]).getPropertyValue('border-right-width').match(/\d+/)[0] : 0;
-
-               return parseInt(borderLeft) + parseInt(borderRight);
-            }
+            return this.$element === undefined ? undefined : (this.$element[0].offsetWidth - this.$element[0].clientWidth);
         };
 
         Scroll.prototype.getBordersHeight = function() {
@@ -48705,6 +48693,7 @@ Github: https://github.com/angular-gantt/angular-gantt.git
         return Scroll;
     }]);
 }());
+
 
 (function(){
     'use strict';
@@ -50642,7 +50631,7 @@ angular.module('gantt.templates', []).run(['$templateCache', function($templateC
 
 //# sourceMappingURL=angular-gantt.js.map
 ;/*
-Project: angular-gantt v1.2.11 - Gantt chart component for AngularJS
+Project: angular-gantt v1.2.10 - Gantt chart component for AngularJS
 Authors: Marco Schweighauser, Rémi Alvergnat
 License: MIT
 Homepage: https://www.angular-gantt.com
@@ -52202,88 +52191,57 @@ Github: https://github.com/angular-gantt/angular-gantt.git
                 return true;
             });
 
-            var createConnection = function(info, mouseEvent) {
-                if (mouseEvent) {
-                    var oldDependency;
-                    if (info.connection.$dependency) {
-                        oldDependency = info.connection.$dependency;
-                    }
-
-                    var sourceEndpoint = info.sourceEndpoint;
-                    var targetEndpoint = info.targetEndpoint;
-
-                    var sourceModel = sourceEndpoint.$task.model;
-
-                    var dependenciesModel = sourceModel.dependencies;
-                    if (dependenciesModel === undefined) {
-                        dependenciesModel = [];
-                        sourceModel.dependencies = dependenciesModel;
-                    }
-
-                    var connectionModel = {to: targetEndpoint.$task.model.id};
-                    dependenciesModel.push(connectionModel);
-
-                    if (oldDependency) {
-                        oldDependency.removeFromTaskModel();
-                        self.manager.removeDependency(oldDependency, true); // Connection will be disconnected later by jsPlumb.
-                    }
-
-                    var dependency = self.manager.addDependency(sourceEndpoint.$task, connectionModel);
-                    info.connection.$dependency = dependency;
-                    dependency.connection = info.connection;
-
-                    self.manager.api.dependencies.raise.add(dependency);
-
+            // Record the new dependency in the model and reload the task to display the new connection.
+            this.manager.plumb.bind('beforeDrop', function(info) {
+                var oldDependency;
+                if (info.connection.$dependency) {
+                    oldDependency = info.connection.$dependency;
                 }
-            };
 
-            var updateConnection = function(info, mouseEvent) {
-                if (mouseEvent) {
-                    var oldDependency;
-                    if (info.connection.$dependency) {
-                        oldDependency = info.connection.$dependency;
-                    }
+                var sourceEndpoint = info.connection.endpoints[0];
+                var targetEndpoint = info.dropEndpoint;
 
-                    var sourceEndpoint = info.newSourceEndpoint;
-                    var targetEndpoint = info.newTargetEndpoint;
+                var sourceModel = sourceEndpoint.$task.model;
 
-                    var sourceModel = sourceEndpoint.$task.model;
+                var dependenciesModel = sourceModel.dependencies;
 
-                    var dependenciesModel = sourceModel.dependencies;
-                    if (dependenciesModel === undefined) {
-                        dependenciesModel = [];
-                        sourceModel.dependencies = dependenciesModel;
-                    }
+                if (dependenciesModel === undefined) {
+                    dependenciesModel = [];
+                    sourceModel.dependencies = dependenciesModel;
+                }
 
-                    var connectionModel = {to: targetEndpoint.$task.model.id};
-                    dependenciesModel.push(connectionModel);
+                var connectionModel = {to: targetEndpoint.$task.model.id};
+                dependenciesModel.push(connectionModel);
 
-                    if (oldDependency) {
-                        oldDependency.removeFromTaskModel();
-                        self.manager.removeDependency(oldDependency, true); // Connection will be disconnected later by jsPlumb.
-                    }
+                if (oldDependency) {
+                    oldDependency.removeFromTaskModel();
+                    self.manager.removeDependency(oldDependency);
+                }
 
-                    var dependency = self.manager.addDependency(sourceEndpoint.$task, connectionModel);
-                    info.connection.$dependency = dependency;
-                    dependency.connection = info.connection;
+                var dependency = self.manager.addDependency(sourceEndpoint.$task, connectionModel);
+                info.connection.$dependency = dependency;
+                dependency.connection = info.connection;
 
+                if (oldDependency) {
                     self.manager.api.dependencies.raise.change(dependency, oldDependency);
+                } else {
+                    self.manager.api.dependencies.raise.add(dependency);
                 }
-            };
 
-            var deleteConnection = function(info, mouseEvent) {
+                return true;
+            });
+
+            // Remove the dependency from the model if it's manually detached.
+            this.manager.plumb.bind('beforeDetach', function(connection, mouseEvent) {
                 if (mouseEvent) {
-                    var dependency = info.connection.$dependency;
+                    var dependency = connection.$dependency;
 
                     dependency.removeFromTaskModel();
-                    self.manager.removeDependency(dependency, true); // Connection will be disconnected later by jsPlumb.
+                    self.manager.removeDependency(dependency);
                     self.manager.api.dependencies.raise.remove(dependency);
                 }
-            };
-
-            this.manager.plumb.bind('connectionMoved', updateConnection);
-            this.manager.plumb.bind('connection', createConnection);
-            this.manager.plumb.bind('connectionDetached', deleteConnection);
+                return true;
+            });
 
         };
         return DependenciesEvents;
@@ -52357,16 +52315,13 @@ Github: https://github.com/angular-gantt/angular-gantt.git
              * Remove all dependencies defined for a task.
              *
              * @param task
-             * @param keepConnection if true, dependency will not be disconnected.
              */
-            this.removeDependenciesFromTask = function(task, keepConnection) {
+            this.removeDependenciesFromTask = function(task) {
                 var dependencies = this.getTaskDependencies(task);
 
                 if (dependencies) {
                     angular.forEach(dependencies, function(dependency) {
-                        if (!keepConnection) {
-                            dependency.disconnect();
-                        }
+                        dependency.disconnect();
                         this.removeDependency(dependency);
                     });
                 }
@@ -52405,10 +52360,10 @@ Github: https://github.com/angular-gantt/angular-gantt.git
             /**
              * Remove definition of a dependency
              *
-             * @param dependency Dependency object
-             * @param keepConnection if true, dependency will not be disconnected.
+             * @param fromId id of the start task of the dependency
+             * @param toId id of the end task of the dependency
              */
-            this.removeDependency = function(dependency, keepConnection) {
+            this.removeDependency = function(dependency) {
                 var fromDependencies = this.dependenciesFrom[dependency.getFromTaskId()];
                 var fromRemove = [];
 
@@ -52432,16 +52387,12 @@ Github: https://github.com/angular-gantt/angular-gantt.git
                 }
 
                 angular.forEach(fromRemove, function(dependency) {
-                    if (!keepConnection) {
-                        dependency.disconnect();
-                    }
+                    dependency.disconnect();
                     fromDependencies.splice(fromDependencies.indexOf(dependency), 1);
                 });
 
                 angular.forEach(toRemove, function(dependency) {
-                    if (!keepConnection) {
-                        dependency.disconnect();
-                    }
+                    dependency.disconnect();
                     toDependencies.splice(toDependencies.indexOf(dependency), 1);
                 });
 
@@ -52866,44 +52817,17 @@ Github: https://github.com/angular-gantt/angular-gantt.git
             this.manager = manager;
             this.task = task;
             this.installed = false;
-            this.elementHandlers = [];
 
-            this.display = true;
-            this.hideEndpointsPromise = undefined;
+            var hideEndpointsPromise;
 
-            /**
-             * Handler for a single DOM element.
-             *
-             * @param element
-             * @constructor
-             */
-            var ElementHandler = function(element) {
-                this.element = element;
-
-                this.mouseExitHandler = function() {
-                    $timeout.cancel(self.hideEndpointsPromise);
-                    self.hideEndpointsPromise = $timeout(self.hideEndpoints, 1000, false);
-                };
-
-                this.mouseEnterHandler = function() {
-                    $timeout.cancel(self.hideEndpointsPromise);
-                    self.displayEndpoints();
-                };
-
-                this.install = function() {
-                    this.element.bind('mouseenter', this.mouseEnterHandler);
-                    this.element.bind('mouseleave', this.mouseExitHandler);
-                };
-
-                this.release = function() {
-                    this.element.unbind('mouseenter', this.mouseEnterHandler);
-                    this.element.unbind('mouseleave', this.mouseExitHandler);
-                    $timeout.cancel(self.hideEndpointsPromise);
-                };
-
+            var mouseExitHandler = function() {
+                hideEndpointsPromise = $timeout(self.hideEndpoints, 1000, false);
             };
 
-
+            var mouseEnterHandler = function() {
+                $timeout.cancel(hideEndpointsPromise);
+                self.displayEndpoints();
+            };
 
             /**
              * Install mouse handler for this task, and hide all endpoints.
@@ -52912,14 +52836,8 @@ Github: https://github.com/angular-gantt/angular-gantt.git
                 if (!self.installed) {
                     self.hideEndpoints();
 
-                    self.elementHandlers.push(new ElementHandler(self.task.getContentElement()));
-                    angular.forEach(self.task.dependencies.endpoints, function(endpoint) {
-                        self.elementHandlers.push(new ElementHandler(angular.element(endpoint.canvas)));
-                    });
-
-                    angular.forEach(self.elementHandlers, function(elementHandler) {
-                        elementHandler.install();
-                    });
+                    self.task.getContentElement().bind('mouseenter', mouseEnterHandler);
+                    self.task.getContentElement().bind('mouseleave', mouseExitHandler);
 
                     self.installed = true;
                 }
@@ -52930,13 +52848,13 @@ Github: https://github.com/angular-gantt/angular-gantt.git
              */
             this.release = function() {
                 if (self.installed) {
-                    angular.forEach(self.elementHandlers, function(elementHandler) {
-                        elementHandler.release();
-                    });
+                    self.task.getContentElement().unbind('mouseenter', mouseEnterHandler);
+                    self.task.getContentElement().unbind('mouseleave', mouseExitHandler);
 
-                    self.elementHandlers = [];
+                    $timeout.cancel(hideEndpointsPromise);
 
                     self.displayEndpoints();
+
                     self.installed = false;
                 }
             };
@@ -52945,9 +52863,12 @@ Github: https://github.com/angular-gantt/angular-gantt.git
              * Display all endpoints for this task.
              */
             this.displayEndpoints = function() {
-                self.display = true;
                 angular.forEach(self.task.dependencies.endpoints, function(endpoint) {
-                    endpoint.setVisible(true, true, true);
+                    if (!endpoint.isVisible()) {
+                        endpoint.setVisible(true, true, true);
+                        angular.element(endpoint.canvas).bind('mouseenter', mouseEnterHandler);
+                        angular.element(endpoint.canvas).bind('mouseleave', mouseExitHandler);
+                    }
                 });
             };
 
@@ -52956,9 +52877,12 @@ Github: https://github.com/angular-gantt/angular-gantt.git
              */
             this.hideEndpoints = function() {
                 angular.forEach(self.task.dependencies.endpoints, function(endpoint) {
-                    endpoint.setVisible(false, true, true);
+                    if (endpoint.isVisible()) {
+                        angular.element(endpoint.canvas).unbind('mouseenter', mouseEnterHandler);
+                        angular.element(endpoint.canvas).unbind('mouseleave', mouseExitHandler);
+                        endpoint.setVisible(false, true, true);
+                    }
                 });
-                self.display = false;
             };
         };
         return TaskMouseHandler;
@@ -63575,11 +63499,6 @@ angular.module('ui.router.state')
                     }
                 }
 
-                // scope
-                if (_p.sourceEndpoint && _p.sourceEndpoint.scope) {
-                    _p.scope = _p.sourceEndpoint.scope;
-                }
-
                 // pointer events
                 if (!_p["pointer-events"] && _p.sourceEndpoint && _p.sourceEndpoint.connectorPointerEvents)
                     _p["pointer-events"] = _p.sourceEndpoint.connectorPointerEvents;
@@ -67188,7 +67107,6 @@ angular.module('ui.router.state')
                             type: this.connectionType,
                             cssClass: this.connectorClass,
                             hoverClass: this.connectorHoverClass,
-                            scope:params.scope,
                             data:beforeDrag
                         });
                         jpc.pending = true;
@@ -67349,10 +67267,6 @@ angular.module('ui.router.state')
 
                         // although the connection is no longer valid, there are use cases where this is useful.
                         _jsPlumb.fire("connectionDragStop", jpc, originalEvent);
-                        // fire this event to give people more fine-grained control (connectionDragStop fires a lot)
-                        if (jpc.pending) {
-                            _jsPlumb.fire("connectionAborted", jpc, originalEvent);
-                        }
                         // tell jsplumb that dragging is finished.
                         _jsPlumb.currentlyDragging = false;
                         jpc = null;
@@ -74014,7 +73928,7 @@ restangular.provider('Restangular', function() {
 
 })();
 
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.jade = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.jade=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
 /**
@@ -74077,9 +73991,7 @@ function nulls(val) {
  */
 exports.joinClasses = joinClasses;
 function joinClasses(val) {
-  return (Array.isArray(val) ? val.map(joinClasses) :
-    (val && typeof val === 'object') ? Object.keys(val).filter(function (key) { return val[key]; }) :
-    [val]).filter(nulls).join(' ');
+  return Array.isArray(val) ? val.map(joinClasses).filter(nulls).join(' ') : val;
 }
 
 /**
@@ -74106,16 +74018,6 @@ exports.cls = function cls(classes, escaped) {
   }
 };
 
-
-exports.style = function (val) {
-  if (val && typeof val === 'object') {
-    return Object.keys(val).map(function (style) {
-      return style + ':' + val[style];
-    }).join(';');
-  } else {
-    return val;
-  }
-};
 /**
  * Render the given attribute.
  *
@@ -74126,9 +74028,6 @@ exports.style = function (val) {
  * @return {String}
  */
 exports.attr = function attr(key, val, escaped, terse) {
-  if (key === 'style') {
-    val = exports.style(val);
-  }
   if ('boolean' == typeof val || null == val) {
     if (val) {
       return ' ' + (terse ? key : key + '="' + key + '"');
@@ -74136,24 +74035,10 @@ exports.attr = function attr(key, val, escaped, terse) {
       return '';
     }
   } else if (0 == key.indexOf('data') && 'string' != typeof val) {
-    if (JSON.stringify(val).indexOf('&') !== -1) {
-      console.warn('Since Jade 2.0.0, ampersands (`&`) in data attributes ' +
-                   'will be escaped to `&amp;`');
-    };
-    if (val && typeof val.toISOString === 'function') {
-      console.warn('Jade will eliminate the double quotes around dates in ' +
-                   'ISO form after 2.0.0');
-    }
     return ' ' + key + "='" + JSON.stringify(val).replace(/'/g, '&apos;') + "'";
   } else if (escaped) {
-    if (val && typeof val.toISOString === 'function') {
-      console.warn('Jade will stringify dates in ISO form after 2.0.0');
-    }
     return ' ' + key + '="' + exports.escape(val) + '"';
   } else {
-    if (val && typeof val.toISOString === 'function') {
-      console.warn('Jade will stringify dates in ISO form after 2.0.0');
-    }
     return ' ' + key + '="' + val + '"';
   }
 };
@@ -74196,21 +74081,12 @@ exports.attrs = function attrs(obj, terse){
  * @api private
  */
 
-var jade_encode_html_rules = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;'
-};
-var jade_match_html = /[&<>"]/g;
-
-function jade_encode_char(c) {
-  return jade_encode_html_rules[c] || c;
-}
-
-exports.escape = jade_escape;
-function jade_escape(html){
-  var result = String(html).replace(jade_match_html, jade_encode_char);
+exports.escape = function escape(html){
+  var result = String(html)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
   if (result === '' + html) return html;
   else return result;
 };
@@ -74232,7 +74108,7 @@ exports.rethrow = function rethrow(err, filename, lineno, str){
     throw err;
   }
   try {
-    str = str || require('fs').readFileSync(filename, 'utf8')
+    str =  str || require('fs').readFileSync(filename, 'utf8')
   } catch (ex) {
     rethrow(err, null, lineno)
   }
@@ -74257,14 +74133,10 @@ exports.rethrow = function rethrow(err, filename, lineno, str){
   throw err;
 };
 
-exports.DebugItem = function DebugItem(lineno, filename) {
-  this.lineno = lineno;
-  this.filename = filename;
-}
-
 },{"fs":2}],2:[function(require,module,exports){
 
-},{}]},{},[1])(1)
+},{}]},{},[1])
+(1)
 });
 
 //# sourceMappingURL=vendor.js.map
