@@ -2436,7 +2436,7 @@
             "source": {
                 "type": "git",
                 "url": "http://gitlab.assist01.gbart.h3.hu/octet/ticketing.git",
-                "reference": "8ebf85b6f91f3c13878abd807e9f189c45ed4c8f"
+                "reference": "4f2c7fbaaf37c3e3b8cc5600c59d017348b568b9"
             },
             "require": {
                 "doctrine/doctrine-bundle": "~1.4",
@@ -2463,7 +2463,7 @@
                 "task",
                 "ticket"
             ],
-            "time": "2016-02-05 15:12:41"
+            "time": "2016-02-08 06:49:46"
         },
         {
             "name": "paragonie/random_compat",
