@@ -5,3 +5,12 @@
 	<i class="{{ crm_get_project_status_icon(object.status) }}"></i>
 	{{ object }} <small>({{ object.status }})</small>
 {% endblock %}
+
+
+
+
+{% block side_bar_nav %}
+	{{ sonata_block_render_event('render_reminders', { context: [object], limit: 3 }) }}
+	{#{{ sonata_block_render_event('render_reminders', { context: [object.owner] }) }}#}
+	{{ parent() }}
+{% endblock side_bar_nav %}

@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: extra/gedmo_doctrine_extensions.yml }
+    - { resource: @OctetMessageBusBundle/Resources/config/config.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -41,6 +42,9 @@ twig:
         resource:
             - 'form_div_layout.html.twig'
             - 'ApplicationAdminBundle:Form:fields.html.twig'
+            - 'CoreToolsBundle:Form:fields.html.twig'
+            - 'CoreToolsBundle:Form:fields.html.twig'
+            - 'SonataCoreBundle:Form:datepicker.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -73,11 +77,16 @@ doctrine:
         #     path:     "%database_path%"
         types:
             json: Sonata\Doctrine\Types\JsonType
+            reference: Octet\ReferenceObjectBundle\Doctrine\Type\Reference
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        resolve_target_entities:
+            Octet\Ticketing\Lib\Model\UserInterface: 'Application\UserBundle\Entity\User'
+            Octet\Ticketing\Lib\Model\NoteRelatedInterface: 'Application\ObjectIdentityBundle\Entity\ObjectIdentity'
+            Octet\Ticketing\Lib\Model\ReminderRelatedInterface: 'Application\ObjectIdentityBundle\Entity\ObjectIdentity'
 
 
 # Swiftmailer Configuration
@@ -91,7 +100,7 @@ swiftmailer:
 sonata_admin:
     security:
         handler: sonata.admin.security.handler.role
-    title: 8 Cloud
+    title: %sonata_admin.title%
     title_logo: bundles/applicationadmin/img/logo.png
     templates:
         dashboard: SonataAdminBundle:Core:dashboard.html.twig
@@ -257,3 +266,20 @@ sonata_user:
                 # Defaults:
                 - Profile
                 - Default
+
+
+fos_rest:
+    view:
+        formats:
+            json: true
+            rss: true
+            xml: false
+        templating_formats:
+            html: true
+        force_redirects:
+            html: true
+        failed_validation: HTTP_BAD_REQUEST
+        default_engine: twig
+    routing_loader:
+        default_format: json
+

@@ -1,0 +1,30 @@
+
+<div gantt="gantt" headers="['month', 'day']" time-frames="options.timeFrames" date-frames="options.dateFrames" time-frames-non-working-mode="&quot;cropped&quot;" from-date="options.fromDate" to-date="options.toDate" data="data" api="registerApi" options="options" filter-row="filterRowFunc" expand-to-fit="false" shrink-to-fit="false" currentDate="options.currentDate" currentDateValue="options.currentDateValue" column-width="options.columnWidth" max-height="maxHeight()" ng-show="readyToShow">
+  <gantt-tree keep-ancestor-on-filter-row="true"></gantt-tree>
+  <gantt-tooltips template-url="views/tooltips.tmpl.html"></gantt-tooltips>
+  <gantt-condensed-groups display="group"></gantt-condensed-groups>
+  <gantt-groups template-url="views/taskgroup.tmpl.html"></gantt-groups>
+  <gantt-progress></gantt-progress>
+  <!-- gantt-dependencies(js-plumb-defaults='{ Connector: [ "Flowchart", { stub: 10 } ], ConnectionsDetachable: false, ConnectionOverlays: [["Arrow", { location:1, length: 7, width: 7 }]], PaintStyle: { lineWidth: 0.8, strokeStyle:"#000" } }', endpoints='[ { anchor: [ 0.8, 1, 0, 1 ], isSource: true, enabled: false, endpoint: "Blank" }, { anchor: "Left", isTarget: true, enabled: false, endpoint: "Blank" } ]')-->
+</div><span id="menubutton" ng-click="toggleMenu()" ng-show="readyToShow" class="glyphicon glyphicon-menu-hamburger"></span>
+<div id="menu" ng-show="showMenu">
+  <div class="menu-content">Show projects and rows containing:
+    <div>
+      <input type="text" ng-model="filter.row" ng-keypress="filterRow($event)"/>
+    </div>
+  </div>
+  <div class="menu-content">Show projects with active lifecycle category:
+    <div>
+      <select ng-change="filterCategory()" ng-model="filter.category">
+        <option value="">any</option>
+        <option value="A">A - ZERO VERSION DESIGN</option>
+        <option value="B">B - PREPARATION</option>
+        <option value="C">C - BRIEFING</option>
+        <option value="D">D - DESIGN</option>
+        <option value="E">E - SITEBUILD</option>
+        <option value="F">F - DEVELOPMENT</option>
+        <option value="G">G - FINALIZATION AND HANDOVER</option>
+      </select>
+    </div>
+  </div>
+</div>

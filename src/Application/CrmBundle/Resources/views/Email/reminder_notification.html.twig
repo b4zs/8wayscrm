@@ -1,0 +1,17 @@
+{% block subject %}Reminder{% endblock %}
+{% block html_body %}
+	Dear {{ user }},<br>
+	<br>
+	This is a reminder alert for one of your notes. <br>
+	<br>
+	<ul>
+		<li>title: {{ reminder.note.title }}</li>
+		<li>description: {{ reminder.note.description|nl2br }}</li>
+		<li>context:
+			{% for i,object in related_objects %}<a href="{{ object.url }}">{{ object.title }}</a> {% endfor %}
+		</li>
+	</ul>
+
+	{{ note_admin.generateObjectUrl('edit', reminder.note, {}, true) }}
+
+{% endblock %}

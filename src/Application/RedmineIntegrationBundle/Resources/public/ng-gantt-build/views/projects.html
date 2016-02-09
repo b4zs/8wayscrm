@@ -1,0 +1,4 @@
+
+<select ng-model="selectedProject" ng-options="project as project.name for project in projects"></select>
+<button ng-click="selectedProject &amp;&amp; showGantt(selectedProject.id)">Show project</button>
+<button ng-click="selectedProject &amp;&amp; showCondensedGantt(selectedProject.id)">Show overview</button>

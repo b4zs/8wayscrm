@@ -1,0 +1,47 @@
+{% extends 'SonataAdminBundle:CRUD:base_list.html.twig' %}
+
+{% block sonata_page_content %}
+
+	<iframe id="redmine-gantt-frame"
+	        style="width: 100%; height: 100%;"
+	        frameborder="0"></iframe>
+{% endblock %}
+
+{% block list_filters %}{% endblock %}
+{% block sonata_breadcrumb %}
+	<ol class="nav navbar-top-links breadcrumb">
+		<li>
+			<a href="{{ url('application_redmine_integration_gantt') }}">Redmine-Gantt</a>
+		</li>
+	</ol>
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		localStorage.setItem('user', JSON.stringify({ api_key: '{{ app.user.redmineAuthToken }}' }));
+
+		$(function(){
+		$('.navbar-btn.sidebar-toggle').click();
+			var $frame = $('#redmine-gantt-frame');
+			var headerHeight = $('.header').height();
+			function resizeFrame() {
+				$frame.css('min-height', $(window).height()-headerHeight);
+			}
+			$(window).on('resize', resizeFrame);
+			resizeFrame();
+			$frame.attr('src', '{{ asset('bundles/applicationredmineintegration/ng-gantt-build/index.html') }}');
+			window.f = $frame;
+		});
+	</script>
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style>
+		body{
+			margin-bottom: 0px;
+		}
+	</style>
+{% endblock %}

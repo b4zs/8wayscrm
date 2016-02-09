@@ -1,4 +1,3 @@
-
 {% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
 
 {% block navbar_title %}
@@ -10,3 +9,10 @@
 		{{ object }} <small>({{ type }})</small>
 	{% endif %}
 {% endblock %}
+
+
+{% block side_bar_nav %}
+	{{ sonata_block_render_event('render_reminders', { context: [object], limit: 3 }) }}
+	{#{{ sonata_block_render_event('render_reminders', { context: [object.owner] }) }}#}
+	{{ parent() }}
+{% endblock side_bar_nav %}

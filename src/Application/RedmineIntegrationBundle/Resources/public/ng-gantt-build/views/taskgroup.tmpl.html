@@ -1,0 +1,16 @@
+
+<div ng-controller="GanttGroupController">
+  <div ng-if="taskGroup.overviewTasks.length &gt; 0" class="gantt-task-group-overview">
+    <gantt-task-overview ng-repeat="task in taskGroup.overviewTasks"></gantt-task-overview>
+  </div>
+  <div ng-if="taskGroup.row._collapsed &amp;&amp; taskGroup.promotedTasks.length &gt; 0" class="gantt-task-group-promote">
+    <gantt-task ng-repeat="task in taskGroup.promotedTasks"></gantt-task>
+  </div>
+  <div ng-if="taskGroup.showGrouping" ng-style="{'left': taskGroup.left + 'px', 'width': taskGroup.width + 'px'}" style="position: absolute" ng-class="'gantt-lifecycle-' + taskGroup.row.model.name.substr(0,1)" class="gantt-task-group">
+    <div class="gantt-task-group-left-main"></div>
+    <div class="gantt-task-group-right-main"></div>
+    <div class="gantt-task-group-left-symbol"></div>
+    <div class="gantt-task-group-right-symbol"></div>
+    <div inview="inview" class="gantt-task-group-label">{{taskGroup.row.model.name}}</div>
+  </div>
+</div>

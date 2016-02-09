@@ -53,22 +53,8 @@ class LoggableEntityExtension extends AdminExtension
 
 		$form->getAdmin()->getSubject()->setLogExtraData(new LogExtraData());
 
-		$form->with('Add note');
+		$form->with('Comment for your changes (optional)');
 
-		//TODO: get these values for the specific object type
-		$form->add('log_custom_action', 'choice', array(
-			'required' => false,
-			'choices'  => array(
-				'phone call'    => 'Phone call',
-				'email'         => 'Email',
-				'meeting'       => 'Meeting',
-			),
-			'empty_value'   => 'Update',
-			'expanded'      => true,
-			'label'         => false,
-			'property_path' => 'logExtraData.customAction',
-			'attr'          => array('class' => 'list-inline'),
-		));
 		$form->add('log_extra_comment', 'textarea', array(
 			'required'      => false,
 			'label'         => false,

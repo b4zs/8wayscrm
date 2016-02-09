@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use Application\AdminBundle\ApplicationAdminBundle;
 use Application\MediaBundle\ApplicationMediaBundle;
@@ -10,6 +10,7 @@ use FOS\UserBundle\FOSUserBundle;
 use Gedmo\DoctrineExtensions;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
+use Octet\Ticketing\Bundle\OctetTicketingBundle;
 use Sonata\AdminBundle\SonataAdminBundle;
 use Sonata\BlockBundle\SonataBlockBundle;
 use Sonata\CoreBundle\SonataCoreBundle;
@@ -59,8 +60,17 @@ class AppKernel extends Kernel
             new ApplicationAdminBundle(),
 
             new Core\LoggableEntityBundle\CoreLoggableEntityBundle(),
+            new Core\ToolsBundle\CoreToolsBundle(),
+            new Octet\MessageBusBundle\OctetMessageBusBundle(),
+            new SimpleBus\AsynchronousBundle\SimpleBusAsynchronousBundle(),
+            new SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle(),
+            new SimpleBus\SymfonyBridge\SimpleBusEventBusBundle(),
+            new OctetTicketingBundle(),
 
-            //You need to add this dependency to make media functional
+            new Core\ObjectIdentityBundle\CoreObjectIdentityBundle(),
+            new Application\ObjectIdentityBundle\ApplicationObjectIdentityBundle(),
+            new Octet\ReferenceObjectBundle\OctetReferenceObjectBundle(),
+            new Application\RedmineIntegrationBundle\ApplicationRedmineIntegrationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -104,6 +104,14 @@ class UserAdmin extends BaseUserAdmin
 			$formMapper->remove('groups');
 		}
 
+		if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+			$formMapper
+				->with('Redmine', array('class' => 'col-md-12'))
+				->add('redmineAuthToken', null, array(
+					'label' => 'API token'
+				))
+				->end();
+		}
 
 		if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN') && $this->isGranted('ROLE_SUPER_ADMIN')) {
 			$formMapper
@@ -137,6 +145,12 @@ class UserAdmin extends BaseUserAdmin
 			->add('locked', null, array('editable' => true))
 			->add('createdAt')
 		;
+
+		if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
+			$listMapper
+				->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
+			;
+		}
 	}
 
 	public function toString($object)

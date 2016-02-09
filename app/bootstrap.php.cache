@@ -172,7 +172,7 @@ $this->set($key, $values);
 }
 public function get($key, $default = null, $first = true)
 {
-$key = strtr(strtolower($key),'_','-');
+$key = str_replace('_','-', strtolower($key));
 if (!array_key_exists($key, $this->headers)) {
 if (null === $default) {
 return $first ? null : array();
@@ -186,7 +186,7 @@ return $this->headers[$key];
 }
 public function set($key, $values, $replace = true)
 {
-$key = strtr(strtolower($key),'_','-');
+$key = str_replace('_','-', strtolower($key));
 $values = array_values((array) $values);
 if (true === $replace || !isset($this->headers[$key])) {
 $this->headers[$key] = $values;
@@ -199,7 +199,7 @@ $this->cacheControl = $this->parseCacheControl($values[0]);
 }
 public function has($key)
 {
-return array_key_exists(strtr(strtolower($key),'_','-'), $this->headers);
+return array_key_exists(str_replace('_','-', strtolower($key)), $this->headers);
 }
 public function contains($key, $value)
 {
@@ -207,7 +207,7 @@ return in_array($value, $this->get($key, null, false));
 }
 public function remove($key)
 {
-$key = strtr(strtolower($key),'_','-');
+$key = str_replace('_','-', strtolower($key));
 unset($this->headers[$key]);
 if ('cache-control'=== $key) {
 $this->cacheControl = array();
@@ -1394,7 +1394,7 @@ $this->setContent($content);
 $this->setStatusCode($status);
 $this->setProtocolVersion('1.0');
 if (!$this->headers->has('Date')) {
-$this->setDate(new \DateTime(null, new \DateTimeZone('UTC')));
+$this->setDate(\DateTime::createFromFormat('U', time(), new \DateTimeZone('UTC')));
 }
 }
 public static function create($content ='', $status = 200, $headers = array())
@@ -1458,12 +1458,12 @@ public function sendHeaders()
 if (headers_sent()) {
 return $this;
 }
-header(sprintf('HTTP/%s %s %s', $this->version, $this->statusCode, $this->statusText), true, $this->statusCode);
 foreach ($this->headers->allPreserveCase() as $name => $values) {
 foreach ($values as $value) {
-header($name.': '.$value, false, $this->statusCode);
+header($name.': '.$value, false);
 }
 }
+header(sprintf('HTTP/%s %s %s', $this->version, $this->statusCode, $this->statusText), true, $this->statusCode);
 foreach ($this->headers->getCookies() as $cookie) {
 setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
 }
@@ -1513,7 +1513,7 @@ if ($this->isInvalid()) {
 throw new \InvalidArgumentException(sprintf('The HTTP status code "%s" is not valid.', $code));
 }
 if (null === $text) {
-$this->statusText = isset(self::$statusTexts[$code]) ? self::$statusTexts[$code] :'';
+$this->statusText = isset(self::$statusTexts[$code]) ? self::$statusTexts[$code] :'unknown status';
 return $this;
 }
 if (false === $text) {
@@ -1873,7 +1873,7 @@ $this->set('Cache-Control','');
 public function set($key, $values, $replace = true)
 {
 parent::set($key, $values, $replace);
-$uniqueKey = strtr(strtolower($key),'_','-');
+$uniqueKey = str_replace('_','-', strtolower($key));
 $this->headerNames[$uniqueKey] = $key;
 if (in_array($uniqueKey, array('cache-control','etag','last-modified','expires'))) {
 $computed = $this->computeCacheControlValue();
@@ -1885,7 +1885,7 @@ $this->computedCacheControl = $this->parseCacheControl($computed);
 public function remove($key)
 {
 parent::remove($key);
-$uniqueKey = strtr(strtolower($key),'_','-');
+$uniqueKey = str_replace('_','-', strtolower($key));
 unset($this->headerNames[$uniqueKey]);
 if ('cache-control'=== $uniqueKey) {
 $this->computedCacheControl = array();
@@ -2155,9 +2155,7 @@ try {
 $service = $this->$method();
 } catch (\Exception $e) {
 unset($this->loading[$id]);
-if (array_key_exists($id, $this->services)) {
 unset($this->services[$id]);
-}
 if ($e instanceof InactiveScopeException && self::EXCEPTION_ON_INVALID_REFERENCE !== $invalidBehavior) {
 return;
 }
@@ -2277,7 +2275,7 @@ return strtr(ucwords(strtr($id, array('_'=>' ','.'=>'_ ','\\'=>'_ '))), array(' 
 }
 public static function underscore($id)
 {
-return strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/','/([a-z\d])([A-Z])/'), array('\\1_\\2','\\1_\\2'), strtr($id,'_','.')));
+return strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/','/([a-z\d])([A-Z])/'), array('\\1_\\2','\\1_\\2'), str_replace('_','.', $id)));
 }
 }
 }
@@ -2363,11 +2361,11 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.7.5';
-const VERSION_ID = 20705;
+const VERSION ='2.7.9';
+const VERSION_ID = 20709;
 const MAJOR_VERSION = 2;
 const MINOR_VERSION = 7;
-const RELEASE_VERSION = 5;
+const RELEASE_VERSION = 9;
 const EXTRA_VERSION ='';
 const END_OF_MAINTENANCE ='05/2018';
 const END_OF_LIFE ='05/2019';
@@ -2931,13 +2929,16 @@ public function registerCommands(Application $application)
 if (!is_dir($dir = $this->getPath().'/Command')) {
 return;
 }
+if (!class_exists('Symfony\Component\Finder\Finder')) {
+throw new \RuntimeException('You need the symfony/finder component to register bundle commands.');
+}
 $finder = new Finder();
 $finder->files()->name('*Command.php')->in($dir);
 $prefix = $this->getNamespace().'\\Command';
 foreach ($finder as $file) {
 $ns = $prefix;
 if ($relativePath = $file->getRelativePath()) {
-$ns .='\\'.strtr($relativePath,'/','\\');
+$ns .='\\'.str_replace('/','\\', $relativePath);
 }
 $class = $ns.'\\'.$file->getBasename('.php');
 if ($this->container) {

@@ -1,0 +1,4 @@
+services:
+#    application_object_identity.example:
+#        class: Application\ObjectIdentityBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

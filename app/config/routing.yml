@@ -1,3 +1,7 @@
+application_reminde_integration:
+    resource: "@ApplicationRedmineIntegrationBundle/Resources/config/routing.yml"
+    prefix:   /admin/redmine
+
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
     prefix: /admin
@@ -20,3 +24,13 @@ app_index:
     path: /
     defaults:
         _controller: ApplicationCrmBundle:Default:index
+
+object_identity:
+    resource: '@CoreObjectIdentityBundle/Resources/config/routing.yml'
+    prefix: /
+
+
+ticketing_notes_helper:
+    resource: @OctetTicketingBundle/Resources/config/routing_note.yml
+    prefix: /ticketing/notes/
+
