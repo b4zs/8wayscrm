@@ -101,6 +101,7 @@ sonata_admin:
     security:
         handler: sonata.admin.security.handler.role
     title: %sonata_admin.title%
+    title_logo: bundles/applicationadmin/img/logo.png
     templates:
         dashboard: SonataAdminBundle:Core:dashboard.html.twig
         user_block: ApplicationAdminBundle:Core:user_block.html.twig
@@ -118,6 +119,7 @@ sonata_admin:
                 - bundles/sonataadmin/css/styles.css
                 - bundles/sonataadmin/css/layout.css
                 - bundles/applicationadmin/css/layout.css
+                - bundles/applicationuser/css/layout.css
             javascripts:
                 - bundles/sonataadmin/vendor/jquery/dist/jquery.min.js
                 - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
