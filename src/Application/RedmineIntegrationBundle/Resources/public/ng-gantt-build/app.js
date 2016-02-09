@@ -269,7 +269,7 @@ angular.module('ng-gantt', [
       controller: 'CondensedGanttCtrl',
       resolve: {
         projectIds: function($stateParams) {
-          return [$stateParams.projectId];
+          return [parseInt($stateParams.projectId)];
         }
       }
     })
@@ -284,7 +284,6 @@ angular.module('ng-gantt', [
         }
       }
     });
-
 
   RestangularProvider.setBaseUrl(RedmineBaseUrl);
   RestangularProvider.setRequestSuffix('.json');
@@ -523,16 +522,53 @@ angular.module('ng-gantt')
       taskContent : '<i class="fa fa-tasks"></i> <a href="'+RedmineBaseUrl+'/issues/{{task.model.issueId}}" target="_blank">{{task.model.name}}</a>',
       columnWidth: 18,
       currentDate: 'line',
-      currentDateValue: new Date(moment().format("YYYY"), moment().format("MM")-1, moment().format("DD"))
+      currentDateValue: new Date(moment().format("YYYY"), moment().format("M") -1, moment().format("D"))
       //currentDateValue: new Date(2015, 5, 12)//, 9, 0, 0)
     };
 
     $scope.registerApi = function(api) {
       $scope.api = api;
 
-      //api.rows.addRowFilter(filterRowsFunc);
+      api.directives.on.new($scope, function(dName, dScope, dElement, dAttrs, dController) {
+
+        // TODO: same in project-gantt
+        // override the gantt-scrollable's css to have min-height set
+        if (dName === 'ganttScrollable') {
+          dScope.getScrollableCss = function() {
+            var css = {};
+
+            var maxHeight = dScope.gantt.options.value('maxHeight');
+            if (maxHeight > 0) {
+              css['max-height'] = maxHeight - dScope.gantt.header.getHeight() + 'px';
+              css['min-height'] = css['max-height'];
+              css['overflow-y'] = 'auto';
+
+              if (dScope.gantt.scroll.isVScrollbarVisible()) {
+                css['border-right'] = 'none';
+              }
+            }
+
+            var columnWidth = dScope.gantt.options.value('columnWidth');
+            var bodySmallerThanGantt = dScope.gantt.width === 0 ? false: dScope.gantt.width < dScope.gantt.getWidth() - dScope.gantt.side.getWidth();
+            if (columnWidth !== undefined && bodySmallerThanGantt) {
+              css.width = (dScope.gantt.width + dScope.gantt.scroll.getBordersWidth()) + 'px';
+            }
+
+            return css;
+          };
+        }
+      });
 
       api.core.on.ready($scope, function(api) {
+
+        // scroll to the current date after the columns are displayed
+        api.columns.on.generate($scope, function() {
+          $timeout(function() {
+            $scope.api.scroll.toDate($scope.options.currentDateValue);
+            $scope.readyToShow = true;
+          }, 0);
+        });
+
         api.directives.on.new($scope, function(dName, dScope, dElement, dAttrs, dController) {
           if (dName === 'ganttTaskContent') {
             dElement.attr('inview', '');
@@ -560,7 +596,6 @@ angular.module('ng-gantt')
             $scope.api.tree.collapseAll();
 
             $scope.api.side.setWidth(undefined);
-            $scope.readyToShow = true;
           }, 0);
         });
       });
@@ -697,7 +732,7 @@ angular.module('ng-gantt')
                 var user = response.data.user;
                 User.setUser(user);
                 Restangular.setDefaultRequestParams({ key: user.api_key });
-                $state.go('demo');
+                $state.go('projects');
             }, function(){
                 $window.alert('Wrong username or password!');
             });
