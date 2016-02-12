@@ -69,3 +69,20 @@ services:
         class: Application\CrmBundle\Twig\CrmBundleExtension
         tags:
             - { name: twig.extension }
+
+    application_crm.model_builder.client_index:
+        class: Application\CrmBundle\ModelBuilder\ClientIndexBuilder
+        tags:
+            - { name: model_builder, class: 'Application\CrmBundle\Entity\Client' }
+
+    application_crm.model_builder.project_index:
+        class: Application\CrmBundle\ModelBuilder\ProjectIndexBuilder
+        tags:
+            - { name: model_builder, class: 'Application\CrmBundle\Entity\Project' }
+
+    application_crm.mailer:
+        class: Application\CrmBundle\Mailer\CrmMailer
+        calls:
+            - [setContainer, [@service_container]]
+        tags:
+            - { name: command_handler, handles: octet_ticketing_send_reminder_notification, method: handleSendReminderNotificationCommand }

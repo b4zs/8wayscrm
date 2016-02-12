@@ -1,0 +1,4 @@
+
+<div ng-cloak="ng-cloak" ng-show="displayed" ng-class="isRightAligned ? 'gantt-task-infoArrowR' : 'gantt-task-infoArrow'" ng-style="{top: taskRect.top + 'px', marginTop: -elementHeight - 8 + 'px'}" class="gantt-task-info">
+  <div class="gantt-task-info-content"><b>{{task.model.name}}</b><br/><small>Type: {{task.model.type}}<br/>Status: {{task.model.status}}<br/>Priority: {{task.model.priority}}<br/>Assignee: {{task.model.assignee.fullname}} ({{task.model.assignee.role}})</small></div>
+</div>

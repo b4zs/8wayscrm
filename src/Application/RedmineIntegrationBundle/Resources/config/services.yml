@@ -1,0 +1,7 @@
+services:
+    application_redmine_integration.menu.menu_build_listener:
+        class: Application\RedmineIntegrationBundle\Menu\MenuBuildListener
+        calls:
+          - [setContainer, [@service_container]]
+        tags:
+          - { name: kernel.event_listener, event: menu.build.sonata_admin_sidebar, method: buildSonataAdminMenu  }

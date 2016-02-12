@@ -51,12 +51,21 @@ Application\UserBundle\Entity\User:
             type: integer
             lenght: 32
             nullable: true
+        redmineAuthToken:
+            type: string
+            length: 128
+            nullable: true
     manyToOne:
         primaryGroup:
             targetEntity: Application\UserBundle\Entity\Group
         fileset:
             targetEntity: Application\MediaBundle\Entity\Gallery
             cascade: [all]
+    oneToOne:
+        objectIdentity:
+            targetEntity: Application\ObjectIdentityBundle\Entity\ObjectIdentity
+            inversedBy: user
+            cascade: ["persist"]
     oneToMany:
         projectMemberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership

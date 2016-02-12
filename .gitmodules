@@ -1,0 +1,3 @@
+[submodule "src/Application/RedmineIntegrationBundle/Resources/public/ng-gantt"]
+	path = src/Application/RedmineIntegrationBundle/Resources/public/ng-gantt
+	url = http://gitlab.assist01.gbart.h3.hu/balint/ng-gantt.git

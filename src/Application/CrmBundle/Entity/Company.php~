@@ -1,0 +1,166 @@
+<?php
+
+namespace Application\CrmBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Company
+ */
+class Company
+{
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $sectorOfActivity;
+
+    /**
+     * @var string
+     */
+    private $country;
+
+    /**
+     * @var ContactInformation
+     */
+    private $mainContactInformation;
+
+    /**
+     * @var string
+     */
+    private $website;
+
+
+
+
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->mainContactInformation = new ContactInformation();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Company
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set mainContactInformation
+     *
+     * @param string $mainContactInformation
+     * @return Company
+     */
+    public function setMainContactInformation($mainContactInformation)
+    {
+        $this->mainContactInformation = $mainContactInformation;
+
+        return $this;
+    }
+
+    /**
+     * Get mainContactInformation
+     *
+     * @return string 
+     */
+    public function getMainContactInformation()
+    {
+        return $this->mainContactInformation;
+    }
+
+    /**
+     * Set sectorOfActivity
+     *
+     * @param string $sectorOfActivity
+     * @return Company
+     */
+    public function setSectorOfActivity($sectorOfActivity)
+    {
+        $this->sectorOfActivity = $sectorOfActivity;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorOfActivity
+     *
+     * @return string 
+     */
+    public function getSectorOfActivity()
+    {
+        return $this->sectorOfActivity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param mixed $website
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    }
+}

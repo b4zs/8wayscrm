@@ -15,6 +15,10 @@ use Application\CrmBundle\Entity\Person;
 use Application\CrmBundle\Entity\ProjectMembership;
 use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\MediaBundle\Entity\Gallery;
+use Application\ObjectIdentityBundle\Entity\ObjectIdentity;
+use Application\ObjectIdentityBundle\Model\ObjectIdentityAwareTrait;
+use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
+use Core\ObjectIdentityBundle\Model\ObjectIdentityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -29,8 +33,12 @@ use Sonata\UserBundle\Entity\BaseUser as BaseUser;
  *
  * @author <yourname> <youremail>
  */
-class User extends BaseUser implements OwnerGroupAware
+class User extends BaseUser implements
+    OwnerGroupAware,
+    ObjectIdentityAware
 {
+    use ObjectIdentityAwareTrait;
+
     /**
      * @var integer $id
      */
@@ -74,6 +82,8 @@ class User extends BaseUser implements OwnerGroupAware
 
     private $fileset;
 
+    private $redmineAuthToken;
+
     public function __construct()
     {
         parent::__construct();
@@ -81,6 +91,7 @@ class User extends BaseUser implements OwnerGroupAware
         $this->enabled = true;
         $this->setRoles(array('ROLE_SONATA_ADMIN', 'ROLE_SALES', 'ROLE_ADMIN'));
         $this->fileset = new Gallery();
+        $this->initObjectIdentity();
     }
 
     /**
@@ -353,5 +364,63 @@ class User extends BaseUser implements OwnerGroupAware
         $this->getFileset()->addGalleryHasMedias($galleryHasMedia);
     }
 
+
+    public function getReminders()
+    {
+        // TODO: Implement getReminders() method.
+    }
+
+    public function setReminders()
+    {
+        // TODO: Implement setReminders() method.
+    }
+
+    public function addReminder()
+    {
+        // TODO: Implement addReminder() method.
+    }
+
+    public function removeReminder()
+    {
+        // TODO: Implement removeReminder() method.
+    }
+
+    public function getNotes()
+    {
+        // TODO: Implement getNotes() method.
+    }
+
+    public function setNotes()
+    {
+        // TODO: Implement setNotes() method.
+    }
+
+    public function addNote()
+    {
+        // TODO: Implement addNote() method.
+    }
+
+    public function removeNote()
+    {
+        // TODO: Implement removeNote() method.
+    }
+
+    /**
+     * @return string
+     */
+    public function getCanonicalName()
+    {
+        return $this->getUsernameCanonical();
+    }
+
+    public function getRedmineAuthToken()
+    {
+        return $this->redmineAuthToken;
+    }
+
+    public function setRedmineAuthToken($redmineAuthToken)
+    {
+        $this->redmineAuthToken = $redmineAuthToken;
+    }
 
 }

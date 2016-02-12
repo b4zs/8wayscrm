@@ -1,0 +1,27 @@
+Application\ObjectIdentityBundle\Entity\ObjectIdentity:
+    type: entity
+    table: object_identity
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    oneToOne:
+        project:
+            targetEntity: Application\CrmBundle\Entity\Project
+        abstractClient:
+            targetEntity: Application\CrmBundle\Entity\AbstractClient
+        user:
+            targetEntity: Application\UserBundle\Entity\User
+            mappedBy: objectIdentity
+    oneToMany:
+       indices:
+           targetEntity: Core\ObjectIdentityBundle\Entity\ObjectIdentityIndex
+           mappedBy:     objectIdentity
+           fetch:        EXTRA_LAZY
+    manyToMany:
+        notes:
+            targetEntity: Octet\Ticketing\Bundle\Entity\Note
+        reminders:
+            targetEntity: Octet\Ticketing\Bundle\Entity\Reminder

@@ -5,9 +5,11 @@ namespace Application\CrmBundle\Entity;
 use Application\CrmBundle\Enum\ProjectStatus;
 use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\MediaBundle\Entity\Gallery;
+use Application\ObjectIdentityBundle\Model\ObjectIdentityAwareTrait;
 use Application\UserBundle\Entity\Group;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
+use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -18,8 +20,10 @@ use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 /**
  * Project
  */
-class Project implements LogExtraDataAware, OwnerGroupAware
+class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
 {
+    use ObjectIdentityAwareTrait;
+
     /**
      * @var integer
      */
@@ -86,6 +90,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fileset = new Gallery();
         $this->createdAt = new \DateTime();
+        $this->initObjectIdentity();
     }
 
     /**
@@ -342,4 +347,10 @@ class Project implements LogExtraDataAware, OwnerGroupAware
     {
         $this->groups->removeElement($group);
     }
+
+    public function getCanonicalName()
+    {
+        return $this->getName();
+    }
+
 }

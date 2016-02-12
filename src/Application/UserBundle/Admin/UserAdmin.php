@@ -104,6 +104,14 @@ class UserAdmin extends BaseUserAdmin
 			$formMapper->remove('groups');
 		}
 
+		if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+			$formMapper
+				->with('Redmine', array('class' => 'col-md-12'))
+				->add('redmineAuthToken', null, array(
+					'label' => 'API token'
+				))
+				->end();
+		}
 
 		if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN') && $this->isGranted('ROLE_SUPER_ADMIN')) {
 			$formMapper

@@ -46,6 +46,9 @@ Application\CrmBundle\Entity\Project:
         fileset:
             targetEntity: Application\MediaBundle\Entity\Gallery
             cascade: [all]
+        objectIdentity:
+            targetEntity: Application\ObjectIdentityBundle\Entity\ObjectIdentity
+            cascade: [all]
     manyToMany:
         groups:
             targetEntity: Application\UserBundle\Entity\Group
