@@ -10,6 +10,10 @@ class GanttController extends CRUDController
 {
     public function indexAction()
     {
+        if (!$this->isGranted('ROLE_APPLICATION_REDMINE_GANTT_LIST')) {
+            throw new AccessDeniedHttpException('Access Denied.');
+        }
+
         if (!$this->get('security.token_storage')->getToken()->getUser()->getRedmineAuthToken()) {
             throw new AccessDeniedHttpException('No redmine authentication token');
         }
