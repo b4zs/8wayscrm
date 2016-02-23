@@ -227,7 +227,7 @@ angular.module('ng-gantt', [
     'gantt.condensedgroups'
 ])
 
-.constant('RedmineBaseUrl', 'http://redmine.assist01.gbart.h3.hu')
+.constant('RedmineBaseUrl', '/redmine-proxy.php')
 
 // Configurations
 .config(function ($stateProvider, RestangularProvider, RedmineBaseUrl) {
