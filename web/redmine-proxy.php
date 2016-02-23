@@ -67,6 +67,20 @@ function sendResponse($responseHeaders, $body)
 	echo $body;
 }
 
+if (!function_exists('getallheaders')) {
+	function getallheaders() {
+		$headers = [];
+		foreach ($_SERVER as $name => $value) {
+			if (substr($name, 0, 5) == 'HTTP_') {
+				$headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+			}
+		}
+		return $headers;
+	}
+}
+
+
+
 $url = 'http://redmine.assist01.gbart.h3.hu'.str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
 $requestHeaders = buildRequestHeaders();
 $method = $_SERVER['REQUEST_METHOD'];
