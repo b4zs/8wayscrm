@@ -5,3 +5,21 @@ services:
           - [setContainer, [@service_container]]
         tags:
           - { name: kernel.event_listener, event: menu.build.sonata_admin_sidebar, method: buildSonataAdminMenu  }
+
+    application_redmine_integration.helper.ticket_time:
+        class: Application\RedmineIntegrationBundle\Helper\TicketTimeHelper
+
+    application_redmine_integration.helper.communication:
+        class: Application\RedmineIntegrationBundle\Helper\CommunicationHelper
+        calls:
+          - [setRedmineDomain, ['http://redmine.assist01.gbart.h3.hu']]
+          - [setBrowser, ['@application_redmine_integration.http.client']]
+
+    application_redmine_integration.http.listener.logger:
+        class: Buzz\Listener\LoggerListener
+        arguments: [['@logger', 'debug'], '[redmine] ']
+
+    application_redmine_integration.http.client:
+        class: Buzz\Browser
+        calls:
+          - ['setListener', ['@application_redmine_integration.http.listener.logger']]

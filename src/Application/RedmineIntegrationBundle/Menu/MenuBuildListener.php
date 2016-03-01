@@ -13,17 +13,10 @@ class MenuBuildListener extends ContainerAware
 			return;
 		}
 		$menu = $event->getSubject();
-		$createItem = $this->getKnpMenuFactory()->createItem('sonata.user.admin.user.team.create', array(
-			'uri'   => $this->getRouter()->generate('application_redmine_integration_gantt'),
-			'label' => 'Redmine gantt',
-			'attributes' => array(
-				'title' => 'Create member',
-				'class' => ''
-			)
-		));
-		$createItem->setExtra('icon', '');
-		$menu->addChild($createItem);
 
+		$ganttItem = $this->createGanttItem();
+		$ganttItem->addChild($this->createProjectFixerItem());
+		$menu->addChild($ganttItem);
 	}
 
 	private function getKnpMenuFactory()
@@ -34,6 +27,34 @@ class MenuBuildListener extends ContainerAware
 	private function getRouter()
 	{
 		return $this->container->get('router');
+	}
+
+	protected function createGanttItem()
+	{
+		$createItem = $this->getKnpMenuFactory()->createItem('redmine.gantt', array(
+			'uri' => $this->getRouter()->generate('application_redmine_integration_gantt'),
+			'label' => 'Redmine gantt',
+			'attributes' => array(
+				'title' => 'Create member',
+				'class' => ''
+			)
+		));
+		$createItem->setExtra('icon', '');
+		return $createItem;
+	}
+
+	protected function createProjectFixerItem()
+	{
+		$createItem = $this->getKnpMenuFactory()->createItem('redmine.gantt.fix_project', array(
+			'uri' => $this->getRouter()->generate('application_redmine_integration_fix_project'),
+			'label' => 'Redmine Project fixer',
+			'attributes' => array(
+				'title' => '',
+				'class' => ''
+			)
+		));
+		$createItem->setExtra('icon', '');
+		return $createItem;
 	}
 
 }

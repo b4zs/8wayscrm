@@ -1,0 +1,67 @@
+{% extends 'SonataAdminBundle:CRUD:base_list.html.twig' %}
+
+{% block list_filters %}{% endblock %}
+{% block sonata_breadcrumb %}
+	<ol class="nav navbar-top-links breadcrumb">
+		<li>
+			<a href="{{ url('application_redmine_integration_gantt') }}">Redmine-Gantt-fixer</a>
+		</li>
+	</ol>
+
+{% endblock %}
+
+
+{% block sonata_page_content %}
+	{#{{ dump(data) }}#}
+	<h1>min start: {{ min_start|date }}</h1>
+	{% if days_shifted %}
+	<h1>days shifted: {{ days_shifted }}</h1>
+	{% endif %}
+
+	{% for issue in data.issues %}
+		<div class="col-md-3" style="margin: 5px;">
+			<table border="1" cellpadding="0" width="100%">
+				<tr>
+					<td>id</td>
+					<td>{{ issue.id }}</td>
+				</tr>
+				<tr>
+					<td>t</td>
+					<td>{{ issue.subject }}</td>
+				</tr>
+				<tr>
+					<td>p</td>
+					<td>{{ issue.project.name }}</td>
+				</tr>
+				<tr>
+					<td>st</td>
+					<td>{{ issue.status.name }}</td>
+				</tr>
+				<tr>
+					<td>est</td>
+					<td>{{ issue.estimated_hours|default('err') }}</td>
+				</tr>
+				<tr>
+					<td>_width</td>
+					<td>{{ issue._width_in_hours|default('err') }}</td>
+				</tr>
+				<tr>
+					<td>_dist</td>
+					<td>{{ issue._distance_from_start_in_days is defined ? issue._distance_from_start_in_days  : 'err' }}</td>
+				</tr>
+				<tr>
+					<td>[</td>
+					<td>{{ issue.start_date|default('err') }}</td>
+				</tr>
+				<tr>
+					<td>]</td>
+					<td>{{ issue.due_date|default('err') }}</td>
+				</tr>
+				<tr>
+					<td>_mod</td>
+					<td>{{ issue._modified|default('-')|json_encode }}</td>
+				</tr>
+			</table>
+		</div>
+	{% endfor %}
+{% endblock %}
