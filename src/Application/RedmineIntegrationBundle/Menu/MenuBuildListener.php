@@ -9,13 +9,17 @@ class MenuBuildListener extends ContainerAware
 {
 	public function buildSonataAdminMenu(GenericEvent $event)
 	{
-		if (!$this->container->get('security.token_storage')->getToken()->getUser()->getRedmineAuthToken()) {
+		$token = $this->container->get('security.token_storage')->getToken();
+		$authorizationChecker = $this->container->get('security.authorization_checker');
+		if (!$token->getUser()->getRedmineAuthToken()) {
 			return;
 		}
 		$menu = $event->getSubject();
 
 		$ganttItem = $this->createGanttItem();
-		$ganttItem->addChild($this->createProjectFixerItem());
+		if (true || $authorizationChecker->isGranted('ROLE_REDMINE_PROJECT_GANTT_FIXER')) {
+			$ganttItem->addChild($this->createProjectFixerItem());
+		}
 		$menu->addChild($ganttItem);
 	}
 
@@ -46,8 +50,8 @@ class MenuBuildListener extends ContainerAware
 	protected function createProjectFixerItem()
 	{
 		$createItem = $this->getKnpMenuFactory()->createItem('redmine.gantt.fix_project', array(
-			'uri' => $this->getRouter()->generate('application_redmine_integration_fix_project'),
-			'label' => 'Redmine Project fixer',
+			'uri' => $this->getRouter()->generate('application_redmine_integration_fix_gantt'),
+			'label' => 'Project gantt fixer',
 			'attributes' => array(
 				'title' => '',
 				'class' => ''

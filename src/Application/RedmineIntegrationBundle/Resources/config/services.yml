@@ -1,3 +1,6 @@
+parameters:
+    application_redmine_integration.redmine_api_url: 'http://redmine.assist01.gbart.h3.hu'
+
 services:
     application_redmine_integration.menu.menu_build_listener:
         class: Application\RedmineIntegrationBundle\Menu\MenuBuildListener
@@ -12,7 +15,7 @@ services:
     application_redmine_integration.helper.communication:
         class: Application\RedmineIntegrationBundle\Helper\CommunicationHelper
         calls:
-          - [setRedmineDomain, ['http://redmine.assist01.gbart.h3.hu']]
+          - [setRedmineDomain, ['%application_redmine_integration.redmine_api_url%']]
           - [setBrowser, ['@application_redmine_integration.http.client']]
 
     application_redmine_integration.http.listener.logger:

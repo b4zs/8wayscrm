@@ -31,7 +31,7 @@ class CommunicationHelper
 		$content = $browser->getContent();
 		$data = json_decode($content, true);
 
-		return $data;
+		return $data['issues'];
 	}
 
 	public function updateTickets(array $issues)
@@ -48,7 +48,6 @@ class CommunicationHelper
 			$headers = array(
 				'Content-Type' => 'application/json',
 			);
-
 
 			/** @var \Buzz\Message\Response $response */
 			$response = $this->browser->put($url, $headers, $requestBody);
@@ -77,10 +76,42 @@ class CommunicationHelper
 	private function buildUpdateIssueRequestData($issue)
 	{
 		$result = array();
-		foreach ($issue['_modified'] as $field) {
-			$result[$field] = $issue[$field];
+		foreach ($issue['_modified'] as $field => $value) {
+			$result[$field] = $value;
 		}
 
 		return $result;
+	}
+
+	public function fetchAllProjects()
+	{
+		$offset = 0;
+		$limit = 100;
+		$projects = array();
+
+		while (true) {
+			$url = $this->redmineDomain;
+			$url .= '/projects.json';
+			$url .= '?' . http_build_query(array(
+				'key' => $this->token,
+				'limit'     => $limit,
+				'offset'    => $offset,
+			));
+
+			/** @var \Buzz\Message\Response $response */
+			$response = $this->browser->get($url, array());
+			$data = json_decode($response->getContent(), true);
+			$totalCount = $data['total_count'];
+			$projects = array_merge($projects, $data['projects']);
+
+			if ($totalCount < ($offset + $limit)) {
+				break;
+			} else {
+				$offset += $limit;
+			}
+		}
+
+//		var_dump($projects);die;
+		return $projects;
 	}
 }

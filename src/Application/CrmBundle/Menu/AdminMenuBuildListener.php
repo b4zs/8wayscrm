@@ -52,16 +52,18 @@ class AdminMenuBuildListener extends ContainerAware
 		$mainMenuItem = $menu->getChild(self::CONTACT_MANAGER);
 
 
-		foreach ($mainMenuItem->getChildren() as $adminCode => $child) {
-			$icons = array(
-				'application_crm.admin.team_member'     => 'group',
+		if ($mainMenuItem) {
+			foreach ($mainMenuItem->getChildren() as $adminCode => $child) {
+				$icons = array(
+					'application_crm.admin.team_member'     => 'group',
 //				'application_crm.admin.contact_person'  => 'phone',
-				'application_crm.admin.individual'      => 'male',
-				'application_crm.admin.company'         => 'building',
-			);
+					'application_crm.admin.individual'      => 'male',
+					'application_crm.admin.company'         => 'building',
+				);
 
-			if (isset($icons[$adminCode])) {
-				$child->setExtra('icon', 'fa fa-'.$icons[$adminCode]);
+				if (isset($icons[$adminCode])) {
+					$child->setExtra('icon', 'fa fa-'.$icons[$adminCode]);
+				}
 			}
 		}
 	}
@@ -74,39 +76,41 @@ class AdminMenuBuildListener extends ContainerAware
 
 		$this->createdMenuItems[$adminCode] = $mainMenuItem = $menu->getChild('Projects');
 
-		$mainMenuItem->removeChild($adminCode);
-		$mainMenuItem->setUri($admin->generateUrl(
-			'list',
-			array('filter' => array('status' => array('type' => '', 'value' => array(
-				ProjectStatus::ASSESSMENT,
-				ProjectStatus::QUOTATION,
-				ProjectStatus::PREPARATION,
-				ProjectStatus::EXECUTION,
-				ProjectStatus::DELIVERED,
-			),)))
-		));
-
-
-		$this->createdMenuItems[$adminCode.'#create'] = $addProjectItem = $mainMenuItem->addChild($adminCode.'.create');
-		$addProjectItem->setUri($admin->generateUrl('create'));
-		$addProjectItem->setExtra('icon', 'fa fa-plus');
-		$addProjectItem->setLabel('');
-		$addProjectItem->setAttributes(array(
-			'title' => 'Create lead',
-			'class' => 'pull-right sidemenu-pull-right sidemenu-pull-up'
-		));
-
-		foreach ($statuses as $status => $statusData) {
-			$this->createdMenuItems[$adminCode.'#'.$status] = $statusItem = $this->getKnpMenuFactory()->createItem($status, array(
-				'uri' => $admin->generateUrl(
-					'list',
-					array('filter' => array('status' => array('type' => '', 'value' => array($status),)))
-				),
-				'label' => ucfirst($status),
+		if ($mainMenuItem) {
+			$mainMenuItem->removeChild($adminCode);
+			$mainMenuItem->setUri($admin->generateUrl(
+				'list',
+				array('filter' => array('status' => array('type' => '', 'value' => array(
+					ProjectStatus::ASSESSMENT,
+					ProjectStatus::QUOTATION,
+					ProjectStatus::PREPARATION,
+					ProjectStatus::EXECUTION,
+					ProjectStatus::DELIVERED,
+				),)))
 			));
-			$statusItem->setExtra('icon', $statusData['icon']);
 
-			$mainMenuItem->addChild($statusItem);
+
+			$this->createdMenuItems[$adminCode.'#create'] = $addProjectItem = $mainMenuItem->addChild($adminCode.'.create');
+			$addProjectItem->setUri($admin->generateUrl('create'));
+			$addProjectItem->setExtra('icon', 'fa fa-plus');
+			$addProjectItem->setLabel('');
+			$addProjectItem->setAttributes(array(
+				'title' => 'Create lead',
+				'class' => 'pull-right sidemenu-pull-right sidemenu-pull-up'
+			));
+
+			foreach ($statuses as $status => $statusData) {
+				$this->createdMenuItems[$adminCode.'#'.$status] = $statusItem = $this->getKnpMenuFactory()->createItem($status, array(
+					'uri' => $admin->generateUrl(
+						'list',
+						array('filter' => array('status' => array('type' => '', 'value' => array($status),)))
+					),
+					'label' => ucfirst($status),
+				));
+				$statusItem->setExtra('icon', $statusData['icon']);
+
+				$mainMenuItem->addChild($statusItem);
+			}
 		}
 	}
 
@@ -117,45 +121,48 @@ class AdminMenuBuildListener extends ContainerAware
 		/** @var ClientAdmin $admin */
 		$admin = $this->container->get($adminCode);
 
-		$clientsMenu = $menu->getChild(self::CONTACT_MANAGER)->getChild($adminCode);
-		$clientsMenu->setExtra('icon', 'fa fa-building');
-		$clientsMenu->setUri($admin->generateUrl(
-			'list',
-			array('filter' => array('status' => array('type' => '', 'value' => array(
-				ClientStatus::COLD,
-				ClientStatus::HOT,
-				ClientStatus::SLEEPING,
-				ClientStatus::ACTIVE,
-			),)))
-		));
-
-
-		$createItemAdded = false;
-		foreach ($statuses as $status => $statusData) {
-			$this->createdMenuItems[$adminCode.'#'.$status] = $statusItem = $this->getKnpMenuFactory()->createItem($statusData['title'], array(
-				'uri' => $admin->generateUrl(
-					'list',
-					array('filter' => array('status' => array('type' => '', 'value' => array($status),)))
-				),
+		$contactManager = $menu->getChild(self::CONTACT_MANAGER);
+		if ($contactManager) {
+			$clientsMenu = $contactManager->getChild($adminCode);
+			$clientsMenu->setExtra('icon', 'fa fa-building');
+			$clientsMenu->setUri($admin->generateUrl(
+				'list',
+				array('filter' => array('status' => array('type' => '', 'value' => array(
+					ClientStatus::COLD,
+					ClientStatus::HOT,
+					ClientStatus::SLEEPING,
+					ClientStatus::ACTIVE,
+				),)))
 			));
-			$clientsMenu->addChild($statusItem);
 
-			if (!$createItemAdded) {
-				$this->createdMenuItems[$adminCode.'#create'] = $addLeadItem = $clientsMenu->addChild($adminCode.'.create');
-				$addLeadItem->setUri($admin->generateUrl('create'));
-				$addLeadItem->setExtra('icon', 'fa fa-plus');
-				$addLeadItem->setLabel('');
-				$addLeadItem->setAttributes(array(
-					'title' => 'Create lead',
-					'class' => 'pull-right sidemenu-pull-right'
+
+			$createItemAdded = false;
+			foreach ($statuses as $status => $statusData) {
+				$this->createdMenuItems[$adminCode.'#'.$status] = $statusItem = $this->getKnpMenuFactory()->createItem($statusData['title'], array(
+					'uri' => $admin->generateUrl(
+						'list',
+						array('filter' => array('status' => array('type' => '', 'value' => array($status),)))
+					),
 				));
-				$createItemAdded = true;
-			}
+				$clientsMenu->addChild($statusItem);
 
-			if (!empty($statusData['icon'])) {
-				$statusItem->setExtra('icon', 'fa fa-'.$statusData['icon']);
-			}
+				if (!$createItemAdded) {
+					$this->createdMenuItems[$adminCode.'#create'] = $addLeadItem = $clientsMenu->addChild($adminCode.'.create');
+					$addLeadItem->setUri($admin->generateUrl('create'));
+					$addLeadItem->setExtra('icon', 'fa fa-plus');
+					$addLeadItem->setLabel('');
+					$addLeadItem->setAttributes(array(
+						'title' => 'Create lead',
+						'class' => 'pull-right sidemenu-pull-right'
+					));
+					$createItemAdded = true;
+				}
 
+				if (!empty($statusData['icon'])) {
+					$statusItem->setExtra('icon', 'fa fa-'.$statusData['icon']);
+				}
+
+			}
 		}
 	}
 
@@ -248,12 +255,14 @@ class AdminMenuBuildListener extends ContainerAware
 	private function reorderContactManager(MenuItem $menu)
 	{
 		$contactManagerItem = $menu->getChild(self::CONTACT_MANAGER);
-		$contactManagerItem->reorderChildren(array_intersect(array(
-			'sonata.user.admin.user.team',
-			'sonata.user.admin.user.team.create',
-			'application_crm.admin.client',
-			'application_crm.admin.supplier',
-		), array_keys($contactManagerItem->getChildren())));
+		if ($contactManagerItem) {
+			$contactManagerItem->reorderChildren(array_intersect(array(
+				'sonata.user.admin.user.team',
+				'sonata.user.admin.user.team.create',
+				'application_crm.admin.client',
+				'application_crm.admin.supplier',
+			), array_keys($contactManagerItem->getChildren())));
+		}
 	}
 
 	private function isGranted($role)
@@ -265,8 +274,11 @@ class AdminMenuBuildListener extends ContainerAware
 	{
 		$adminCode = 'application_crm.admin.supplier';
 
-		$mainAdminItem = $menu->getChild(self::CONTACT_MANAGER)->getChild($adminCode);
-		$mainAdminItem->setExtra('icon', 'fa fa-support');
+		$contactManagerItem = $menu->getChild(self::CONTACT_MANAGER);
+		if ($contactManagerItem) {
+			$mainAdminItem = $contactManagerItem->getChild($adminCode);
+			$mainAdminItem->setExtra('icon', 'fa fa-support');
+		}
 
 	}
 

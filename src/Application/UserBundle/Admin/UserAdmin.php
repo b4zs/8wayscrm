@@ -113,7 +113,7 @@ class UserAdmin extends BaseUserAdmin
 				->end();
 		}
 
-		if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN') && $this->isGranted('ROLE_SUPER_ADMIN')) {
+		if ($this->getSubject() /* && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN') /**/ && $this->isGranted('ROLE_SUPER_ADMIN')) {
 			$formMapper
 				->with('Management', array('class' => 'col-md-12'))
 				->add('realRoles', 'sonata_security_roles', array(

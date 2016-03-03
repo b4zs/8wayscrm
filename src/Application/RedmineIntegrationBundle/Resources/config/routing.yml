@@ -5,8 +5,8 @@ application_redmine_integration_gantt:
         _sonata_admin: application_crm.admin.project
 
 
-application_redmine_integration_fix_project:
-    path:     /fix-project
+application_redmine_integration_fix_gantt:
+    path:     /fix-gantt
     defaults:
-        _controller: ApplicationRedmineIntegrationBundle:Project:fixGantt
+        _controller: ApplicationRedmineIntegrationBundle:Project:ganttFixer
         _sonata_admin: application_crm.admin.project
