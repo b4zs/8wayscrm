@@ -1,0 +1,109 @@
+{% extends 'SonataAdminBundle:CRUD:base_list.html.twig' %}
+
+{% block list_filters %}{% endblock %}
+{% block sonata_breadcrumb %}
+	<ol class="nav navbar-top-links breadcrumb">
+		<li>
+			<a href="{{ url('application_redmine_integration_gantt') }}">Redmine-Gantt-fixer</a>
+		</li>
+	</ol>
+
+{% endblock %}
+
+{% macro issue_field_cell_content(issue, field) %}
+	{{ issue[field]|default('err') }}
+	{% if issue._modified[field] is defined %}
+		<br>
+		<span style="color: red">{{ issue._modified[field] }}</span>
+	{% endif %}
+
+	{% if issue._note[field] is defined %}
+		<br>
+		<span class="label label-danger">{{ issue._note[field] }}</span>
+	{% endif %}
+{% endmacro %}
+
+
+
+{% block sonata_page_content %}
+	{{ form_start(form) }}
+		<div class="col-md-4">
+			{{ form_widget(form.project) }}
+		</div>
+		<div class="col-md-2">
+			{{ form_widget(form.reload, { attr: { class: 'btn btn-sm btn-primary col-md-12' } }) }}
+		</div>
+		<div class="col-md-6">
+			{#{{ form_data|json_encode }}#}
+			{% if min_start and max_due %}
+				<strong>date range: {{ min_start|date }} - {{ max_due|date }}</strong>
+			{% endif %}
+
+			{% if days_shifted|default(false) %}
+				<strong>, days shifted: {{ days_shifted }}</strong><br>
+			{% endif %}
+		</div>
+
+		{% import _self as self %}
+
+		<div class="clearfix"></div>
+		{% include '@SonataCore/FlashMessage/render.html.twig' %}
+
+		{% if issues is defined and issues %}
+		<table  width="100%" class="table table-striped">
+			<thead>
+				<tr>
+					<th></th>
+					<th>id</th>
+					<th>subject</th>
+					{#<th>project</th>#}
+					<th>status</th>
+					<th>start</th>
+					<th>due</th>
+					<th title="estimated hours">est</th>
+					<th title="length in hours (distance between start and due dates)">lh</th>
+					<th title="distance from NOW - in days">dst</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for issue in issues %}
+				{% set issue_url = redmine_base_url ~ '/issues/' ~ issue.id %}
+				<tr>
+					<td>{{ form_widget(issue_checkboxes[issue.id]) }}</td>
+					<td><a href="{{ issue_url }}">{{ issue.id }}</a></td>
+					<td>
+						<a href="{{ issue_url }}">{{ issue.subject }}</a>
+						{% if reference_ticket and reference_ticket.id == issue.id %}
+							<span class="label label-primary">reference ticket</span>
+						{% endif %}
+					</td>
+					{#<td>{{ issue.project.name }}</td>#}
+					<td>{{ issue.status.name }}</td>
+					<td>{{ self.issue_field_cell_content(issue, 'start_date') }}</td>
+					<td>{{ self.issue_field_cell_content(issue, 'due_date') }}</td>
+					<td>{{ issue.estimated_hours|default('err') }}</td>
+					<td>{{ issue._width_in_hours|default('err') }}</td>
+					<td>{{ issue._distance_in_days is defined ? issue._distance_in_days  : 'err' }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		{% endif %}
+		<fieldset>
+			{% for field in ['mark_all', 'mark_none', 'mark_remaining'] %}
+			{% if form[field] is defined %}{{ form_widget(form[field], { attr: { class: 'btn btn-xs btn-blank' } }) }}{% endif %}
+			{% endfor %}
+		</fieldset>
+
+
+		{% if form.shift_reference_to is defined %}
+			<hr>
+			<fieldset class="row">
+				<div class="col-md-3 form-row"><label for="{{ form.shift_reference_to.vars.id }}" class="">Shift reference date from {{ reference_ticket.start_date }} to:</label></div>
+				<div class="col-md-3">{{ form_widget(form.shift_reference_to, { attr: { class: 'col-md-12' } }) }}</div>
+				<div class="col-md-3">{{ form_widget(form.shift_reference_preview, { attr: { class: 'col-md-12 btn btn-primary' } }) }}</div>
+				<div class="col-md-3">{{ form_widget(form.shift_reference_do, { attr: { class: 'col-md-12 btn btn-success' } }) }}</div>
+			</fieldset>
+		{% endif %}
+	{{ form_end(form) }}
+{% endblock %}

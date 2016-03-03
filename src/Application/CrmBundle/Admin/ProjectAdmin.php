@@ -81,7 +81,6 @@ class ProjectAdmin extends Admin
 
             if ('lead' !== $parentAdmin) {
                 $formMapper->add('client', 'sonata_type_model_list', array(
-                    'btn_add' => false,
                     'btn_delete' => false,
                     'btn_list' => 'Select',
                 ), array());
