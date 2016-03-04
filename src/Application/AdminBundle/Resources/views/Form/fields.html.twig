@@ -1,6 +1,6 @@
 {% block gb_delete_checkbox_widget %}
 	<div class="hidden">{{ block('checkbox_widget') }}</div>
-	<button class="btn btn-sm btn-danger" onclick="$('#{{ form.vars.id }}').attr('checked', 'checked').val(1); $(this).parents('tr').first().hide('slow'); return false;">{{ 'link_delete' | trans({}, 'SonataAdminBundle') }}</button>
+	<button class="btn btn-sm btn-danger" onclick="$('#{{ form.vars.id }}').attr('checked', 'checked').val(1); $(this).parents('tr').first().hide('slow').find(':input').removeAttr('required'); return false;">{{ 'link_delete' | trans({}, 'SonataAdminBundle') }}</button>
 {% endblock %}
 
 {% block gb_open_button_widget %}
