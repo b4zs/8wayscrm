@@ -24,5 +24,7 @@ services:
 
     application_redmine_integration.http.client:
         class: Buzz\Browser
+        arguments:
+          - '@sonata.media.buzz.connector.curl'
         calls:
           - ['setListener', ['@application_redmine_integration.http.listener.logger']]
