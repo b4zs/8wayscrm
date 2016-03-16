@@ -4,6 +4,7 @@ namespace Application\ObjectIdentityBundle\Entity;
 
 use Application\CrmBundle\Entity\Client;
 use Application\CrmBundle\Entity\Project;
+use Application\CrmBundle\Entity\Supplier;
 use Application\UserBundle\Entity\User;
 use Octet\Ticketing\Bundle\Entity\NoteRelatedTrait;
 use Octet\Ticketing\Bundle\Entity\ReminderRelatedTrait;
@@ -23,6 +24,9 @@ class ObjectIdentity
 
 	/** @var  Client */
 	protected $abstractClient;
+
+	/** @var  Supplier */
+	protected $supplier;
 
 	/** @var  User */
 	protected $user;
@@ -60,6 +64,16 @@ class ObjectIdentity
 	public function setUser(User $user)
 	{
 		$this->user = $user;
+	}
+
+	public function getSupplier()
+	{
+		return $this->supplier;
+	}
+
+	public function setSupplier(Supplier $supplier)
+	{
+		$this->supplier = $supplier;
 	}
 
 

@@ -12,6 +12,8 @@ Application\ObjectIdentityBundle\Entity\ObjectIdentity:
             targetEntity: Application\CrmBundle\Entity\Project
         abstractClient:
             targetEntity: Application\CrmBundle\Entity\AbstractClient
+        supplier:
+            targetEntity: Application\CrmBundle\Entity\Supplier
         user:
             targetEntity: Application\UserBundle\Entity\User
             mappedBy: objectIdentity
