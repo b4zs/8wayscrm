@@ -1,3 +1,4 @@
+
 {
   "name": "symfony/framework-standard-edition",
   "license": "MIT",
@@ -7,10 +8,7 @@
     "psr-4": { "": "src/", "SymfonyStandard\\": "app/SymfonyStandard/" }
   },
   "repositories": [
-    {
-      "type": "composer",
-      "url": "http://gitlab.assist01.gbart.h3.hu/satis/"
-    }
+    {"type": "composer", "url": "http://composer.assist01.gbart.h3.hu/repo/private/"}
   ],
   "require": {
     "php": ">=5.3.9",
@@ -73,7 +71,8 @@
     ]
   },
   "config": {
-    "bin-dir": "bin"
+    "bin-dir": "bin",
+    "secure-http": false
   },
   "extra": {
     "symfony-app-dir": "app",
