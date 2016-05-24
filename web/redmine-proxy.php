@@ -1,8 +1,8 @@
 <?php
 
 define('DEBUG', false);
-define('CACHE', __DIR__.'/redmine-proxy-cache');
-//define('CACHE', false);
+//define('CACHE', __DIR__.'/redmine-proxy-cache');
+define('CACHE', false);
 
 function buildRequestHeaders()
 {

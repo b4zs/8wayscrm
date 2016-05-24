@@ -552,7 +552,8 @@ var gbGantt = angular.module('gbGantt', [
 
 //gbGantt.constant('RedmineBaseUrl', 'http://127.0.0.1:9000/redmine-proxy.php/');
 gbGantt.constant('_', window._);
-gbGantt.constant('RedmineBaseUrl', 'http://redmine.assist01.gbart.h3.hu')
+//gbGantt.constant('RedmineBaseUrl', 'http://redmine.assist01.gbart.h3.hu')
+gbGantt.constant('RedmineBaseUrl', '/redmine-proxy.php');
 
 // Configurations
 gbGantt.config(function ($stateProvider, RestangularProvider, RedmineBaseUrl) {
