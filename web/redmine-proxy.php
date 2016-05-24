@@ -1,6 +1,8 @@
 <?php
 
 define('DEBUG', false);
+define('CACHE', __DIR__.'/redmine-proxy-cache');
+//define('CACHE', false);
 
 function buildRequestHeaders()
 {
@@ -23,7 +25,7 @@ function executeRequest($method, $url, $body, $curlHeaders)
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $curlHeaders);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
 	curl_setopt($ch, CURLOPT_VERBOSE, 1);
 	curl_setopt($ch, CURLOPT_HEADER, 1);
@@ -34,6 +36,10 @@ function executeRequest($method, $url, $body, $curlHeaders)
 	}
 
 	$response = curl_exec($ch);
+    if ($error = curl_error($ch)) {
+        throw new \RuntimeException($error);
+    }
+
 	return array($ch, $response);
 }
 
@@ -64,6 +70,11 @@ function sendResponse($responseHeaders, $body)
 		header("$key: $value");
 	}
 
+	header('Access-Control-Allow-Origin: *');
+	header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Origin, Accept, Authorization, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
+	header('Access-Control-Allow-Credentials: true');
+	header('Access-Control-Allow-Methods: GET,HEAD,OPTIONS,POST,PUT');
+
 	echo $body;
 }
 
@@ -80,16 +91,62 @@ if (!function_exists('getallheaders')) {
 }
 
 
+$proxyRoot = 'http://redmine.assist01.gbart.h3.hu';
+$proxyRoot = 'http://localhost:3000';
 
-$url = 'http://redmine.assist01.gbart.h3.hu'.str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
+$url = $proxyRoot.str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
 $requestHeaders = buildRequestHeaders();
 $method = $_SERVER['REQUEST_METHOD'];
 $requestBody = file_get_contents('php://input');
-list($ch, $response) = executeRequest($method, $url, $requestBody, $requestHeaders);
-list($body, $responseHeaders) = parseCurlResponse($ch, $response);
 
-if (DEBUG) {
-	var_dump($requestHeaders, $url, $response, $responseHeaders, $body);
-	die;
+function processRequest($request)
+{
+	list($method, $url, $requestHeaders, $requestBody) = $request;
+	list($ch, $response) = executeRequest($method, $url, $requestBody, $requestHeaders);
+	list($responseBody, $responseHeaders) = parseCurlResponse($ch, $response);
+
+	return array($responseHeaders, $responseBody);
 }
-sendResponse($responseHeaders, $body);
+
+$request = array($method, $url, $requestHeaders, $requestBody);
+$response = null;
+
+if ('OPTIONS' === $method) { // CORS
+	sendResponse(array(), '');
+	exit(0);
+}
+
+$shouldCache = CACHE 
+	&& ($method === 'GET')
+	;
+
+if (CACHE && $shouldCache) {
+	$cacheKey = md5(serialize($request));
+	$cacheHit = false;
+
+	$cacheFilename = CACHE.'/'.$cacheKey.'.txt';
+	if (!is_dir(CACHE)) mkdir(CACHE);
+	if (file_exists($cacheFilename)) {
+		$cacheHit = true;
+		$response = unserialize(file_get_contents($cacheFilename));
+	}
+}
+if (null == $response) {
+	$response = processRequest($request);
+	if (CACHE && $shouldCache) {
+		file_put_contents($cacheFilename, serialize($response));
+	}
+}
+
+list ($responseHeaders, $responseBody) = $response;
+$responseHeaders['debug-using-cache'] = json_encode($shouldCache);
+if ($shouldCache) {
+	$responseHeaders['debug-cache-hit'] = json_encode($cacheHit);
+}
+
+//
+//if (DEBUG) {
+//	var_dump($requestHeaders, $url, $response, $responseHeaders, $body);
+//	die;
+//}
+sendResponse($responseHeaders, $responseBody);

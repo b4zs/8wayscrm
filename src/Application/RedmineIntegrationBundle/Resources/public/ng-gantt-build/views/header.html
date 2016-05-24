@@ -1,0 +1,18 @@
+
+<nav role="navigation" ng-controller="MainCtrl" class="navbar navbar-default">
+  <div class="navbar-header"><a href="#" class="navbar-brand">redmine gantt</a></div>
+  <div id="navbar-inverse" class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+      <li>
+        <form class="navbar-form">
+          <div class="form-group">
+            <select ng-model="selectedProject" ng-options="project as project.name for project in projects" class="form-control">
+              <option value="">Please select a project</option>
+            </select>
+            <button ng-click="selectedProject &amp;&amp; showGantt(selectedProject.id)" class="btn btn-default navbar-btn">Show project</button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>

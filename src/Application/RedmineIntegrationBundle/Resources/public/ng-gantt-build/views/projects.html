@@ -1,4 +1,57 @@
+<div class="loading" ng-show="!readyToShow" ng-model="loading">
+  <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="Loading">
+  <span>Collecting data... <br> this may take a few minutes</span>
+</div>
+<div gantt="gantt"
+     headers="['month', 'day']"
+     time-frames="options.timeFrames"
+     date-frames="options.dateFrames"
+     time-frames-non-working-mode="&quot;cropped&quot;"
+     from-date="options.fromDate"
+     to-date="options.toDate"
+     data="data"
+     api="registerApi"
+     options="options"
+     filter-row="filterRowFunc"
+     expand-to-fit="false"
+     shrink-to-fit="false"
+     currentDate="options.currentDate"
+     currentDateValue="options.currentDateValue"
+     column-width="options.columnWidth"
+     max-height="maxHeight()"
+     ng-show="readyToShow"
+>
 
-<select ng-model="selectedProject" ng-options="project as project.name for project in projects"></select>
-<button ng-click="selectedProject &amp;&amp; showGantt(selectedProject.id)">Show project</button>
-<button ng-click="selectedProject &amp;&amp; showCondensedGantt(selectedProject.id)">Show overview</button>
+  <gantt-tree keep-ancestor-on-filter-row="true"></gantt-tree>
+  <gantt-tooltips template-url="views/tooltips.tmpl.html"></gantt-tooltips>
+  <gantt-condensed-groups display="group"></gantt-condensed-groups>
+  <gantt-condensed-tooltips></gantt-condensed-tooltips>
+  <gantt-groups template-url="views/taskgroup.tmpl.html"></gantt-groups>
+  <gantt-progress></gantt-progress>
+
+</div>
+
+<!-- span id="menubutton" ng-click="toggleMenu()" ng-show="readyToShow" class="glyphicon glyphicon-menu-hamburger"></span-->
+
+<div id="menu" ng-show="showMenu">
+  <div class="menu-content">Show projects and rows containing:
+    <div>
+      <input type="text" ng-model="filter.row" ng-keypress="filterRow($event)" placeholder="Filter results"/>
+    </div>
+  </div>
+  <div class="menu-content">
+    <label>Show projects with active lifecycle category:</label>
+    <div>
+      <select ng-change="filterCategory()" ng-model="filter.category" class="form-control">
+        <option value="">any</option>
+        <option value="A">A - ZERO VERSION DESIGN</option>
+        <option value="B">B - PREPARATION</option>
+        <option value="C">C - BRIEFING</option>
+        <option value="D">D - DESIGN</option>
+        <option value="E">E - SITEBUILD</option>
+        <option value="F">F - DEVELOPMENT</option>
+        <option value="G">G - FINALIZATION AND HANDOVER</option>
+      </select>
+    </div>
+  </div>
+</div>
