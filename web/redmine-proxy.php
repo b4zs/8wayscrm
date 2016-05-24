@@ -92,7 +92,7 @@ if (!function_exists('getallheaders')) {
 
 
 $proxyRoot = 'http://redmine.assist01.gbart.h3.hu';
-$proxyRoot = 'http://localhost:3000';
+//$proxyRoot = 'http://localhost:3000';
 
 $url = $proxyRoot.str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
 $requestHeaders = buildRequestHeaders();
