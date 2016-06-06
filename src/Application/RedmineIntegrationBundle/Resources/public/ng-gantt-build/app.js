@@ -1,3 +1,157 @@
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name ng-gantt
+ * @description
+ * # ng-gantt
+ *
+ * Main module of the application.
+ */
+
+var gbGantt = angular.module('gbGantt', [
+    'ng',
+    'restangular',
+    'ui.router',
+    'gantt',
+    'gantt.tree',
+    'gantt.groups',
+    'gantt.tooltips',
+    'gantt.progress',
+    'gantt.dependencies',
+    'gantt.condensedgroups',
+    'gantt.condensedtooltips'
+]);
+
+// Configurations
+gbGantt.config(function ($stateProvider, RestangularProvider, RedmineBaseUrl) {
+
+  // States
+  $stateProvider
+    .state('login', {
+      url: "/login",
+      templateUrl: 'views/login.html',
+      controller: 'LoginCtrl'
+    })
+    .state('default', {
+      url: "/",
+      templateUrl: 'views/projects.html',
+      controller: 'ProjectsController',
+      resolve: {
+        projectIds: function($stateParams, ProjectsRepository) {
+          var promise = ProjectsRepository.getAllProjects();
+          promise.then(function(a){
+            $stateParams.projectIds = a;
+          });
+
+          return promise;
+        }
+      }
+    })
+
+    .state('projectgantt', {
+      url: "/project/:projectId/gantt",
+      templateUrl: 'views/project-gantt.html',
+      controller: 'ProjectGanttCtrl'
+    })
+
+    .state('condensedgantt', {
+      url: "/project/:projectId/condensedgantt",
+      templateUrl: 'views/condensed-gantt.html',
+      controller: 'CondensedGanttCtrl',
+      resolve: {
+        projectIds: function ($stateParams, ProjectsRepository) {
+          var promise = ProjectsRepository.getAllProjects();
+          promise.then(function (a) {
+            $stateParams.projectIds = a;
+          });
+
+          return promise;
+        }
+      }
+    });
+
+  RestangularProvider.setBaseUrl(RedmineBaseUrl);
+  RestangularProvider.setRequestSuffix('.json');
+  RestangularProvider.setDefaultHttpFields({cache: true});
+
+  RestangularProvider.addResponseInterceptor(function(data, operation, what) {
+    var extractedData;
+    // .. to look for getList operations
+    if (operation === "getList") {
+      // .. and handle the data and meta data
+      extractedData = data[what];
+      if (undefined !== extractedData) {
+        extractedData.meta = {totalcount: data.totalcount, offset: data.offset, limit: data.limit};
+      }
+    } else {
+      extractedData = data.data;
+    }
+    return extractedData;
+  });
+});
+
+gbGantt.run(function(User, Restangular, $state, $templateCache) {
+
+  angular.module('ui.tree').config(function(treeConfig) {
+    treeConfig.defaultCollapsed = true;
+  });
+
+
+  //Restangular.setErrorInterceptor(function(response) {
+  //  if (response.status == 401) {
+  //    console.log("Login required... ");
+  //    $state.go('default');
+  //  } else if (response.status == 404) {
+  //    $state.go('default');
+  //  } else {
+  //    alert("There were an error while connecting to server. We redirect you to the projects page.");
+  //    $state.go('default');
+  //  }
+  //
+  //  return false;
+  //});
+
+
+  $templateCache.put('plugins/tree/treeBodyChildren.tmpl.html',
+    '<div ng-controller="GanttTreeNodeController"\n' +
+    '     class="gantt-row-label gantt-row-height"\n' +
+    '     ng-class="row.model.classes"\n' +
+    '     ng-style="{\'height\': row.model.height}">\n' +
+    '   <div class="gantt-valign-container">\n' +
+    '      <div class="gantt-valign-content">\n' +
+    '         <a ng-disabled="isCollapseDisabledOnNode()" ng-controller="GanttTreeNodeToggleController" data-nodrag\n' +
+    '            class="gantt-tree-handle-button btn btn-xs"\n' +
+    '            ng-class="{\'gantt-tree-collapsed\': collapsed, \'gantt-tree-expanded\': !collapsed}"\n' +
+    '            ng-click="toggleNode()">'+
+    //'             <span class="gantt-label-text">{{collapsed?"c":"e"}}</span>' +
+    '             <span\n' +
+    '                class="gantt-tree-handle glyphicon"\n' +
+    '                ng-class="{\n' +
+    '                \'glyphicon-chevron-right\': collapsed, \'glyphicon-chevron-down\': !collapsed,\n' +
+    '                \'gantt-tree-collapsed\': collapsed, \'gantt-tree-expanded\': !collapsed}"></span>\n' +
+    '         </a>\n' +
+    //'         <span class="gantt-label-text">{{collapsed?"c":"e"}}</span>' +
+    '         <span gantt-row-label class="gantt-label-text" gantt-bind-compile-html="getRowContent()"></span>\n' +
+    '      </div>\n' +
+    '   </div>\n' +
+    '</div>\n' +
+    '<ol ui-tree-nodes ng-class="{hidden: collapsed}" ng-model="childrenRows">\n' +
+    '  <li ng-repeat="row in childrenRows" ui-tree-node collapsed="true">\n' +
+    '    <div ng-include="\'plugins/tree/treeBodyChildren.tmpl.html\'"></div>\n' +
+    '  </li>\n' +
+    '</ol>');
+
+  if (User.getUser()) {
+    Restangular.setDefaultRequestParams({ key: User.apiKey(), proxy_cache: true  });
+	  if (!$state.is('default')) {
+        $state.go('default');
+	  }
+  } else {
+    $state.go('login');
+  }
+});
+
 /*
 Project: angular-gantt v1.2.10 - Gantt chart component for AngularJS
 Authors: Marco Schweighauser, Rémi Alvergnat
@@ -273,159 +427,160 @@ angular.module('gantt.condensedtooltips.templates', []).run(['$templateCache', f
 //# sourceMappingURL=angular-gantt-tooltips-plugin.js.map
 
 /*
-Project: angular-gantt v1.2.10 - Gantt chart component for AngularJS
-Authors: Marco Schweighauser, Rémi Alvergnat
-License: MIT
-Homepage: https://www.angular-gantt.com
-Github: https://github.com/angular-gantt/angular-gantt.git
-*/
+ Project: angular-gantt v1.2.10 - Gantt chart component for AngularJS
+ Authors: Marco Schweighauser, Rémi Alvergnat
+ License: MIT
+ Homepage: https://www.angular-gantt.com
+ Github: https://github.com/angular-gantt/angular-gantt.git
+ */
 (function(){
-    'use strict';
-    angular.module('gantt.condensedgroups', ['gantt', 'gantt.condensedgroups.templates']).directive('ganttCondensedGroups', ['ganttUtils', 'GanttHierarchy', '$compile', '$document', function(utils, Hierarchy, $compile, $document) {
-        return {
-            restrict: 'E',
-            require: '^gantt',
-            scope: {
-                enabled: '=?',
-                display: '=?'
-            },
-            link: function(scope, element, attrs, ganttCtrl) {
-                var api = ganttCtrl.gantt.api;
+  'use strict';
+  angular.module('gantt.condensedgroups', ['gantt', 'gantt.condensedgroups.templates']).directive('ganttCondensedGroups', ['ganttUtils', 'GanttHierarchy', '$compile', '$document', function(utils, Hierarchy, $compile, $document) {
+    return {
+      restrict: 'E',
+      require: '^gantt',
+      scope: {
+        enabled: '=?',
+        display: '=?'
+      },
+      link: function(scope, element, attrs, ganttCtrl) {
+        var api = ganttCtrl.gantt.api;
 
-                // Load options from global options attribute.
-                if (scope.options && typeof(scope.options.sortable) === 'object') {
-                    for (var option in scope.options.sortable) {
-                        scope[option] = scope.options[option];
-                    }
-                }
+        // Load options from global options attribute.
+        if (scope.options && typeof(scope.options.sortable) === 'object') {
+          for (var option in scope.options.sortable) {
+            scope[option] = scope.options[option];
+          }
+        }
 
-                if (scope.enabled === undefined) {
-                    scope.enabled = true;
-                }
+        if (scope.enabled === undefined) {
+          scope.enabled = true;
+        }
 
-                if (scope.display === undefined) {
-                    scope.display = 'group';
-                }
+        if (scope.display === undefined) {
+          scope.display = 'group';
+        }
 
-                scope.hierarchy = new Hierarchy();
+        scope.hierarchy = new Hierarchy();
 
-                function refresh() {
-                    scope.hierarchy.refresh(ganttCtrl.gantt.rowsManager.filteredRows);
-                }
+        function refresh() {
+          scope.hierarchy.refresh(ganttCtrl.gantt.rowsManager.filteredRows);
+        }
 
-                ganttCtrl.gantt.api.registerMethod('condensedgroups', 'refresh', refresh, this);
-                ganttCtrl.gantt.$scope.$watchCollection('gantt.rowsManager.filteredRows', function() {
-                    refresh();
-                });
+        ganttCtrl.gantt.api.registerMethod('condensedgroups', 'refresh', refresh, this);
+        ganttCtrl.gantt.$scope.$watchCollection('gantt.rowsManager.filteredRows', function() {
+          console.log('ganttCtrl.$watch(gantt.rowsManager.filteredRows)');
+          refresh();
+        });
 
-                api.directives.on.new(scope, function(directiveName, rowScope, rowElement) {
-                    if (directiveName === 'ganttRow') {
-                        if (! (rowScope.row.model.condensedGroups instanceof Array)) return;
+        api.directives.on.new(scope, function(directiveName, rowScope, rowElement) {
+          if (directiveName === 'ganttRow') {
+            if (! (rowScope.row.model.condensedGroups instanceof Array)) return;
 
-                        var lifecycleGroupScope = rowScope.$new();
-                        lifecycleGroupScope.pluginScope = scope;
+            var lifecycleGroupScope = rowScope.$new();
+            lifecycleGroupScope.pluginScope = scope;
 
-                        var ifElement = $document[0].createElement('div');
-                        angular.element(ifElement).attr('data-ng-if', 'pluginScope.enabled');
+            var ifElement = $document[0].createElement('div');
+            angular.element(ifElement).attr('data-ng-if', 'pluginScope.enabled');
 
-                        var lifecycleGroupElement = $document[0].createElement('gantt-condensed-task-group');
-                        if (attrs.templateUrl !== undefined) {
-                            angular.element(lifecycleGroupElement).attr('data-template-url', attrs.templateUrl);
-                        }
-                        if (attrs.template !== undefined) {
-                            angular.element(lifecycleGroupElement).attr('data-template', attrs.template);
-                        }
-
-                        angular.element(ifElement).append(lifecycleGroupElement);
-
-                        rowElement.append($compile(ifElement)(lifecycleGroupScope));
-                    }
-                });
+            var lifecycleGroupElement = $document[0].createElement('gantt-condensed-task-group');
+            if (attrs.templateUrl !== undefined) {
+              angular.element(lifecycleGroupElement).attr('data-template-url', attrs.templateUrl);
             }
-        };
-    }]);
+            if (attrs.template !== undefined) {
+              angular.element(lifecycleGroupElement).attr('data-template', attrs.template);
+            }
+
+            angular.element(ifElement).append(lifecycleGroupElement);
+
+            rowElement.append($compile(ifElement)(lifecycleGroupScope));
+          }
+        });
+      }
+    };
+  }]);
 }());
 
 
 (function(){
-    'use strict';
-    angular.module('gantt.condensedgroups').controller('GanttCondensedGroupController', ['$scope', 'GanttCondensedGroups', 'ganttUtils', 'RedmineBaseUrl', function($scope, CondensedGroups, utils, RedmineBaseUrl) {
-        var updateCondensedTaskGroup = function() {
-            var lifecycleGroups = $scope.row.model.condensedGroups;
+  'use strict';
+  angular.module('gantt.condensedgroups').controller('GanttCondensedGroupController', ['$scope', 'GanttCondensedGroups', 'ganttUtils', 'RedmineBaseUrl', function($scope, CondensedGroups, utils, RedmineBaseUrl) {
+    var updateCondensedTaskGroup = function() {
+      var lifecycleGroups = $scope.row.model.condensedGroups;
 
-            var enabledValue = utils.firstProperty([lifecycleGroups], 'enabled', $scope.pluginScope.enabled);
-            if (enabledValue) {
-                $scope.display = utils.firstProperty([lifecycleGroups], 'display', $scope.pluginScope.display);
-                var c = new CondensedGroups($scope.row, $scope.pluginScope);
-                $scope.taskGroups = c.groups;
+      var enabledValue = utils.firstProperty([lifecycleGroups], 'enabled', $scope.pluginScope.enabled);
+      if (enabledValue) {
+        $scope.display = utils.firstProperty([lifecycleGroups], 'display', $scope.pluginScope.display);
+        var c = new CondensedGroups($scope.row, $scope.pluginScope);
+        $scope.taskGroups = c.groups;
 
-                //$scope.row.setFromTo();
-                // TODO?: átírja a row-ba a taskGroup alapján a kezdeti és végdátumokat
-                //$scope.row.setFromToByValues($scope.taskGroup.from, $scope.taskGroup.to);
-            } else {
-                $scope.taskGroups = undefined;
-                $scope.display = undefined;
+        //$scope.row.setFromTo();
+        // TODO?: átírja a row-ba a taskGroup alapján a kezdeti és végdátumokat
+        //$scope.row.setFromToByValues($scope.taskGroup.from, $scope.taskGroup.to);
+      } else {
+        $scope.taskGroups = undefined;
+        $scope.display = undefined;
+      }
+    };
+
+    // TODO check
+    $scope.gantt.api.tasks.on.viewChange($scope, function(task) {
+      if ($scope.taskGroup !== undefined) {
+        if ($scope.taskGroup.tasks.indexOf(task) > -1) {
+          updateCondensedTaskGroup();
+          if(!$scope.$$phase) {
+            $scope.$digest();
+          }
+        } else {
+          var descendants = $scope.pluginScope.hierarchy.descendants($scope.row);
+          if (descendants.indexOf(task.row) > -1) {
+            updateCondensedTaskGroup();
+            if(!$scope.$$phase) {
+              $scope.$digest();
             }
-        };
+          }
+        }
+      }
+    });
 
-        // TODO check
-        $scope.gantt.api.tasks.on.viewChange($scope, function(task) {
-            if ($scope.taskGroup !== undefined) {
-                if ($scope.taskGroup.tasks.indexOf(task) > -1) {
-                    updateCondensedTaskGroup();
-                    if(!$scope.$$phase) {
-                        $scope.$digest();
-                    }
-                } else {
-                    var descendants = $scope.pluginScope.hierarchy.descendants($scope.row);
-                    if (descendants.indexOf(task.row) > -1) {
-                        updateCondensedTaskGroup();
-                        if(!$scope.$$phase) {
-                            $scope.$digest();
-                        }
-                    }
-                }
-            }
-        });
+    $scope.isActive = function(taskGroup) {
+      return taskGroup.from <= $scope.gantt.currentDateManager.date &&
+        $scope.gantt.currentDateManager.date < taskGroup.to;
+    };
 
-        $scope.isActive = function(taskGroup) {
-          return taskGroup.from <= $scope.gantt.currentDateManager.date &&
-                 $scope.gantt.currentDateManager.date < taskGroup.to;
-        };
+    // TODO escape / encode
+    var linkIssue = function(issue) {
+      return "<a href=\"" + RedmineBaseUrl + "/issues/" + issue.id + "\" target=\"_blank\">" + issue.subject + "</a>";
+    };
 
-        // TODO escape / encode
-        var linkIssue = function(issue) {
-          return "<a href=\"" + RedmineBaseUrl + "/issues/" + issue.id + "\" target=\"_blank\">" + issue.subject + "</a>";
-        };
+    var assignee = function(issue) {
+      return issue.assignee ? " assignee: " + issue.assignee : "";
+    };
 
-        var assignee = function(issue) {
-          return issue.assignee ? " assignee: " + issue.assignee : "";
-        };
+    $scope.currentDateTooltipText = (function() {
+      var details = $scope.row.model.details;
+      var issuesInProgress = _.chain(details.issuesInProgress)
+        .map(function(issue) { return linkIssue(issue) + assignee(issue) +"<br>"; })
+        .reduce(function(a,b) { return a + b; })
+        .value();
+      var html =
+        "<small>Project manager: "+details.projectManager+'<br/>'+
+        "Reported status: "+details.reportedStatus;
+      if (issuesInProgress)
+        html += "<br>Issues in progress: <br>"+ issuesInProgress;
 
-        $scope.currentDateTooltipText = (function() {
-          var details = $scope.row.model.details;
-          var issuesInProgress = _.chain(details.issuesInProgress)
-                                  .map(function(issue) { return linkIssue(issue) + assignee(issue) +"<br>"; })
-                                  .reduce(function(a,b) { return a + b; })
-                                  .value();
-          var html =
-            "<small>Project manager: "+details.projectManager+'<br/>'+
-            "Reported status: "+details.reportedStatus;
-          if (issuesInProgress)
-            html += "<br>Issues in progress: <br>"+ issuesInProgress;
+      html += "</small>";
+      return html;
+    })();
 
-          html += "</small>";
-          return html;
-        })();
+    var removeWatch = $scope.pluginScope.$watch('display', updateCondensedTaskGroup);
 
-        var removeWatch = $scope.pluginScope.$watch('display', updateCondensedTaskGroup);
+    $scope.$watchCollection('gantt.rowsManager.filteredRows', updateCondensedTaskGroup);
 
-        $scope.$watchCollection('gantt.rowsManager.filteredRows', updateCondensedTaskGroup);
+    $scope.gantt.api.columns.on.refresh($scope, updateCondensedTaskGroup);
 
-        $scope.gantt.api.columns.on.refresh($scope, updateCondensedTaskGroup);
-
-        $scope.$on('$destroy', removeWatch);
-    }]);
+    $scope.$on('$destroy', removeWatch);
+  }]);
 }());
 
 (function(){
@@ -433,9 +588,9 @@ Github: https://github.com/angular-gantt/angular-gantt.git
   angular.module('gantt.condensedgroups').directive('ganttCondensedTaskGroupItem', ['GanttDirectiveBuilder', function(Builder) {
     var builder = new Builder('ganttCondensedTaskGroupItem', 'plugins/groups/condensedTaskGroupItem.tmpl.html');
     /*builder.scope = {
-      tooltipText: '=?'
-    };
-    builder.transclude = true;*/
+     tooltipText: '=?'
+     };
+     builder.transclude = true;*/
     return builder.build();
   }]);
 }());
@@ -445,243 +600,91 @@ Github: https://github.com/angular-gantt/angular-gantt.git
   angular.module('gantt.condensedgroups').directive('ganttCondensedTaskGroupItemActiveFlag', ['GanttDirectiveBuilder', function(Builder) {
     var builder = new Builder('ganttCondensedTaskGroupItemActiveFlag', 'plugins/groups/condensedTaskGroupItemActiveFlag.tmpl.html');
     /*builder.scope = {
-      tooltipText: '=?'
-    };
-    builder.transclude = true;*/
+     tooltipText: '=?'
+     };
+     builder.transclude = true;*/
     return builder.build();
   }]);
 }());
 
 (function(){
-    'use strict';
-    angular.module('gantt.condensedgroups').directive('ganttCondensedTaskGroup', ['GanttDirectiveBuilder', function(Builder) {
-        var builder = new Builder('ganttCondensedTaskGroup', 'plugins/groups/condensedTaskGroup.tmpl.html');
-        return builder.build();
-    }]);
+  'use strict';
+  angular.module('gantt.condensedgroups').directive('ganttCondensedTaskGroup', ['GanttDirectiveBuilder', function(Builder) {
+    var builder = new Builder('ganttCondensedTaskGroup', 'plugins/groups/condensedTaskGroup.tmpl.html');
+    return builder.build();
+  }]);
 }());
 
 
 (function(){
-    'use strict';
+  'use strict';
 
-    angular.module('gantt').factory('GanttCondensedGroups', ['ganttUtils', function(utils) {
-        var CondensedGroups = function (row, pluginScope) {
-            var self = this;
+  angular.module('gantt').factory('GanttCondensedGroups', ['ganttUtils', function(utils) {
+    var CondensedGroups = function (row, pluginScope) {
+      var self = this;
 
-            self.row = row;
-            self.pluginScope = pluginScope;
-            self.groups = [];
-            self.showGrouping = false;
+      self.row = row;
+      self.pluginScope = pluginScope;
+      self.groups = [];
+      self.showGrouping = false;
 
-            var lifecycleGroups = self.row.model.condensedGroups;
-            if (lifecycleGroups.length > 0) {
-                self.showGrouping = true;
-                angular.forEach(lifecycleGroups, function(lifecycleGroup) {
-                    var left = row.rowsManager.gantt.getPositionByDate(lifecycleGroup.from);
-                    var width = row.rowsManager.gantt.getPositionByDate(lifecycleGroup.to) - left;
+      var lifecycleGroups = self.row.model.condensedGroups;
+      if (lifecycleGroups.length > 0) {
+        self.showGrouping = true;
+        angular.forEach(lifecycleGroups, function(lifecycleGroup) {
+          var left = row.rowsManager.gantt.getPositionByDate(lifecycleGroup.from);
+          var width = row.rowsManager.gantt.getPositionByDate(lifecycleGroup.to) - left;
 
-                    self.groups.push({
-                      left: left,
-                      width: width,
-                      name: lifecycleGroup.name,
-                      inProgress: lifecycleGroup.in_progress,
-                      parentName: row.model.name
-                    });
-                });
-            }
-        };
-        return CondensedGroups;
-    }]);
+          self.groups.push({
+            left: left,
+            width: width,
+            name: lifecycleGroup.name,
+            inProgress: lifecycleGroup.in_progress,
+            parentName: row.model.name
+          });
+        });
+      }
+    };
+    return CondensedGroups;
+  }]);
 }());
 
 angular.module('gantt.condensedgroups.templates', []).run(['$templateCache', function($templateCache) {
-    $templateCache.put('plugins/groups/condensedTaskGroupItem.tmpl.html',
-      '<div class="gantt-condensed-task-group-item">\n' +
-      '        <gantt-condensed-task-group-item-active-flag tooltipText="{{currentDateTooltipText}}"></gantt-condensed-task-group-item-active-flag>' +
-      '        <div class="gantt-task-group-left-main"></div>\n' +
-      '        <div class="gantt-task-group-right-main"></div>\n' +
-      '        <div class="gantt-task-group-left-symbol"></div>\n' +
-      '        <div class="gantt-task-group-right-symbol"></div>\n' +
-      '</div>\n');
+  $templateCache.put('plugins/groups/condensedTaskGroupItem.tmpl.html',
+    '<div class="gantt-condensed-task-group-item">\n' +
+    '        <gantt-condensed-task-group-item-active-flag tooltipText="{{currentDateTooltipText}}"></gantt-condensed-task-group-item-active-flag>' +
+    '        <div class="gantt-task-group-left-main"></div>\n' +
+    '        <div class="gantt-task-group-right-main"></div>\n' +
+    '        <div class="gantt-task-group-left-symbol"></div>\n' +
+    '        <div class="gantt-task-group-right-symbol"></div>\n' +
+    '</div>\n');
 
-    $templateCache.put('plugins/groups/condensedTaskGroupItemActiveFlag.tmpl.html',
-      '<div ' +
-      'ng-show="isActive(row.model.condensedGroups[$index])"' +
-      '     ng-style="{ \'left\': gantt.currentDateManager.position - taskGroup.left - 6 + \'px\' }"' +
-      '     class="gantt-task-group-current-date">' +
-      '</div>\n');
+  $templateCache.put('plugins/groups/condensedTaskGroupItemActiveFlag.tmpl.html',
+    '<div ' +
+    'ng-show="isActive(row.model.condensedGroups[$index])"' +
+    '     ng-style="{ \'left\': gantt.currentDateManager.position - taskGroup.left - 6 + \'px\' }"' +
+    '     class="gantt-task-group-current-date">' +
+    '</div>\n');
 
-    $templateCache.put('plugins/groups/condensedTaskGroup.tmpl.html',
-      '<div class="gantt-condensed-task-group" ng-controller="GanttCondensedGroupController">\n' +
-      '    <div class="gantt-task-group"\n' +
-      '         ng-class="\'gantt-lifecycle-\' + taskGroup.name.substr(0,1)"\n' +
-      '         ng-style="{\'left\': taskGroup.left + \'px\', \'width\': taskGroup.width + \'px\'}"\n' +
-      '         ng-repeat="taskGroup in taskGroups">\n' +
-      '        <gantt-condensed-task-group-item tooltipText="{{taskGroup.name}}"></gantt-condensed-task-group-item>\n' +
-      '    </div>\n' +
-      '</div>\n');
+  $templateCache.put('plugins/groups/condensedTaskGroup.tmpl.html',
+    '<div class="gantt-condensed-task-group" ng-controller="GanttCondensedGroupController">\n' +
+    '    <div class="gantt-task-group"\n' +
+    '         ng-class="\'gantt-lifecycle-\' + taskGroup.name.substr(0,1)"\n' +
+    '         ng-style="{\'left\': taskGroup.left + \'px\', \'width\': taskGroup.width + \'px\'}"\n' +
+    '         ng-repeat="taskGroup in taskGroups">\n' +
+    '        <gantt-condensed-task-group-item tooltipText="{{taskGroup.name}}"></gantt-condensed-task-group-item>\n' +
+    '    </div>\n' +
+    '</div>\n');
 }]);
 
 //# sourceMappingURL=angular-gantt-condensedgroups-plugin.js.map
 
-'use strict';
-
-/**
- * @ngdoc overview
- * @name ng-gantt
- * @description
- * # ng-gantt
- *
- * Main module of the application.
- */
-
-var gbGantt = angular.module('gbGantt', [
-    'ng',
-    'restangular',
-    'ui.router',
-    'gantt',
-    'gantt.tree',
-    'gantt.groups',
-    'gantt.tooltips',
-    'gantt.progress',
-    'gantt.dependencies',
-    'gantt.condensedgroups',
-    'gantt.condensedtooltips'
-]);
-
-
-gbGantt.constant('RedmineBaseUrl', '/redmine-proxy.php/');
+gbGantt.constant('RedmineBaseUrl', 'http://redmine.assist01.gbart.h3.hu/');
 gbGantt.constant('_', window._);
-//gbGantt.constant('RedmineBaseUrl', 'http://redmine.assist01.gbart.h3.hu')
-
-// Configurations
-gbGantt.config(function ($stateProvider, RestangularProvider, RedmineBaseUrl) {
-
-  // States
-  $stateProvider
-    .state('login', {
-      url: "/login",
-      templateUrl: 'views/login.html',
-      controller: 'LoginCtrl'
-    })
-    .state('default', {
-      url: "/",
-      templateUrl: 'views/projects.html',
-      controller: 'ProjectsController',
-      resolve: {
-        projectIds: function($stateParams, ProjectsRepository) {
-          var promise = ProjectsRepository.getAllProjects();
-          promise.then(function(a){
-            $stateParams.projectIds = a;
-          });
-
-          return promise;
-        }
-      }
-    })
-
-    .state('projectgantt', {
-      url: "/project/:projectId/gantt",
-      templateUrl: 'views/project-gantt.html',
-      controller: 'ProjectGanttCtrl'
-    })
-
-    .state('condensedgantt', {
-      url: "/project/:projectId/condensedgantt",
-      templateUrl: 'views/condensed-gantt.html',
-      controller: 'CondensedGanttCtrl',
-      resolve: {
-        projectIds: function ($stateParams, ProjectsRepository) {
-          var promise = ProjectsRepository.getAllProjects();
-          promise.then(function (a) {
-            $stateParams.projectIds = a;
-          });
-
-          return promise;
-        }
-      }
-    });
-
-  RestangularProvider.setBaseUrl(RedmineBaseUrl);
-  RestangularProvider.setRequestSuffix('.json');
-  RestangularProvider.setDefaultHttpFields({cache: true});
-
-  RestangularProvider.addResponseInterceptor(function(data, operation, what) {
-    var extractedData;
-    // .. to look for getList operations
-    if (operation === "getList") {
-      // .. and handle the data and meta data
-      extractedData = data[what];
-      if (undefined !== extractedData) {
-        extractedData.meta = {totalcount: data.totalcount, offset: data.offset, limit: data.limit};
-      }
-    } else {
-      extractedData = data.data;
-    }
-    return extractedData;
-  });
-});
-
-gbGantt.run(function(User, Restangular, $state, $templateCache) {
-
-  angular.module('ui.tree').config(function(treeConfig) {
-    treeConfig.defaultCollapsed = true;
-  });
 
 
-  //Restangular.setErrorInterceptor(function(response) {
-  //  if (response.status == 401) {
-  //    console.log("Login required... ");
-  //    $state.go('default');
-  //  } else if (response.status == 404) {
-  //    $state.go('default');
-  //  } else {
-  //    alert("There were an error while connecting to server. We redirect you to the projects page.");
-  //    $state.go('default');
-  //  }
-  //
-  //  return false;
-  //});
-
-
-  $templateCache.put('plugins/tree/treeBodyChildren.tmpl.html',
-    '<div ng-controller="GanttTreeNodeController"\n' +
-    '     class="gantt-row-label gantt-row-height"\n' +
-    '     ng-class="row.model.classes"\n' +
-    '     ng-style="{\'height\': row.model.height}">\n' +
-    '   <div class="gantt-valign-container">\n' +
-    '      <div class="gantt-valign-content">\n' +
-    '         <a ng-disabled="isCollapseDisabledOnNode()" ng-controller="GanttTreeNodeToggleController" data-nodrag\n' +
-    '            class="gantt-tree-handle-button btn btn-xs"\n' +
-    '            ng-class="{\'gantt-tree-collapsed\': collapsed, \'gantt-tree-expanded\': !collapsed}"\n' +
-    '            ng-click="toggleNode()">'+
-    //'             <span class="gantt-label-text">{{collapsed?"c":"e"}}</span>' +
-    '             <span\n' +
-    '                class="gantt-tree-handle glyphicon"\n' +
-    '                ng-class="{\n' +
-    '                \'glyphicon-chevron-right\': collapsed, \'glyphicon-chevron-down\': !collapsed,\n' +
-    '                \'gantt-tree-collapsed\': collapsed, \'gantt-tree-expanded\': !collapsed}"></span>\n' +
-    '         </a>\n' +
-    //'         <span class="gantt-label-text">{{collapsed?"c":"e"}}</span>' +
-    '         <span gantt-row-label class="gantt-label-text" gantt-bind-compile-html="getRowContent()"></span>\n' +
-    '      </div>\n' +
-    '   </div>\n' +
-    '</div>\n' +
-    '<ol ui-tree-nodes ng-class="{hidden: collapsed}" ng-model="childrenRows">\n' +
-    '  <li ng-repeat="row in childrenRows" ui-tree-node collapsed="true">\n' +
-    '    <div ng-include="\'plugins/tree/treeBodyChildren.tmpl.html\'"></div>\n' +
-    '  </li>\n' +
-    '</ol>');
-
-  if (User.getUser()) {
-    Restangular.setDefaultRequestParams({ key: User.apiKey(), proxy_cache: true  });
-	  if (!$state.is('default')) {
-        $state.go('default');
-	  }
-  } else {
-    $state.go('login');
-  }
-});
+gbGantt.constant('RedmineBaseUrl', 'http://localhost:8000/redmine-proxy.php/');
+gbGantt.constant('_', window._);
 
 (function(){
     'use strict';
@@ -870,12 +873,11 @@ gbGantt.controller('ProjectsController', function($scope, Restangular, RedmineBa
     var projectId = projectRowScope.row.model.projectId;
     var projectParent = projectRowScope.row.model.parent;
 
-    console.log('ProjectController.on(openProject)', projectRowScope, '...loading issues...');
-
     Restangular.all('issues').getList({ project_id: projectId, limit: 100, include: 'relations', status_id: '*', start_date: '*' }).then(
       function(issues) {
         Restangular.stripRestangular(issues);
-        console.log('ProjectController.on(openProject).issues_loaded', issues, 'broadcasting "projectOpened('+projectId+')"');
+
+
         $scope.$broadcast('projectOpened', projectId);
 
         var newRows = PrepareIssues(issues, rowId, projectId);
@@ -884,7 +886,6 @@ gbGantt.controller('ProjectsController', function($scope, Restangular, RedmineBa
           if (ganttRow.isProject) {
             return true;
           }
-
           return ganttRow.projectId === projectId;
         });
 
@@ -892,9 +893,10 @@ gbGantt.controller('ProjectsController', function($scope, Restangular, RedmineBa
         $scope.openedProject = projectId;
 
         console.log('ProjectController.on(openProject).issues_loaded', 'invoking projectRowScope.toggle', projectRowScope, projectRowScope.toggle);
-        projectRowScope.toggle();//TODO: this probably should be disabled...
+        //projectRowScope.toggle();//TODO: this probably should be disabled...
 
         $timeout(function() {
+          $scope.api.rows.refresh();
           $scope.api.side.setWidth(undefined);
         }, 0);
       });
@@ -1006,7 +1008,7 @@ gbGantt.controller('ProjectsController', function($scope, Restangular, RedmineBa
 
   $scope.registerApi = function(api) {
     $scope.api = api;
-    $controllerScope = $scope;
+    var $controllerScope = $scope;
 
     api.directives.on.new($scope, function(dName, dScope, dElement, dAttrs, dController) {
 
@@ -1499,11 +1501,22 @@ gbGantt.controller('CondensedGanttCtrl', function ($scope, Restangular, RedmineB
     console.log('CondensedGanttCtrl');
   });
 
-'use strict';
-
 gbGantt.controller('GanttTreeNodeToggleController', function($scope) {
+  var isProjectRow = function() {
+    return $scope.row.model.condensedGroups instanceof Array;
+  };
+
+
+  var toggleProject = function () {
+    console.log('GanttTreeNodeToggleController::toggleProject');
+    if ($scope.collapsed) {
+      $scope.openProject();
+    } else {
+      $scope.closeProject();
+    }
+  };
+
     $scope.toggleNode = function() {
-      console.log('GanttTreeNodeToggleController.toggleNode, $scope.collapsed = ',$scope.collapsed, 'isProjectRow() = ', isProjectRow());
       if (isProjectRow()) {
         toggleProject();
       } else {
@@ -1514,7 +1527,6 @@ gbGantt.controller('GanttTreeNodeToggleController', function($scope) {
     };
 
     $scope.isCollapseDisabledOnNode = function() {
-      //console.log('GanttTreeNodeToggleController.isCollapseDisabledOnNode, isProjectRow()= ', isProjectRow());
       if (isProjectRow()) {
         return false;
       } else {
@@ -1528,26 +1540,26 @@ gbGantt.controller('GanttTreeNodeToggleController', function($scope) {
       }
 
       var closingThisProject = $scope.row.model.projectId !== projectId;
-      console.log('GanttTreeNodeToggleController.projectOpened event caught, args.projectId', projectId, 'this.row.model.projectId', $scope.row.model.projectId, ' closingThis? ', closingThisProject, 'collapsed = ',$scope.collapsed);
       if (closingThisProject) {
         $scope.closeProject();
       } else {
         if ($scope.collapsed) {
-          console.warn('GanttTreeNodeToggleController.projectOpened event caught', 'this project got opened but still collapsed = ',$scope.collapsed);
         }
       }
     });
 
     $scope.openProject = function () {
       if (!$scope.collapsed) {
+        console.info('returning false $scope.openProject');
         return;
       }
-      console.log('GanttTreeNodeToggleController.openProject, model = ', $scope.row.model)
+
       $scope.collapsed = false;
 
       $scope.$emit('openProject', $scope);
 
       var idx = $scope.row.model.classes.indexOf('gantt-row-expanded');
+
       if (idx === -1) {
         $scope.row.model.classes.push('gantt-row-expanded');
       }
@@ -1557,11 +1569,10 @@ gbGantt.controller('GanttTreeNodeToggleController', function($scope) {
       if ($scope.collapsed) {
         return;
       }
-      console.log('GanttTreeNodeToggleController.closeProject, model = ', $scope.row.model)
+
       $scope.collapsed = true;
 
       if ($scope.row.model.parent) {
-        console.log('GanttTreeNodeToggleController.closeProject, emitting "closeProject"');
         $scope.$emit('closeProject', $scope);
       } else {
         $scope.toggle();
@@ -1573,21 +1584,9 @@ gbGantt.controller('GanttTreeNodeToggleController', function($scope) {
       }
     };
 
-    var isProjectRow = function() {
-      return $scope.row.model.condensedGroups instanceof Array;
-    };
-
-    var toggleProject = function () {
-      console.log('GanttTreeNodeToggleController.toggleProject, $scope.collapsed = ',$scope.collapsed);
-      if ($scope.collapsed) {
-        $scope.openProject();
-      } else {
-        $scope.closeProject();
-      }
-    };
 
     if (isProjectRow()) {
-      //$scope.collapsed = true;
+      $scope.collapsed = true;
     }
   });
 

@@ -440,9 +440,9 @@
 }
 
 .gantt-side {
-  width: 15vw !important;
+  width: 15% !important;
 }
 
 .gantt-scrollable-header {
-  width: 85vw !important;
+  width: 85% !important;
 }

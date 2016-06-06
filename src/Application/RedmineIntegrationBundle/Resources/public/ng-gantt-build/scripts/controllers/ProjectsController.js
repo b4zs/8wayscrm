@@ -91,12 +91,11 @@ gbGantt.controller('ProjectsController', function($scope, Restangular, RedmineBa
     var projectId = projectRowScope.row.model.projectId;
     var projectParent = projectRowScope.row.model.parent;
 
-    console.log('ProjectController.on(openProject)', projectRowScope, '...loading issues...');
-
     Restangular.all('issues').getList({ project_id: projectId, limit: 100, include: 'relations', status_id: '*', start_date: '*' }).then(
       function(issues) {
         Restangular.stripRestangular(issues);
-        console.log('ProjectController.on(openProject).issues_loaded', issues, 'broadcasting "projectOpened('+projectId+')"');
+
+
         $scope.$broadcast('projectOpened', projectId);
 
         var newRows = PrepareIssues(issues, rowId, projectId);
@@ -105,7 +104,6 @@ gbGantt.controller('ProjectsController', function($scope, Restangular, RedmineBa
           if (ganttRow.isProject) {
             return true;
           }
-
           return ganttRow.projectId === projectId;
         });
 
@@ -113,9 +111,10 @@ gbGantt.controller('ProjectsController', function($scope, Restangular, RedmineBa
         $scope.openedProject = projectId;
 
         console.log('ProjectController.on(openProject).issues_loaded', 'invoking projectRowScope.toggle', projectRowScope, projectRowScope.toggle);
-        projectRowScope.toggle();//TODO: this probably should be disabled...
+        //projectRowScope.toggle();//TODO: this probably should be disabled...
 
         $timeout(function() {
+          $scope.api.rows.refresh();
           $scope.api.side.setWidth(undefined);
         }, 0);
       });
@@ -227,7 +226,7 @@ gbGantt.controller('ProjectsController', function($scope, Restangular, RedmineBa
 
   $scope.registerApi = function(api) {
     $scope.api = api;
-    $controllerScope = $scope;
+    var $controllerScope = $scope;
 
     api.directives.on.new($scope, function(dName, dScope, dElement, dAttrs, dController) {
 

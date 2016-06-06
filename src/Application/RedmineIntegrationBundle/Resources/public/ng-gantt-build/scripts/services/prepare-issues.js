@@ -66,7 +66,11 @@ gbGantt.factory('PrepareIssues', function() {
                 id: taskId(issue.id),
                 name: issue.subject,
                 from: issue.start_date,
-                to: issue.due_date || issue.start_date,
+                to: (function(issue){
+                  var due = issue.due_date ? moment(issue.due_date) : null;
+                  var start = moment(issue.start_date);
+                  return due < start ? issue.start_date : issue.due_date; // -.-
+                })(issue),
                 type: issue.tracker.name,
                 status: issue.status.name,
                 priority: issue.priority.name,

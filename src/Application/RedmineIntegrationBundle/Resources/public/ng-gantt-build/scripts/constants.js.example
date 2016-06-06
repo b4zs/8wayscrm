@@ -1,0 +1,2 @@
+gbGantt.constant('RedmineBaseUrl', 'http://localhost:8000/redmine-proxy.php/');
+gbGantt.constant('_', window._);
