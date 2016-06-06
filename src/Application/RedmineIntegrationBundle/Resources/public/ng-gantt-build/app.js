@@ -679,11 +679,11 @@ angular.module('gantt.condensedgroups.templates', []).run(['$templateCache', fun
 
 //# sourceMappingURL=angular-gantt-condensedgroups-plugin.js.map
 
-gbGantt.constant('RedmineBaseUrl', 'http://redmine.assist01.gbart.h3.hu/');
+//gbGantt.constant('RedmineBaseUrl', 'http://redmine.assist01.gbart.h3.hu/');
 gbGantt.constant('_', window._);
 
 
-gbGantt.constant('RedmineBaseUrl', 'http://localhost:8000/redmine-proxy.php/');
+gbGantt.constant('RedmineBaseUrl', '/redmine-proxy.php/');
 gbGantt.constant('_', window._);
 
 (function(){
