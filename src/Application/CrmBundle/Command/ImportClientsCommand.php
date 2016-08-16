@@ -127,10 +127,14 @@ class ImportClientsCommand extends ContainerAwareCommand
 		$client->addGroup($this->getTargetGroup());
 
 		//website
-		$client->getCompany()->setWebsite($row['website']);
+        if (!empty($row['website'])) {
+		    $client->getCompany()->setWebsite($row['website']);
+        }
 
 		//sales
-		$client->setOwner($this->fetchUser($row['sales']));
+        if (!empty($row['sales'])) {
+		    $client->setOwner($this->fetchUser($row['sales']));
+        }
 
 		//activity
 		if ($row['activity']) {
@@ -155,7 +159,9 @@ class ImportClientsCommand extends ContainerAwareCommand
 		}
 
 		//phone number
-		$contact->getPerson()->setCompanyPhone($row['phoneNumber']);
+        if (!empty($row['phoneNumber'])) {
+		    $contact->getPerson()->setCompanyPhone($row['phoneNumber']);
+        }
 
 		//gender
 		switch (trim(strtolower(strtr($row['gender'], array('.'=>'',':'=>'',))))) {
@@ -180,7 +186,9 @@ class ImportClientsCommand extends ContainerAwareCommand
 		}
 
 		//email
-		$contact->getPerson()->setCompanyEmail($row['eMail']);
+        if (!empty($row['eMail'])) {
+		    $contact->getPerson()->setCompanyEmail($row['eMail']);
+        }
 
 		//address
 		$address = $client->getAddresses()->first();
@@ -188,7 +196,9 @@ class ImportClientsCommand extends ContainerAwareCommand
 			$address = new Address();
 			$client->addAddress($address);
 		}
-		$address->setStreet($row['address']);
+        if (!empty($row['address'])) {
+		    $address->setStreet($row['address']);
+        }
 
 		//last contact
 		if (is_numeric($row['lastContact'])) {
@@ -200,23 +210,30 @@ class ImportClientsCommand extends ContainerAwareCommand
 				'04-15-15' => '15-4-15',
 			));
 		}
-		$client->setCreatedAt(new \DateTime($row['lastContact']));
-		$client->setUpdatedAt(new \DateTime($row['lastContact']));
+        $lastContactTimestamp = strtotime($row['lastContact']);
+
+        if (!$client->getCreatedAt()) {
+		    $client->setCreatedAt(new \DateTime($row['lastContact']));
+        }
+        if (!$client->getUpdatedAt() || $client->getUpdatedAt()->getTimestamp() < $lastContactTimestamp) {
+		    $client->setUpdatedAt(new \DateTime($row['lastContact']));
+        }
 
 		//action
 		/** @var LogEntryRepository $logRepository */
 		$logRepository = $this->getEntityManager()->getRepository('CoreLoggableEntityBundle:LogEntry');
 		$logEntries = $logRepository->getLogEntries($client);
+        $versions = array();
 		foreach ($logEntries as $logEntry) {
-			$this->getEntityManager()->remove($logEntry);
+            $versions[] = intval($logEntry->getVersion());
+//			$this->getEntityManager()->remove($logEntry);
 		}
-		$version = 0;
+		$version = count($versions) ? max($versions)+1 : 0;
 
 
 		$this->getEntityManager()->persist($client);
 		$this->getEntityManager()->flush($client);
 
-		$this->createEntityLog($client, 'update',  $row['action'], $row['comment'], new \DateTime($row['lastContact']), $version);
 
 		//interest + meeting scheduled + offer sent
 		$row['meetingScheduled'] = \Doctrine\Common\Util\Inflector::camelize($row['meetingScheduled']);
@@ -224,125 +241,16 @@ class ImportClientsCommand extends ContainerAwareCommand
 			$row['meetingScheduled'] = null;
 		}
 
-		$state = array();
-		$state['sleeping'] = null;
-		$state['signed']  = null;
-		$state['offerSent'] = null;
-		$state['called'] = trim(strtolower($row['action'])) === 'called';
-		$state['interested'] = null;
-		$state['meetingScheduled'] = null;
-		$state['lastAction'] = trim(strtolower($row['action']));
+        if (!isset($row['comment'])) {
+            $row['comment'] = '';
+        }
 
-		switch (strtolower($row['offerSent'])) {
-			case '':
-			case 'no':
-				$state['offerSent'] = false;
-				break;
-			case 'yes':
-				$state['offerSent'] = true;
-				break;
-			case 'signed':
-				$state['offerSent'] = true;
-				$state['signed'] = true;
-				break;
-			default:
-				throw new \RuntimeException('offerSent value not handled:'.json_encode($row['offerSent']));
-		}
-
-		switch (trim(strtolower($row['interest']))) {
-			case 'no interest':
-			case 'not interested':
-			case 'no':
-				$state['interested'] = false;
-				break;
-			case 'not at the moment':
-			case 'yes but not now':
-			case 'not now':
-				$state['interested'] = false;
-				$state['sleeping'] = true;
-			case 'interested':
-			case 'positive':
-			case 'yes':
-			case 'yes, probably':
-			case 'probably':
-			case 'maybe':
-			case 'yes, but':
-				$state['interested'] = true;
-				break;
-			case 'n/a':
-			case '':
-			case 'unknown':
-				break;
-			default:
-				throw new \RuntimeException('Interest value not handled:'.json_encode($row['interest']));
-		}
-
-
-		$row['meetingScheduled'] = strtr($row['meetingScheduled'], array(
-			'à' => ' ',
-		));
-		if (is_numeric($row['meetingScheduled'])) {
-			$date = date('Y-m-d', strtotime('1900-Jan-0') + $row['meetingScheduled'] * 3600 * 24);
-			$this->createEntityLog($client, 'update',  'meeting scheduled', "Meeting scheduled to ".$date, new \DateTime($row['lastContact']), $version);
-			$row['meetingScheduled'] = 'meeting';
-		}
-		switch (strtolower($row['meetingScheduled'])) {
-			case 'email':
-			case 'e-mail':
-				$state['meetingScheduled'] = 'e-mail';
-				break;
-			case 'meeting':
-			case 'maybe':
-			case 'yes':
-				$state['meetingScheduled'] = $row['meetingScheduled'];
-				break;
-			case '050115':
-			case 'torecall10july':
-			case 'torecalldecember':
-			case '07.05.2015 11h30':
-			case 'rappeler22mai':
-			case 'torecall15.05':
-			case 'torecallseptember2015':
-			case 'waitforcallbackforapproval':
-			case 'tocal07.05':
-			case 'yes24.062015':
-				$this->createEntityLog($client, 'update',  'meeting scheduled', "Meeting scheduled: ".$row['meetingScheduled'], new \DateTime($row['lastContact']), $version);
-				$state['meetingScheduled'] = $row['meetingScheduled'];
-				break;
-			case '':
-			case null:
-			case 'no':
-				$state['meetingScheduled'] = false;
-				break;
-			case 'dead':
-				$state['meetingScheduled'] = false;
-				$state['interested'] = false;
-				break;
-			default:
-				throw new \RuntimeException('meetingScheduled value not handled: '.json_encode($row['meetingScheduled']));
-		}
-
-		if (!$state['lastAction']) {
-			$client->setStatus(ClientStatus::COLD);
-		} elseif ($state['sleeping']) {
-			$client->setStatus(ClientStatus::SLEEPING);
-		} elseif ($state['signed']) {
-			$client->setStatus(ClientStatus::ACTIVE);
-		} elseif (!$state['offerSent'] && true === $state['interested'] && !$state['meetingScheduled']) {
-			$client->setStatus(ClientStatus::HOT);
-		} elseif ($state['meetingScheduled']) {
-			$client->setStatus(ClientStatus::ACTIVE);
-		} elseif ($state['offerSent'] && $state['interested']) {
-			$client->setStatus(ClientStatus::HOT);
-		} elseif ($state['offerSent'] && !$state['interested']) {
-			$client->setStatus(ClientStatus::ARCHIVED);
-		} elseif (!$state['offerSent'] && false === $state['interested'] && !$state['meetingScheduled']) {
-			$client->setStatus(ClientStatus::JUNK);
-		} elseif (!$state['offerSent'] && null === $state['interested'] && !$state['meetingScheduled']) {
-			$client->setStatus(ClientStatus::COLD);
-		} else {
-			throw new \RuntimeException('Unhandled state: '.PHP_EOL.json_encode($state));
-		}
+        list($status, $state, $version) = $this->handleClientState($row, $client, $version);
+        if ($status != $client->getStatus()) {
+            $row['comment'] .= PHP_EOL.'[system] updating status during reimport: '.sprintf('"%s" to "%s"', $client->getStatus(), $status);
+            $client->setStatus($status);
+        }
+		$this->createEntityLog($client, 'update',  $row['action'], $row['comment'], new \DateTime($row['lastContact']), $version);
 
 		$this->createEntityLog($client, 'update', 'status', Yaml::dump($state), new \DateTime('NOW'), $version);
 
@@ -414,6 +322,129 @@ class ImportClientsCommand extends ContainerAwareCommand
 			'name' => '8ways',
 		));
 	}
+
+    private function handleClientState(array $row, $client, $version)
+    {
+        $state = array();
+        $state['sleeping'] = null;
+        $state['signed'] = null;
+        $state['offerSent'] = null;
+        $state['called'] = trim(strtolower($row['action'])) === 'called';
+        $state['interested'] = null;
+        $state['meetingScheduled'] = null;
+        $state['lastAction'] = trim(strtolower($row['action']));
+
+        switch (strtolower($row['offerSent'])) {
+            case '':
+            case 'no':
+                $state['offerSent'] = false;
+                break;
+            case 'yes':
+                $state['offerSent'] = true;
+                break;
+            case 'signed':
+                $state['offerSent'] = true;
+                $state['signed'] = true;
+                break;
+            default:
+                throw new \RuntimeException('offerSent value not handled:' . json_encode($row['offerSent']));
+        }
+
+        switch (trim(strtolower($row['interest']))) {
+            case 'no interest':
+            case 'not interested':
+            case 'no':
+                $state['interested'] = false;
+                break;
+            case 'not at the moment':
+            case 'yes but not now':
+            case 'not now':
+                $state['interested'] = false;
+                $state['sleeping'] = true;
+            case 'interested':
+            case 'positive':
+            case 'yes':
+            case 'yes, probably':
+            case 'probably':
+            case 'maybe':
+            case 'yes, but':
+                $state['interested'] = true;
+                break;
+            case 'n/a':
+            case '':
+            case 'unknown':
+                break;
+            default:
+                throw new \RuntimeException('Interest value not handled:' . json_encode($row['interest']));
+        }
+
+
+        $row['meetingScheduled'] = strtr($row['meetingScheduled'], array(
+            'à' => ' ',
+        ));
+        if (is_numeric($row['meetingScheduled'])) {
+            $date = date('Y-m-d', strtotime('1900-Jan-0') + $row['meetingScheduled'] * 3600 * 24);
+            $this->createEntityLog($client, 'update', 'meeting scheduled', "Meeting scheduled to " . $date, new \DateTime($row['lastContact']), $version);
+            $row['meetingScheduled'] = 'meeting';
+        }
+        switch (strtolower($row['meetingScheduled'])) {
+            case 'email':
+            case 'e-mail':
+                $state['meetingScheduled'] = 'e-mail';
+                break;
+            case 'meeting':
+            case 'maybe':
+            case 'yes':
+                $state['meetingScheduled'] = $row['meetingScheduled'];
+                break;
+            case '050115':
+            case 'torecall10july':
+            case 'torecalldecember':
+            case '07.05.2015 11h30':
+            case 'rappeler22mai':
+            case 'torecall15.05':
+            case 'torecallseptember2015':
+            case 'waitforcallbackforapproval':
+            case 'tocal07.05':
+            case 'yes24.062015':
+                $this->createEntityLog($client, 'update', 'meeting scheduled', "Meeting scheduled: " . $row['meetingScheduled'], new \DateTime($row['lastContact']), $version);
+                $state['meetingScheduled'] = $row['meetingScheduled'];
+                break;
+            case '':
+            case null:
+            case 'no':
+                $state['meetingScheduled'] = false;
+                break;
+            case 'dead':
+                $state['meetingScheduled'] = false;
+                $state['interested'] = false;
+                break;
+            default:
+                throw new \RuntimeException('meetingScheduled value not handled: ' . json_encode($row['meetingScheduled']));
+        }
+
+        if (!$state['lastAction']) {
+            return array(ClientStatus::COLD, $state, $version);
+        } elseif ($state['sleeping']) {
+            return array(ClientStatus::SLEEPING, $state, $version);
+        } elseif ($state['signed']) {
+            return array(ClientStatus::ACTIVE, $state, $version);
+        } elseif (!$state['offerSent'] && true === $state['interested'] && !$state['meetingScheduled']) {
+            return array(ClientStatus::HOT, $state, $version);
+        } elseif ($state['meetingScheduled']) {
+            return array(ClientStatus::ACTIVE, $state, $version);
+        } elseif ($state['offerSent'] && $state['interested']) {
+            return array(ClientStatus::HOT, $state, $version);
+        } elseif ($state['offerSent'] && !$state['interested']) {
+            return array(ClientStatus::ARCHIVED, $state, $version);
+        } elseif (!$state['offerSent'] && false === $state['interested'] && !$state['meetingScheduled']) {
+            return array(ClientStatus::JUNK, $state, $version);
+        } elseif (!$state['offerSent'] && null === $state['interested'] && !$state['meetingScheduled']) {
+            return array(ClientStatus::COLD, $state, $version);
+        } else {
+            throw new \RuntimeException('Unhandled state: ' . PHP_EOL . json_encode($state));
+        }
+    }
 
 
 }
