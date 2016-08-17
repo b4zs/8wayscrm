@@ -12,7 +12,9 @@ use Application\UserBundle\Entity\User;
 use Core\LoggableEntityBundle\Entity\LogEntry;
 use Core\ToolsBundle\Enum\Gender;
 use Doctrine\Common\Util\Debug;
+use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\UnitOfWork;
 use Exporter\Source\CsvSourceIterator;
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -27,6 +29,12 @@ use Symfony\Component\Yaml\Yaml;
 class ImportClientsCommand extends ContainerAwareCommand
 {
 	private $existingSectors = null;
+
+	protected $updatedClients = 0;
+
+	protected $newClients = 0;
+
+	protected $unprocessedClients = 0;
 
 	protected function configure()
 	{
@@ -70,7 +78,7 @@ class ImportClientsCommand extends ContainerAwareCommand
 			}
 		}
 
-		$output->writeln('done');
+		$output->writeln(PHP_EOL . sprintf('done. updated: %d, new: %d, skipped: %d', $this->updatedClients, $this->newClients, $this->unprocessedClients));
 	}
 
 	private function normalizeKey($key)
@@ -116,11 +124,27 @@ class ImportClientsCommand extends ContainerAwareCommand
 			}
 		}
 
+		if(null === $name) {
+			$this->unprocessedClients++;
+			return; //???
+		}
+
+
 		//name
 		$client = $this->findClientByName($name);
+
+		if($client instanceof Client && null !== $client->getDeletedAt()) {
+			$this->unprocessedClients++;
+			return;
+		}
+
 		if (!$client) {
 			$client = new Client();
 			$client->getCompany()->setName($name);
+			$client->getFileset()->setName($name);
+			$this->newClients++;
+		} else {
+			$this->updatedClients++;
 		}
 
 		//group
@@ -167,7 +191,6 @@ class ImportClientsCommand extends ContainerAwareCommand
 		switch (trim(strtolower(strtr($row['gender'], array('.'=>'',':'=>'',))))) {
 			case 'mrs':
 			case 'ms':
-			case 'ms':
 			case 'mlle':
 			case 'mme':
 				$contact->getPerson()->setGender(Gender::FEMALE);
@@ -203,6 +226,8 @@ class ImportClientsCommand extends ContainerAwareCommand
 		//last contact
 		if (is_numeric($row['lastContact'])) {
 			$row['lastContact'] = date('Y-m-d', strtotime('1900-Jan-0') + $row['lastContact'] * 3600 * 24);
+		} elseif($row['lastContact'] == '') {
+			$row['lastContact'] = (new \DateTime())->format('Y-m-d');
 		}else{
 			$row['lastContact'] = strtr($row['lastContact'], array(
 				'fev.' => 'feb ',
@@ -210,13 +235,15 @@ class ImportClientsCommand extends ContainerAwareCommand
 				'04-15-15' => '15-4-15',
 			));
 		}
+
         $lastContactTimestamp = strtotime($row['lastContact']);
 
         if (!$client->getCreatedAt()) {
-		    $client->setCreatedAt(new \DateTime($row['lastContact']));
+		    $client->setCreatedAt((new \DateTime())->setTimestamp($lastContactTimestamp));
         }
+
         if (!$client->getUpdatedAt() || $client->getUpdatedAt()->getTimestamp() < $lastContactTimestamp) {
-		    $client->setUpdatedAt(new \DateTime($row['lastContact']));
+		    $client->setUpdatedAt((new \DateTime())->setTimestamp($lastContactTimestamp));
         }
 
 		//action
@@ -225,15 +252,9 @@ class ImportClientsCommand extends ContainerAwareCommand
 		$logEntries = $logRepository->getLogEntries($client);
         $versions = array();
 		foreach ($logEntries as $logEntry) {
-            $versions[] = intval($logEntry->getVersion());
-//			$this->getEntityManager()->remove($logEntry);
+            $versions[] = (int)$logEntry->getVersion();
 		}
 		$version = count($versions) ? max($versions)+1 : 0;
-
-
-		$this->getEntityManager()->persist($client);
-		$this->getEntityManager()->flush($client);
-
 
 		//interest + meeting scheduled + offer sent
 		$row['meetingScheduled'] = \Doctrine\Common\Util\Inflector::camelize($row['meetingScheduled']);
@@ -246,23 +267,34 @@ class ImportClientsCommand extends ContainerAwareCommand
         }
 
         list($status, $state, $version) = $this->handleClientState($row, $client, $version);
-        if ($status != $client->getStatus()) {
-            $row['comment'] .= PHP_EOL.'[system] updating status during reimport: '.sprintf('"%s" to "%s"', $client->getStatus(), $status);
-            $client->setStatus($status);
-        }
-		$this->createEntityLog($client, 'update',  $row['action'], $row['comment'], new \DateTime($row['lastContact']), $version);
 
-		$this->createEntityLog($client, 'update', 'status', Yaml::dump($state), new \DateTime('NOW'), $version);
+		if($this->getEntityManager()->getUnitOfWork()->getEntityState($client) === UnitOfWork::STATE_MANAGED) {
+			if ($status != $client->getStatus()) {
+				$row['comment'] .= PHP_EOL.'[system] updating status during reimport: '.sprintf('"%s" to "%s"', $client->getStatus(), $status);
+				$client->setStatus($status);
+			}
+		} else {
+			$row['comment'] .= PHP_EOL.'[system] inserted new client during reimport';
+			$client->setStatus($status);
+			$this->getEntityManager()->persist($client);
+		}
 
 		$this->getEntityManager()->flush($client);
+
+		$this->createEntityLog($client, 'update',  'import', $row['comment'], $version);
 	}
 
 	private function findClientByName($company)
 	{
-		$repository = $this->getContainer()->get('doctrine')->getRepository('ApplicationCrmBundle:Client');
-		return $repository->findOneBy(array(
+		$this->getEntityManager()->getFilters()->disable('softdeleteable');
+
+		$ret = $this->getEntityManager()->getRepository('ApplicationCrmBundle:Client')->findOneBy(array(
 			'company.name' => $company,
 		));
+
+		$this->getEntityManager()->getFilters()->enable('softdeleteable');
+
+		return $ret;
 	}
 
 
@@ -271,18 +303,19 @@ class ImportClientsCommand extends ContainerAwareCommand
 		return $this->getContainer()->get('doctrine.orm.default_entity_manager');
 	}
 
-	private function createEntityLog(Client $client, $action, $customAction, $comment, \DateTime $date, &$version)
+	private function createEntityLog(Client $client, $action, $customAction, $comment, &$version)
 	{
 		$actionLog = new LogEntry();
-		$actionLog->setUsername($client->getOwner()->getUsernameCanonical());
+		$actionLog->setUsername('import');
 		$actionLog->setObjectClass(get_class($client));
 		$actionLog->setObjectId($client->getId());
-		$actionLog->setLoggedAt($date);
-		$actionLog->setVersion(++$version);
+		$actionLog->setLoggedAt(new \DateTime());
+		$actionLog->setVersion($version++);
 		$actionLog->setAction($action);
 		$actionLog->setCustomAction($customAction);
 		$actionLog->setComment($comment);
 		$this->getEntityManager()->persist($actionLog);
+		$this->getEntityManager()->flush($actionLog);
 	}
 
 	private function ensureSector($name)
@@ -354,6 +387,7 @@ class ImportClientsCommand extends ContainerAwareCommand
             case 'no interest':
             case 'not interested':
             case 'no':
+            case 'not interesting':
                 $state['interested'] = false;
                 break;
             case 'not at the moment':
@@ -361,6 +395,7 @@ class ImportClientsCommand extends ContainerAwareCommand
             case 'not now':
                 $state['interested'] = false;
                 $state['sleeping'] = true;
+				break;
             case 'interested':
             case 'positive':
             case 'yes':
@@ -384,7 +419,7 @@ class ImportClientsCommand extends ContainerAwareCommand
         ));
         if (is_numeric($row['meetingScheduled'])) {
             $date = date('Y-m-d', strtotime('1900-Jan-0') + $row['meetingScheduled'] * 3600 * 24);
-            $this->createEntityLog($client, 'update', 'meeting scheduled', "Meeting scheduled to " . $date, new \DateTime($row['lastContact']), $version);
+            $this->createEntityLog($client, 'update', 'meeting scheduled', "Meeting scheduled to " . $date, $version);
             $row['meetingScheduled'] = 'meeting';
         }
         switch (strtolower($row['meetingScheduled'])) {
@@ -407,7 +442,7 @@ class ImportClientsCommand extends ContainerAwareCommand
             case 'waitforcallbackforapproval':
             case 'tocal07.05':
             case 'yes24.062015':
-                $this->createEntityLog($client, 'update', 'meeting scheduled', "Meeting scheduled: " . $row['meetingScheduled'], new \DateTime($row['lastContact']), $version);
+                $this->createEntityLog($client, 'update', 'meeting scheduled', "Meeting scheduled: " . $row['meetingScheduled'], $version);
                 $state['meetingScheduled'] = $row['meetingScheduled'];
                 break;
             case '':
