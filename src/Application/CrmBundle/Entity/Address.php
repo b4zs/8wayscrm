@@ -53,6 +53,14 @@ class Address
      */
     private $client;
 
+    /**
+     * Address constructor.
+     */
+    public function __construct()
+    {
+        $this->country = 'CH';
+    }
+
 
     /**
      * Get id
@@ -259,5 +267,9 @@ class Address
         $this->type = $type;
     }
 
+    public function __toString()
+    {
+        return sprintf('%s, %s %s, %s', $this->getCountry(), $this->getPostalCode(), $this->getCountry(), $this->getStreet());
+    }
 
 }

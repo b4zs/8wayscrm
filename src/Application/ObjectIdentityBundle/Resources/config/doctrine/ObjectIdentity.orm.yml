@@ -1,6 +1,7 @@
 Application\ObjectIdentityBundle\Entity\ObjectIdentity:
     type: entity
     table: object_identity
+    repositoryClass: Application\ObjectIdentityBundle\Entity\ObjectIdentityRepository
     id:
         id:
             type: integer
@@ -17,13 +18,11 @@ Application\ObjectIdentityBundle\Entity\ObjectIdentity:
         user:
             targetEntity: Application\UserBundle\Entity\User
             mappedBy: objectIdentity
+        customProperty:
+            targetEntity: Application\CrmBundle\Entity\CustomProperty
+            mappedBy: objectIdentity
     oneToMany:
        indices:
            targetEntity: Core\ObjectIdentityBundle\Entity\ObjectIdentityIndex
            mappedBy:     objectIdentity
            fetch:        EXTRA_LAZY
-    manyToMany:
-        notes:
-            targetEntity: Octet\Ticketing\Bundle\Entity\Note
-        reminders:
-            targetEntity: Octet\Ticketing\Bundle\Entity\Reminder

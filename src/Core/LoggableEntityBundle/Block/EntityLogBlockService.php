@@ -5,6 +5,7 @@ namespace Core\LoggableEntityBundle\Block;
 use Core\LoggableEntityBundle\Admin\Extension\LoggableEntityExtension;
 use Sonata\BlockBundle\Block\BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Util\OptionsResolver;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,15 +21,21 @@ class EntityLogBlockService extends BaseBlockService
 
 	public function execute(BlockContextInterface $blockContext, Response $response = null)
 	{
-		$className = $blockContext->getSetting('subject_class');
-		$id = $blockContext->getSetting('subject_id');
+	    if(null === $blockContext->getBlock()->getId()) {
+	        $resolver = new OptionsResolver();
+            $this->setDefaultSettings($resolver);
+
+            $blockContext->getBlock()->setSettings($resolver->resolve($blockContext->getBlock()->getSettings()));
+        }
+		$className = $blockContext->getBlock()->getSetting('subject_class');
+		$id = $blockContext->getBlock()->getSetting('subject_id');
 
 		$entries =  $this
 			->loggableAdminExtension
 			->buildLogEntriesQueryForEntity($className, $id)
 			->getResult();
 
-		return $this->renderResponse($blockContext->getTemplate(), array(
+		return $this->renderResponse($blockContext->getBlock()->getSetting('template'), array(
 			'block_context'  => $blockContext,
 			'block'          => $blockContext->getBlock(),
 			'entries'        => $entries,

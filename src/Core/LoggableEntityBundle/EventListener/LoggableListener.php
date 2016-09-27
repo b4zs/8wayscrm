@@ -103,7 +103,7 @@ class LoggableListener extends \Gedmo\Loggable\LoggableListener
 	private function isFieldVersioned($object, $field, $config, $changes)
 	{
 		return
-			(count(array_filter($changes)) > 0)
+			(count($changes) > 0)
 			&& (
 				in_array($field, $config['versioned'])
 				|| (false !== strpos($field, '.'))  // this is a hack to let embedded (embeddable) changeset to be logged

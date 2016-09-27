@@ -6,27 +6,27 @@ use Application\CrmBundle\Model\OwnerGroupAware;
 use Application\CrmBundle\Security\CrmSecurityHelper;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 
-class OwnerGroupSetterListener
+class OwnerGroupSetterListener implements ContainerAwareInterface 
 {
-	/** @var CrmSecurityHelper */
-	private $securityHelper;
-
-	public function __construct(CrmSecurityHelper $securityHelper)
-	{
-		$this->securityHelper = $securityHelper;
-	}
+	use ContainerAwareTrait;
 
 	public function prePersist(LifecycleEventArgs $eventArgs)
 	{
 		$object = $eventArgs->getObject();
 
-		if ($object instanceof OwnerGroupAware && null !== ($group = $this->securityHelper->fetchGroupOfCurrentUser()) && !$this->securityHelper->isGranted('ROLE_SUPER_ADMIN')) {
+		if ($object instanceof OwnerGroupAware && null !== ($group = $this->getSecurityHelper()->fetchGroupOfCurrentUser()) && !$this->getSecurityHelper()->isGranted('ROLE_SUPER_ADMIN')) {
 			if ($object->getGroups()->count() < 1) {
 				$object->addGroup($group);
 			}
 		}
 	}
+
+	protected function getSecurityHelper() {
+	    return $this->container->get('application_crm.security.helper');
+    }
 
 }

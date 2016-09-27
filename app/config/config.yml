@@ -77,7 +77,6 @@ doctrine:
         #     path:     "%database_path%"
         types:
             json: Sonata\Doctrine\Types\JsonType
-            reference: Octet\ReferenceObjectBundle\Doctrine\Type\Reference
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
@@ -87,6 +86,10 @@ doctrine:
             Octet\Ticketing\Lib\Model\UserInterface: 'Application\UserBundle\Entity\User'
             Octet\Ticketing\Lib\Model\NoteRelatedInterface: 'Application\ObjectIdentityBundle\Entity\ObjectIdentity'
             Octet\Ticketing\Lib\Model\ReminderRelatedInterface: 'Application\ObjectIdentityBundle\Entity\ObjectIdentity'
+            Core\ObjectIdentityBundle\Model\ObjectIdentityInterface: 'Application\ObjectIdentityBundle\Entity\ObjectIdentity'
+        dql:
+            string_functions:
+                MATCH: Application\AdminBundle\DQL\MatchAgainstFunction
 
 
 # Swiftmailer Configuration
@@ -99,43 +102,53 @@ swiftmailer:
 
 sonata_admin:
     security:
-        handler: sonata.admin.security.handler.role
+      handler: sonata.admin.security.handler.role
     title: %sonata_admin.title%
     title_logo: bundles/applicationadmin/img/logo.png
     templates:
-        dashboard: SonataAdminBundle:Core:dashboard.html.twig
-        user_block: ApplicationAdminBundle:Core:user_block.html.twig
+      dashboard: SonataAdminBundle:Core:dashboard.html.twig
+      user_block: ApplicationAdminBundle:Core:user_block.html.twig
     assets:
-            stylesheets:
-                - bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
-                - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
-                - bundles/sonatacore/vendor/ionicons/css/ionicons.min.css
-                - bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
-                - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
-                - bundles/sonataadmin/vendor/jqueryui/themes/base/jquery-ui.css
-                - bundles/sonataadmin/vendor/select2/select2.css
-                - bundles/sonataadmin/vendor/select2/select2-bootstrap.css
-                - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
-                - bundles/sonataadmin/css/styles.css
-                - bundles/sonataadmin/css/layout.css
-                - bundles/applicationadmin/css/layout.css
-                - bundles/applicationuser/css/layout.css
-            javascripts:
-                - bundles/sonataadmin/vendor/jquery/dist/jquery.min.js
-                - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
-                - bundles/sonatacore/vendor/moment/min/moment.min.js
-                - bundles/sonataadmin/vendor/bootstrap/dist/js/bootstrap.min.js
-                - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
-                - bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js
-                - bundles/sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min.js
-                - bundles/sonataadmin/jquery/jquery.form.js
-                - bundles/sonataadmin/jquery/jquery.confirmExit.js
-                - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js
-                - bundles/sonataadmin/vendor/select2/select2.min.js
-                - bundles/sonataadmin/vendor/AdminLTE/js/AdminLTE/app.js
-                - bundles/sonataadmin/App.js
-                - bundles/sonataadmin/Admin.js
-                - bundles/applicationadmin/App.js
+      stylesheets:
+        - bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css
+        - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
+        - bundles/sonatacore/vendor/ionicons/css/ionicons.min.css
+        - bundles/sonataadmin/vendor/admin-lte/dist/css/AdminLTE.min.css
+        - bundles/sonataadmin/vendor/admin-lte/dist/css/skins/skin-black.min.css
+        - bundles/sonataadmin/vendor/iCheck/skins/square/blue.css
+        - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
+        - bundles/sonataadmin/vendor/jqueryui/themes/base/jquery-ui.css
+        - bundles/sonatacore/vendor/select2/select2.css
+        - bundles/sonatacore/vendor/select2-bootstrap-css/select2-bootstrap.min.css
+        - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
+        - bundles/sonataadmin/css/styles.css
+        - bundles/sonataadmin/css/tree.css
+        - bundles/sonataadmin/css/layout.css
+        - bundles/applicationadmin/css/layout.css
+        - bundles/applicationuser/css/layout.css
+      javascripts:
+        - bundles/sonataadmin/vendor/jquery/dist/jquery.min.js
+        - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
+        - bundles/sonatacore/vendor/moment/min/moment.min.js
+        - bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js
+        - bundles/sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min.js
+        - bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min.js
+        - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+        - bundles/sonataadmin/vendor/jquery-form/jquery.form.js
+        - bundles/sonataadmin/jquery/jquery.confirmExit.js
+        - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js
+        - bundles/sonatacore/vendor/select2/select2.min.js
+        - bundles/sonataadmin/vendor/admin-lte/dist/js/app.min.js
+        - bundles/sonataadmin/vendor/iCheck/icheck.min.js
+        - bundles/sonataadmin/vendor/slimScroll/jquery.slimscroll.min.js
+        - bundles/sonataadmin/vendor/waypoints/lib/jquery.waypoints.min.js
+        - bundles/sonataadmin/vendor/waypoints/lib/shortcuts/sticky.min.js
+        - bundles/sonataadmin/Admin.js
+        - bundles/sonataadmin/treeview.js
+    dashboard:
+      blocks:
+        - { position: top, type: application_crm.block.dashboard_clients, class: 'col-md-12' }
+        - { position: top, type: application_admin.block.dashboard.search, class: 'col-md-12' }
 
 sonata_block:
     default_contexts: [cms]
@@ -164,7 +177,13 @@ sonata_block:
         sonata.admin.block.admin_list:
             contexts:   [admin]
 
+        application_admin.block.dashboard.search:
+            contexts:   [admin]
+
         sonata.admin.block.search_result:
+            contexts:   [admin]
+
+        application_crm.block.dashboard_clients:
             contexts:   [admin]
 
         sonata.user.block.menu:    # used to display the menu in profile pages
@@ -177,6 +196,10 @@ sonata_block:
         sonata.page.block.container:
 #            cache: core.cache.symfony
 
+sonata_classification:
+  class:
+    category: Application\ClassificationBundle\Entity\Category
+    context: Application\ClassificationBundle\Entity\ClassificationContext
 
 sonata_media:
     # if you don't use default namespace configuration
@@ -184,6 +207,7 @@ sonata_media:
         media: Application\MediaBundle\Entity\Media
         gallery: Application\MediaBundle\Entity\Gallery
         gallery_has_media: Application\MediaBundle\Entity\GalleryHasMedia
+        category: Application\ClassificationBundle\Entity\Category
     default_context: default
     db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr it is mandatory to choose one here
     default_context: default # you need to set a context
@@ -282,4 +306,3 @@ fos_rest:
         default_engine: twig
     routing_loader:
         default_format: json
-

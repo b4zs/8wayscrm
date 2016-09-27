@@ -11,38 +11,61 @@
     {"type": "composer", "url": "http://composer.assist01.gbart.h3.hu/repo/private/"}
   ],
   "require": {
-    "php": ">=5.3.9",
-    "symfony/symfony": "2.7.*",
-    "doctrine/common": "~2.5.3,<2.6.0",
-    "doctrine/orm": "~2.5.1",
-    "doctrine/dbal": "~2.5",
-    "doctrine/doctrine-bundle": "~1.4",
+    "php": ">=5.3.3,<=5.6.11",
+
+    "twig/twig": "~1.12",
+    "twig/extensions": "~1.0",
+
+    "symfony/symfony": "2.8.*",
     "symfony/assetic-bundle": "~2.3",
     "symfony/swiftmailer-bundle": "~2.3",
-    "symfony/monolog-bundle": "~2.4",
+    "symfony/monolog-bundle": "~2.3",
+    "paragonie/random_compat": "v1.2.0",
+
     "sensio/distribution-bundle": "~4.0",
-    "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
+    "sensio/framework-extra-bundle": "3.0.12",
+
+    "doctrine/orm": "~2.5.1",
+    "doctrine/dbal": "~2.5",
+    "doctrine/common": "~2.5.3,<2.6.0",
+    "doctrine/doctrine-bundle": "~1.4",
+    "doctrine/doctrine-fixtures-bundle": "~2.2",
+    "doctrine/data-fixtures": "~1.0@dev",
+
+    "symfony-cmf/routing-bundle": "~1.1",
+
+    "knplabs/gaufrette": "~0.1.6",
+    "knplabs/knp-menu-bundle": "2.1.*",
+
+    "sonata-project/easy-extends-bundle": "~2.1",
+    "sonata-project/intl-bundle": "~2.2@dev",
+    "sonata-project/user-bundle": "3.0.1",
+
+    "dflydev/markdown": "~1.0",
+
+
+    "stof/doctrine-extensions-bundle": "~1.1",
+
     "incenteev/composer-parameter-handler": "~2.0",
-    "sonata-project/admin-bundle": "^2.3",
-    "sonata-project/doctrine-orm-admin-bundle": "^2.3",
-    "knplabs/knp-menu": "^2.0",
-    "phpunit/phpunit": "5.1.*",
-    "jms/serializer": "~1.0",
-    "jms/serializer-bundle": "~1.0",
-    "friendsofsymfony/rest": "~1.0",
-    "friendsofsymfony/rest-bundle": "~1.7",
-    "sonata-project/media-bundle": "~2.3",
-    "sonata-project/user-bundle": "~2.2",
-    "gedmo/doctrine-extensions": "^2.4",
-    "stof/doctrine-extensions-bundle": "^1.2",
-    "sonata/object-identity-bundle": "dev-master@dev",
-    "sonata/security-bundle": "dev-master@dev",
-    "sonata/tools-bundle": "dev-master@dev",
-    "ocramius/proxy-manager": "~1.0",
+
+    "kriswallsmith/buzz": "0.*",
+
+    "liip/theme-bundle": "1.*",
+    "nelmio/api-doc-bundle": "2.*",
+
+    "sonata-project/admin-bundle": "~3.4",
+    "sonata-project/media-bundle": ">=2.3",
+    "sonata-project/block-bundle": "3.1.*",
+
+    "sonata/object-identity-bundle": "1.*@dev",
+    "sonata/tools-bundle": "1.*@dev",
+    "sonata/security-bundle": "1.*@dev",
+
+    "jms/job-queue-bundle": "1.2.0",
+
     "phpoffice/phpexcel": "^1.8",
-    "octet/ticketing": "dev-admin-block@dev",
-    "octet/message-bus": "dev-master",
-    "octet/reference-object": "dev-master"
+    "octet/ticketing": "1.0.x-dev",
+    "octet/message-bus": "dev-master"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"

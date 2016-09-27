@@ -1,5 +1,6 @@
 Application\CrmBundle\Entity\Client:
     type: entity
+    repositoryClass: Application\CrmBundle\Entity\ClientRepository
     gedmo:
         loggable:
             logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry

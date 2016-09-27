@@ -47,10 +47,10 @@ class AppKernel extends Kernel
 
             ///media
             // ...
+            new Sonata\ClassificationBundle\SonataClassificationBundle(),
             new Sonata\MediaBundle\SonataMediaBundle(),
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
-
             new ApplicationMediaBundle(),
 
             new FOSUserBundle(),
@@ -58,8 +58,8 @@ class AppKernel extends Kernel
             new ApplicationUserBundle(),
 
             new ApplicationAdminBundle(),
-
             new Core\LoggableEntityBundle\CoreLoggableEntityBundle(),
+
             new Core\ToolsBundle\CoreToolsBundle(),
             new Octet\MessageBusBundle\OctetMessageBusBundle(),
             new SimpleBus\AsynchronousBundle\SimpleBusAsynchronousBundle(),
@@ -69,8 +69,8 @@ class AppKernel extends Kernel
 
             new Core\ObjectIdentityBundle\CoreObjectIdentityBundle(),
             new Application\ObjectIdentityBundle\ApplicationObjectIdentityBundle(),
-            new Octet\ReferenceObjectBundle\OctetReferenceObjectBundle(),
-            new Application\RedmineIntegrationBundle\ApplicationRedmineIntegrationBundle(),
+            //new Application\RedmineIntegrationBundle\ApplicationRedmineIntegrationBundle(),
+            new Application\ClassificationBundle\ApplicationClassificationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -129,6 +129,13 @@ $(function() {
 
         //Fix the fixed layout sidebar scroll bug
         fix_sidebar();
+
+        //Fire when wrapper is resized
+        $(window).load(function () {
+            setTimeout(function () {
+                fix_sidebar();
+            }, 1000);
+        });
     }
 });
 

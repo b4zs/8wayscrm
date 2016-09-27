@@ -4,7 +4,7 @@ services:
         class: Application\CrmBundle\Admin\ContactAdmin
         arguments: [~, Application\CrmBundle\Entity\Contact, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Contact Persons, show_in_dashboard: false }
+            - {name: sonata.admin, manager_type: orm, group: Contact Persons, label: Contact Persons}
 #
 
     application_crm.admin.address:
@@ -17,13 +17,13 @@ services:
         class: Application\CrmBundle\Admin\ClientAdmin
         arguments: [~, Application\CrmBundle\Entity\Client, ApplicationCrmBundle:ClientAdmin]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Clients }
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: application_crm.admin.client }
 
     application_crm.admin.supplier:
         class: Application\CrmBundle\Admin\SupplierAdmin
         arguments: [~, Application\CrmBundle\Entity\Supplier, ApplicationCrmBundle:ClientAdmin]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: Suppliers }
+            - {name: sonata.admin, manager_type: orm, group: Contact Manager, label: application_crm.admin.supplier }
 
     application_crm.admin.project:
         class: Application\CrmBundle\Admin\ProjectAdmin
@@ -42,7 +42,7 @@ services:
         calls:
             - [setContainer, [@service_container]]
         tags:
-            - { name: kernel.event_listener, event: menu.build.sonata_admin_sidebar, method: onAdminMenuBuild }
+            - { name: kernel.event_listener, event: sonata.admin.event.configure.menu.sidebar, method: onAdminMenuBuild }
 
     application_crm.admin.extension.owner_group_manager:
         class: Application\CrmBundle\Admin\Extension\OwnerGroupManagerExtension
@@ -60,8 +60,8 @@ services:
     application_crm.eventy_listener.owner_group_setter:
         class: Application\CrmBundle\EventListener\OwnerGroupSetterListener
         lazy: true
-        arguments:
-            - @application_crm.security.helper
+        calls:
+            - ['setContainer', ['@service_container']]
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
@@ -86,3 +86,33 @@ services:
             - [setContainer, [@service_container]]
         tags:
             - { name: command_handler, handles: octet_ticketing_send_reminder_notification, method: handleSendReminderNotificationCommand }
+
+    application_crm.admin.sector_of_activity:
+        class: Application\CrmBundle\Admin\SectorOfActivityAdmin
+        arguments: [~, Application\CrmBundle\Entity\SectorOfActivity, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: System, label: 'Sector Of Activity' }
+
+    application_crm.util.search.client_result_provider:
+        class: Application\CrmBundle\Util\Search\ClientResultProvider
+        arguments:
+            - @sonata.admin.pool
+        tags:
+            - { name: admin.result_provider, class: 'Application\CrmBundle\Entity\Client' }
+
+    application_crm.event.listener.admin_post_update:
+        class: Application\CrmBundle\EventListener\PostUpdateEventListener
+        arguments:
+          - '@core_object_identity.manager'
+        tags:
+          - {name: doctrine.event_listener, event: postUpdate, method: postUpdate}
+
+    application_crm.block.dashboard_clients:
+        class: Application\CrmBundle\Block\ClientsBlockService
+        arguments:
+            - 'application_crm.block.dashboard_clients'
+            - '@templating'
+            - '@doctrine.orm.entity_manager'
+            - '@sonata.admin.pool'
+        tags:
+            - { name: sonata.block }

@@ -70,6 +70,11 @@ Application\CrmBundle\Entity\AbstractClient:
             cascade: [all]
             gedmo:
                 - versioned
+        customProperties:
+            targetEntity: Application\CrmBundle\Entity\CustomProperty
+            mappedBy: client
+            cascade: ["all"]
+
     lifecycleCallbacks:
         prePersist: [updateFilesetName]
         preUpdate: [updateFilesetName]

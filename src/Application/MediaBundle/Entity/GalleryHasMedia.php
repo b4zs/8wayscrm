@@ -11,6 +11,7 @@
 
 namespace Application\MediaBundle\Entity;
 
+use Gedmo\Sortable\Sortable;
 use Sonata\MediaBundle\Entity\BaseGalleryHasMedia as BaseGalleryHasMedia;
 
 /**
@@ -21,7 +22,7 @@ use Sonata\MediaBundle\Entity\BaseGalleryHasMedia as BaseGalleryHasMedia;
  *
  * @author <yourname> <youremail>
  */
-class GalleryHasMedia extends BaseGalleryHasMedia
+class GalleryHasMedia extends BaseGalleryHasMedia implements Sortable
 {
     /**
      * @var integer $id
@@ -30,6 +31,7 @@ class GalleryHasMedia extends BaseGalleryHasMedia
 
     public function __construct()
     {
+        $this->position = 0;
         $this->enabled = true;
     }
 

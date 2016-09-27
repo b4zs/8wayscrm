@@ -1,0 +1,21 @@
+<div class="box box-success">
+    <div class="box-header">
+        <h4 class="box-title">{{ 'label.global_search'|trans }}</h4>
+    </div>
+    <div class="box-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form action="{{ url('sonata_admin_search') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="query" value="{{ app.request.get('query') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-flat" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+Application\CrmBundle\Entity\CustomProperty:
+  type: entity
+  table: crm__custom_property
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+
+  fields:
+    name:
+      type: string
+      lenght: 255
+      nullable: false
+
+    value:
+      type: text
+      nullable: true
+
+  oneToOne:
+    objectIdentity:
+      targetEntity: Application\ObjectIdentityBundle\Entity\ObjectIdentity
+      inversedBy: customProperty
+      cascade: ["all"]
+
+  manyToOne:
+    client:
+      targetEntity: Application\CrmBundle\Entity\AbstractClient
+      fetch: EXTRA_LAZY
+      cascade: ["all"]
+      inversedBy: customProperties

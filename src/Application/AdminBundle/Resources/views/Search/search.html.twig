@@ -1,0 +1,62 @@
+{% extends 'ApplicationAdminBundle::standard_layout.html.twig' %}
+
+{% block sonata_head_title %}
+    {{ 'Admin'|trans({}, 'SonataAdminBundle') }}
+{% endblock %}
+
+{% block sonata_breadcrumb %}
+    &nbsp;
+{% endblock sonata_breadcrumb %}
+
+{% block content %}
+
+    <div class="box box-success">
+        <div class="box-header">
+            <h4 class="box-title">{{ 'label.global_search'|trans }}: <b>{{ app.request.get('query') }}</b></h4>
+        </div>
+        <div class="box-body">
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                <form action="{{ url('sonata_admin_search') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="query" value="{{ app.request.get('query') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-flat" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                </div>
+            </div>
+
+            <div class="list-group">
+                {% for result in results if results|length > 0 %}
+
+                    {% if result.url %}
+                        <a href="{{ result.url }}" target="_blank" class="list-group-item">
+                    {% else %}
+                        <div class="list-group-item">
+                    {% endif %}
+                        <h4 class="list-group-item-heading">{{ result.title }}</h4>
+                        <p class="list-group-item-text">{{ result.description|truncate_html(160)|striptags|raw }}</p>
+                    {{ result.url ? '</a>' : '</div>' }}
+
+                {% else %}
+                    <div class="list-group-item list-group-item-warning">
+                        <h4 class="list-group-item-heading">{{ 'label.global_search.no_results'|trans }}</h4>
+                        <p class="list-group-item-text">{{ 'label.global_search.no_results_details'|trans({':term:': '<b>' ~ app.request.get('query') ~ '</b>' })|raw }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if results|length %}
+                {{ knp_pagination_render(results, 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig') }}
+            {% endif %}
+
+        </div>
+    </div>
+
+
+{% endblock %}

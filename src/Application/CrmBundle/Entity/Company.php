@@ -104,7 +104,7 @@ class Company
     /**
      * Get sectorOfActivity
      *
-     * @return string 
+     * @return string
      */
     public function getSectorOfActivity()
     {

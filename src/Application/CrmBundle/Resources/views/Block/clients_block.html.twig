@@ -1,0 +1,35 @@
+{% extends sonata_block.templates.block_base %}
+
+{% block block_class %} cms-clients-block{% if not block.hasParent() %} cms-container-root{%endif%}{% if settings.class %} {{ settings.class }}{% endif %}{% endblock %}
+
+{# render container block #}
+{% block block %}
+    <div class="box box-success">
+        <div class="box-header">
+            <h4 class="box-title">{{ 'label.block.clients.header'|trans }}</h4>
+        </div>
+        <div class="box-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{ 'label.block.clients.new_clients'|trans }}
+                </div>
+                <div class="panel-body">
+                    {{ 'label.block.clients.new_clients_details'|trans }}: {{ new_clients }}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{ 'label.block.clients.clients_by_status'|trans }}
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for key, status in client_statuses %}
+                            <li><a href="{{ admin.generateUrl('list', {filter: {status: {type: '', value: { 0:key }}}}) }}">{{ status }}</a>: {{ attribute(client_counts, key) }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

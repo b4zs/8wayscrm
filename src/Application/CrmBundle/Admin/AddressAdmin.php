@@ -23,7 +23,7 @@ class AddressAdmin extends Admin
             ->add('state')
             ->add('city')
             ->add('street')
-            ->add('streetNumber')
+            /*->add('streetNumber')*/
         ;
     }
 
@@ -38,7 +38,7 @@ class AddressAdmin extends Admin
             ->add('state')
             ->add('city')
             ->add('street')
-            ->add('streetNumber')
+            /*->add('streetNumber')*/
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -62,9 +62,9 @@ class AddressAdmin extends Admin
             ->add('street', null, array(
                 'required' => false,
             ))
-            ->add('streetNumber', null, array(
+            /*->add('streetNumber', null, array(
                 'required' => false,
-            ))
+            ))*/
             ->add('postalCode', null, array(
                 'required' => false,
             ))
@@ -94,7 +94,6 @@ class AddressAdmin extends Admin
                 'required' => false,
                 'choices'  => AddressType::getChoices(),
                 'label'    => 'Address type',
-                'required' => false,
             ))
 
 //            ->add('name', null, array(
@@ -114,7 +113,7 @@ class AddressAdmin extends Admin
             ->add('state')
             ->add('city')
             ->add('street')
-            ->add('streetNumber')
+            /*->add('streetNumber')*/
         ;
     }
 }

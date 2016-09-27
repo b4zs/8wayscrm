@@ -2,28 +2,24 @@
 
 namespace Application\CrmBundle\Admin;
 
-use Application\CrmBundle\Entity\Address;
-use Application\CrmBundle\Entity\Company;
-use Application\CrmBundle\Entity\Contact;
-use Application\CrmBundle\Entity\Individual;
-use Application\CrmBundle\Entity\AbstractClient;
-use Application\CrmBundle\Entity\Person;
-use Application\CrmBundle\Entity\Project;
-use Application\CrmBundle\Enum\ClientStatus;
-use Application\CrmBundle\Enum\Country;
-use Application\CrmBundle\Enum\SectorOfActivity;
-use Application\UserBundle\Entity\User;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Doctrine\ORM\EntityRepository;
-use Knp\Menu\ItemInterface as MenuItemInterface;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Application\CrmBundle\Entity\Address;
+use Application\CrmBundle\Entity\Contact;
+use Application\CrmBundle\Entity\AbstractClient;
+use Application\CrmBundle\Enum\ClientStatus;
+use Application\CrmBundle\Enum\Country;
+use Application\CrmBundle\Form\CustomPropertyType;
+use Application\UserBundle\Entity\User;
 
 class ClientAdmin extends Admin
 {
@@ -35,15 +31,49 @@ class ClientAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+            ->add('quicksearch', 'doctrine_orm_callback', array(
+                'callback' => function($queryBuilder, $alias, $field, $value){
+                    if(null !== $value['value']) {
+                        $matchedOids = $this
+                            ->getConfigurationPool()
+                            ->getContainer()
+                            ->get('doctrine.orm.default_entity_manager')
+                            ->getRepository('ApplicationObjectIdentityBundle:ObjectIdentity')
+                            ->createFulltextSearchQueryBuilder($value['value'])
+                            ->andWhere('oid.type = :type')
+                            ->setParameter('type', 'abstractclient')
+                            ->getQuery()
+                            ->getResult();
+
+                        $oid = array();
+
+                        foreach ($matchedOids as $matchedOid) {
+                            $oid[] = $matchedOid['objectIdentity']->getId();
+                        }
+
+                        /** @var QueryBuilder $query */
+                        $aliases = $queryBuilder->getRootAliases();
+                        $queryBuilder->andWhere(sprintf('%s.objectIdentity IN (:oids)', current($aliases)));
+                        $queryBuilder->setParameter('oids', $oid);
+                    }
+
+                }
+            ), 'text', array(
+                'label' => false,
+                'attr' => array(
+                    'placeholder' => 'Quick search'
+                )
+            ))
             ->add('company', 'doctrine_orm_callback', array(
                 'callback' => function($queryBuilder, $alias, $field, $value){
-                    $aliases = $queryBuilder->getRootAliases();
-                    $value = is_array($value) ? $value['value'] : null;
-                    $queryBuilder
-                        ->andWhere(current($aliases).'.company.name LIKE :company_filter')
-                        ->setParameter('company_filter', '%'.$value.'%');
+                    if(null !== $value['value']) {
+                        $aliases = $queryBuilder->getRootAliases();
+                        $queryBuilder
+                            ->andWhere(current($aliases).'.company.name LIKE :company_filter')
+                            ->setParameter('company_filter', '%'.$value['value'].'%');
+                    }
                 }
-            ))
+            ), 'text')
             ->add(
                 'status',
                 'doctrine_orm_choice',
@@ -54,6 +84,43 @@ class ClientAdmin extends Admin
                 array('choices' => ClientStatus::getChoices(), 'multiple' => true,)
             )
             ->add('owner')
+            ->add('country', 'doctrine_orm_callback', array(
+                'callback' => function($queryBuilder, $alias, $field, $value){
+                    /** @var QueryBuilder $queryBuilder */
+                    if(null !== $value['value']) {
+                        $aliases = $queryBuilder->getRootAliases();
+                        $queryBuilder->join(sprintf('%s.addresses', current($aliases)), 'country');
+                        $queryBuilder
+                            ->andWhere('country.country = :country')
+                            ->setParameter('country', $value['value']);
+                    }
+                }
+            ), 'country')
+            ->add('city', 'doctrine_orm_callback', array(
+                'callback' => function($queryBuilder, $alias, $field, $value){
+                    /** @var QueryBuilder $queryBuilder */
+                    if(null !== $value['value']) {
+                        $aliases = $queryBuilder->getRootAliases();
+                        $queryBuilder->join(sprintf('%s.addresses', current($aliases)), 'city');
+                        $queryBuilder
+                            ->andWhere('city.city = :city')
+                            ->setParameter('city', $value['value']);
+                    }
+                }
+            ), 'text')
+            ->add('sectorOfActivity', 'doctrine_orm_callback', array(
+                'callback' => function($queryBuilder, $alias, $field, $value){
+                    /** @var QueryBuilder $queryBuilder */
+                    if(null !== $value['value']) {
+                        $aliases = $queryBuilder->getRootAliases();
+                        $queryBuilder
+                            ->andWhere(sprintf('%s.company.sectorOfActivity = :soa', current($aliases)))
+                            ->setParameter('soa', $value['value']);
+                    }
+                }
+            ), 'choice', array(
+                'choices' => $this->buildSectorOfActivityChoices()
+            ))
         ;
     }
 
@@ -79,7 +146,7 @@ class ClientAdmin extends Admin
             ))
             ->add('_action', 'actions', array(
                 'actions' => array(
-                    'edit' => array(),
+                    'show' => array(),
                     'delete' => array(),
                 )
             ))
@@ -104,6 +171,8 @@ class ClientAdmin extends Admin
             $formMapper->add('status', 'choice', array(
                 'required'  => false,
                 'choices'   => ClientStatus::getChoices(),
+                'expanded'  => false,
+                'multiple'  => false
             ));
             $formMapper->add('owner', 'sonata_type_model_list', array(
                 'required'  => false,
@@ -120,14 +189,22 @@ class ClientAdmin extends Admin
             $formMapper->add('referral', 'text', array(
                 'required'  => false,
             ));
-            $formMapper->add('financialInformation', 'textarea', array(
+            $formMapper->add('customProperties', 'sonata_type_native_collection', array(
+                'type' => new CustomPropertyType(),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'required' => false,
+                'by_reference' => false
+            ));
+            /*$formMapper->add('financialInformation', 'textarea', array(
                 'required'  => false,
                 'attr'      => array('rows' => '9'),
-            ));
+            ));*/
+
         $formMapper->end();
 
-
-        $formMapper->with('Contact ', array('class' => 'col-md-12',));
+        if($this->getSubject()->getContacts()->count() > 0) {
+            $formMapper->with('Contact ', array('class' => 'col-md-12',));
             $formMapper->add('contacts', 'sonata_type_collection', array(
                 'label'         => false,
                 'by_reference'  => false,
@@ -138,7 +215,8 @@ class ClientAdmin extends Admin
                     'parent_admin'  => 'client',
                 ),
             ));
-        $formMapper->end();
+            $formMapper->end();
+        }
 
         $formMapper->with('Addresses', array('class' => 'col-md-12',));
             $formMapper->add('addresses', 'sonata_type_collection', array(
@@ -169,7 +247,7 @@ class ClientAdmin extends Admin
         $formMapper->with('Files');
             $formMapper->add('fileset.galleryHasMedias', 'sonata_type_collection', array(
                 'label'                 => false,
-                'by_reference'          => false,
+                'by_reference'          => true,
                 'cascade_validation'    => true,
             ), array(
                 'edit'              => 'inline',
@@ -186,12 +264,47 @@ class ClientAdmin extends Admin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
+        $showMapper->with('Company', array('class' => 'col-md-7',));
         $showMapper
-            ->add('id')
-            ->add('financialInformation')
-            ->add('status')
-            ->add('createdAt')
+            ->add('company.name')
+            ->add('company.sectorOfActivity', 'choice', array(
+                'choices' => $this->buildSectorOfActivityChoices(),
+            ))
+            ->add('company.country')
+            ->add('company.website')
+            ->add('company.email')
+            ->add('company.phone1')
+            ->add('company.phone2')
+            ->add('company.fax')
         ;
+        $showMapper->end();
+
+        $showMapper->with('Management', array('class' => 'col-md-5',));
+        $showMapper->add('status', 'choice', array(
+            'choices'   => ClientStatus::getChoices(),
+        ));
+        $showMapper->add('owner');
+        $showMapper->add('projectManager');
+        $showMapper->add('referral');
+        $showMapper->add('financialInformation');
+        $showMapper->end();
+
+
+        $showMapper->with('Contact ', array('class' => 'col-md-12',));
+        $showMapper->add('contacts');
+        $showMapper->end();
+
+        $showMapper->with('Addresses', array('class' => 'col-md-12',));
+        $showMapper->add('addresses');
+        $showMapper->end();
+
+        $showMapper->with('Projects');
+        $showMapper->add('projects');
+        $showMapper->end();
+
+        $showMapper->with('Files');
+        $showMapper->add('fileset.galleryHasMedias');
+        $showMapper->end();
     }
 
     public function getNewInstance()
@@ -212,19 +325,6 @@ class ClientAdmin extends Admin
 
 
         return $instance;
-    }
-
-    protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
-    {
-        parent::configureTabMenu($menu, $action, $childAdmin);
-    }
-
-    /**
-     * @return AbstractClient|null
-     */
-    public function getSubject()
-    {
-        return parent::getSubject(); // TODO: Change the autogenerated stub
     }
 
     public function getTemplate($name)
@@ -291,6 +391,7 @@ class ClientAdmin extends Admin
 
     public function isGranted($name, $object = null)
     {
+
         return parent::isGranted($name, $object)
         && (
             (in_array($name, array('EDIT', 'SHOW', 'DELETE')) && $object)
@@ -316,4 +417,25 @@ class ClientAdmin extends Admin
 
         return $choices;
     }
+
+    public function getExportFields()
+    {
+        return array(
+            'company.name',
+            'status',
+            'company.country',
+            'company.website',
+            'company.phone1',
+            'company.phone2',
+            'company.sectorOfActivity',
+            'owner.fullName',
+            'getFirstContact.person.gender',
+            'getFirstContact.title',
+            'getFirstContact.person.fullName',
+            'getFirstContact.person.companyEmail',
+            'getFirstContact.person.companyPhone',
+        );
+    }
+
+
 }

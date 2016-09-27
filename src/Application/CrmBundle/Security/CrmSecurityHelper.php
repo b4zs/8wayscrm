@@ -80,7 +80,9 @@ class CrmSecurityHelper
 		if ($this->tokenStorage->getToken() && $user = $this->tokenStorage->getToken()->getUser()) {
 			if ($user instanceof User) {
 				$groups = $user->getGroups()->toArray();
-				$groups[] = $user->getPrimaryGroup();
+                if(null !== $user->getPrimaryGroup()) {
+                    $groups[] = $user->getPrimaryGroup();
+                }
 				return array_unique($groups);
 			}
 		}

@@ -13,6 +13,7 @@ use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
 use Core\ObjectIdentityBundle\Model\ObjectIdentityInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +21,7 @@ use FOS\UserBundle\Model\GroupInterface;
 use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
 class AbstractClient implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
+
 {
     use ObjectIdentityAwareTrait;
 
@@ -102,17 +104,23 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware, ObjectIdenti
     protected $groups;
 
     /**
+     * @var ArrayCollection|CustomProperty[]
+     */
+    protected $customProperties;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->company = new Company();
-        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->createdAt = new \DateTime();
-        $this->fileset = new Gallery();
+        $this->company          = new Company();
+        $this->projects         = new ArrayCollection();
+        $this->contacts         = new ArrayCollection();
+        $this->addresses        = new ArrayCollection();
+        $this->groups           = new ArrayCollection();
+        $this->customProperties = new ArrayCollection();
+        $this->createdAt        = new \DateTime();
+        $this->fileset          = new Gallery();
         $this->initObjectIdentity();
     }
 
@@ -277,6 +285,14 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware, ObjectIdenti
     public function getContacts()
     {
         return $this->contacts;
+    }
+
+    public function getFirstContact() {
+        if($this->contacts->count() > 0) {
+            return $this->contacts->current();
+        }
+
+        return null;
     }
 
     function __toString()
@@ -464,5 +480,49 @@ class AbstractClient implements LogExtraDataAware, OwnerGroupAware, ObjectIdenti
     public function getCanonicalName()
     {
         return $this->getCompany()->getName();
+    }
+
+    public function getGalleryHasMedias() {
+        return $this->fileset->getGalleryHasMedias();
+    }
+
+    public function removeGalleryHasMedia(GalleryHasMediaInterface $galleryHasMedia) {
+        if($this->fileset->getGalleryHasMedias()->contains($galleryHasMedia)) {
+            $this->fileset->getGalleryHasMedias()->removeElement($$galleryHasMedia);
+        }
+    }
+
+    /**
+     * @return CustomProperty[]|ArrayCollection
+     */
+    public function getCustomProperties()
+    {
+        return $this->customProperties;
+    }
+
+    /**
+     * @param CustomProperty[]|ArrayCollection $customProperties
+     */
+    public function setCustomProperties($customProperties)
+    {
+        $this->customProperties = new ArrayCollection();
+
+        foreach($customProperties as $customProperty) {
+            $this->addCustomProperty($customProperty);
+        }
+    }
+
+    public function addCustomProperty(CustomProperty $customProperty) {
+        if(!$this->customProperties->contains($customProperty)) {
+            $this->customProperties->add($customProperty);
+            $customProperty->setClient($this);
+        }
+    }
+
+    public function removeCustomProperty(CustomProperty $customProperty) {
+        if($this->customProperties->contains($customProperty)) {
+            $this->customProperties->removeElement($customProperty);
+            $customProperty->setClient(null);
+        }
     }
 }

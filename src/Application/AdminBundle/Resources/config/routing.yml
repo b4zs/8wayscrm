@@ -1,0 +1,3 @@
+sonata_admin_search:
+  pattern: /admin/search
+  defaults: {_controller: ApplicationAdminBundle:Search:search, q: ~}

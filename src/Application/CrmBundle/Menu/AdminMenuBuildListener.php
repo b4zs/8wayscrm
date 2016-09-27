@@ -7,6 +7,7 @@ use Application\CrmBundle\Admin\ProjectAdmin;
 use Application\CrmBundle\Enum\ClientStatus;
 use Application\CrmBundle\Enum\ProjectStatus;
 use Knp\Menu\MenuItem;
+use Sonata\AdminBundle\Event\ConfigureMenuEvent;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -16,24 +17,29 @@ class AdminMenuBuildListener extends ContainerAware
 	private $createdMenuItems = array();
 
 	const CONTACT_MANAGER = 'Contact Manager';
+	const CONTACT_PERSON  = 'Contact Persons';
 
-	public function onAdminMenuBuild(GenericEvent $event)
+	public function onAdminMenuBuild(ConfigureMenuEvent $event)
 	{
 		/** @var MenuItem $menu */
-		$menu = $event->getSubject();
+		$menu = $event->getMenu();
 
-		$this->addTeamMenu($menu);
+        if($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $this->addTeamMenu($menu);
+        }
 		$this->modifyClientsMenu($menu);
 		$this->modifySuppliersMenu($menu);
-		$this->reorderContactManager($menu);
+		$this->modifyContactManager($menu);
 		$this->modifyProjectsMenu($menu);
+		$this->modifyContactPersons($menu);
 
+        $this->removeClassificationMenu($menu);
 		if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
 			$this->removeMediaLibrary($menu);
-			$this->removeUsers($menu);
-			$this->removeSystemTables($menu);
-		}
-
+            $this->removeSystemTables($menu);
+        }
+        $this->removeUsers($menu);
+        $this->reorderMenu($menu);
 		$this->markActiveMenuItem();
 	}
 
@@ -45,6 +51,10 @@ class AdminMenuBuildListener extends ContainerAware
 		$menuFactory = $this->container->get('knp_menu.factory');
 		return $menuFactory;
 	}
+
+	protected function trans($item) {
+	    return $this->container->get('translator')->trans($item);
+    }
 
 	protected function modifyContactManagerMenu(MenuItem $menu)
 	{
@@ -214,6 +224,11 @@ class AdminMenuBuildListener extends ContainerAware
 		$menu->removeChild('sonata_media');
 	}
 
+    private function removeClassificationMenu(MenuItem $menu)
+    {
+        $menu->removeChild('sonata_classification');
+    }
+
 	private function removeUsers(MenuItem $menu)
 	{
 		$menu->removeChild('sonata_user');
@@ -229,15 +244,14 @@ class AdminMenuBuildListener extends ContainerAware
 		$adminCode = 'sonata.user.admin.user';
 		$admin = $this->container->get($adminCode);
 
-		$userItem = $menu->getChild('sonata_user') ? $menu->getChild('sonata_user')->getChild($adminCode) : null;
+		$userItem = $menu->getChild('sonata_user') ? $menu->getChild('sonata_user')->getChild('users') : null;
 		if ($userItem instanceof MenuItem && $admin->isGranted('LIST')) {
-			$contactManagerItem = $menu->getChild(self::CONTACT_MANAGER);
 			$teamItem = clone $userItem;
 			$teamItem->setName($adminCode.'.team');
 			$teamItem->setLabel('Team');
 			$teamItem->setParent(null);
 			$teamItem->setExtra('icon', 'fa fa-user');
-			$this->createdMenuItems[$adminCode] = $contactManagerItem->addChild($teamItem);
+			$this->createdMenuItems[$adminCode] = $menu->addChild($teamItem);
 
 			$this->createdMenuItems[$adminCode.'#create'] = $createItem = $this->getKnpMenuFactory()->createItem('sonata.user.admin.user.team.create', array(
 				'uri'   => $admin->generateUrl('create'),
@@ -248,11 +262,11 @@ class AdminMenuBuildListener extends ContainerAware
 				)
 			));
 			$createItem->setExtra('icon', 'fa fa-plus  fa-fw');
-			$contactManagerItem->addChild($createItem);
+            $teamItem->addChild($createItem);
 		}
 	}
 
-	private function reorderContactManager(MenuItem $menu)
+	private function modifyContactManager(MenuItem $menu)
 	{
 		$contactManagerItem = $menu->getChild(self::CONTACT_MANAGER);
 		if ($contactManagerItem) {
@@ -262,7 +276,18 @@ class AdminMenuBuildListener extends ContainerAware
 				'application_crm.admin.client',
 				'application_crm.admin.supplier',
 			), array_keys($contactManagerItem->getChildren())));
-		}
+
+            $children = $contactManagerItem->getChildren();
+
+            foreach ($children as $child) {
+                $item = $child->copy();
+                $contactManagerItem->removeChild($child);
+                $item->setLabel($this->trans($item->getLabel()));
+                $menu->addChild($item);
+            }
+
+            $menu->removeChild($contactManagerItem->getName());
+        }
 	}
 
 	private function isGranted($role)
@@ -279,8 +304,45 @@ class AdminMenuBuildListener extends ContainerAware
 			$mainAdminItem = $contactManagerItem->getChild($adminCode);
 			$mainAdminItem->setExtra('icon', 'fa fa-support');
 		}
-
 	}
+
+	private function modifyContactPersons(MenuItem $menuItem) {
+	    $contactPersonsMenu = $menuItem->getChild(self::CONTACT_PERSON);
+        if($contactPersonsMenu) {
+            $children = $contactPersonsMenu->getChildren();
+            foreach ($children as $child) {
+                $item = $child->copy();
+                $contactPersonsMenu->removeChild($child);
+                $item->setExtra('icon', 'fa fa-users');
+                $menuItem->addChild($item);
+            }
+        }
+    }
+
+	private function reorderMenu(MenuItem $menuItem) {
+
+	    $priorityArr = array(
+            'application_crm.admin.client',
+            'application_crm.admin.supplier',
+            'Projects',
+        );
+
+        if($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $priorityArr[] = 'sonata.user.admin.user.team';
+        }
+
+        $menuItem->reorderChildren(
+            array_merge(
+                $priorityArr,
+                array_diff(
+                    array_keys(
+                        $menuItem->getChildren()
+                    ),
+                    $priorityArr
+                )
+            )
+        );
+    }
 
 
 }

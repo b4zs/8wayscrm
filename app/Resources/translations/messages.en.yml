@@ -1,0 +1,10 @@
+'label.global_search': 'Search'
+'application_crm.admin.client': 'Clients'
+'application_crm.admin.supplier': 'Suppliers'
+'label.global_search.no_results': 'No results'
+'label.global_search.no_results_details': 'No results for the keyword'
+
+'label.block.clients.header': 'Clients'
+'label.block.clients.new_clients': 'New clients'
+'label.block.clients.new_clients_details': 'New clients on this week'
+'label.block.clients.clients_by_status': 'Clients by status'

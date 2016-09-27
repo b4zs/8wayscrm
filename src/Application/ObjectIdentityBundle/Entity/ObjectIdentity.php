@@ -3,19 +3,14 @@
 namespace Application\ObjectIdentityBundle\Entity;
 
 use Application\CrmBundle\Entity\Client;
+use Application\CrmBundle\Entity\CustomProperty;
 use Application\CrmBundle\Entity\Project;
 use Application\CrmBundle\Entity\Supplier;
 use Application\UserBundle\Entity\User;
-use Octet\Ticketing\Bundle\Entity\NoteRelatedTrait;
-use Octet\Ticketing\Bundle\Entity\ReminderRelatedTrait;
 
 class ObjectIdentity
 	extends \Core\ObjectIdentityBundle\Entity\ObjectIdentity
-	implements
-		\Octet\Ticketing\Lib\Model\NoteRelatedInterface
 {
-	use ReminderRelatedTrait;
-	use NoteRelatedTrait;
 
 	protected $id;
 
@@ -30,6 +25,11 @@ class ObjectIdentity
 
 	/** @var  User */
 	protected $user;
+
+    /**
+     * @var CustomProperty
+     */
+    protected $customProperty;
 
 	public function getId()
 	{
@@ -76,5 +76,20 @@ class ObjectIdentity
 		$this->supplier = $supplier;
 	}
 
+    /**
+     * @return CustomProperty
+     */
+    public function getCustomProperty()
+    {
+        return $this->customProperty;
+    }
+
+    /**
+     * @param CustomProperty $customProperty
+     */
+    public function setCustomProperty(CustomProperty $customProperty)
+    {
+        $this->customProperty = $customProperty;
+    }
 
 }
