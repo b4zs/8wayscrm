@@ -18,7 +18,7 @@ class FixNoteRelatedObjectsCommand extends AbstractTicketingMigrateCommand
         $notes = $this->getDoctrine()->getRepository('OctetTicketingBundle:Note')->findAll();
 
         foreach ($notes as $note) {
-            $author_id = $this->getPdo()->query(sprintf('SELECT author FROM %s WHERE id = %d', static::NOTE_TEMP_TABLE, $note->getId()))->fetch(\Pdo::FETCH_COLUMN);
+            $author_id = $this->getPdo()->query(sprintf('SELECT author FROM %s WHERE 0id = %d', static::NOTE_TEMP_TABLE, $note->getId()))->fetch(\Pdo::FETCH_COLUMN);
             $createdAt = $this->getPdo()->query(sprintf('SELECT created_at FROM %s WHERE id = %d', static::NOTE_TEMP_TABLE, $note->getId()))->fetch(\Pdo::FETCH_COLUMN);
 
             $user = $this->getDoctrine()->getRepository('ApplicationUserBundle:User')->find($author_id);

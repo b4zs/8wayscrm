@@ -10,6 +10,7 @@ abstract class AbstractTicketingMigrateCommand extends ContainerAwareCommand
 
     const NOTE_OID_TEMP_TABLE = 'temp__note_reletad_oid';
     const NOTE_TEMP_TABLE = 'temp__note';
+    const REMINDER_TEMP_TABLE = 'temp__reminder';
 
     /**
      * @return \Doctrine\Bundle\DoctrineBundle\Registry|object

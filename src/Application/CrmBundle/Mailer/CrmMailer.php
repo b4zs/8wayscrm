@@ -2,9 +2,9 @@
 
 namespace Application\CrmBundle\Mailer;
 
+use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
 use Doctrine\Common\Util\ClassUtils;
 use FOS\UserBundle\Model\UserInterface;
-use Octet\Ticketing\Bundle\Entity\NoteRelatedObject;
 use Octet\Ticketing\Lib\Message\Command\SendReminderNotificationCommand;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
@@ -12,21 +12,25 @@ class CrmMailer extends ContainerAware
 {
 	public function handleSendReminderNotificationCommand(SendReminderNotificationCommand $command)
 	{
-		$this->setupRouter();
-		$relatedObjects = array();
-		/** @var NoteRelatedObject $reminderHasRelatedObject */
-		foreach ($command->getReminder()->getNote()->getRelatedObjects() as $noteHasRelatedObject) {
-			$object = $noteHasRelatedObject->getObject();
+        $this->setupRouter();
+        $relatedObjects = array();
+        /** @var ObjectIdentityAware $reminderHasRelatedObject */
+
+        foreach ($command->getSubject()->getNote()->getRelatedObjects() as $noteHasRelatedObject) {
 			$relatedObjects[] = array(
-				'url'   => $this->getAdminPool()->getAdminByClass(ClassUtils::getClass($object))->generateObjectUrl('edit', $object, array(), true),
-				'title' => (string)$object,
+				'url'   => $this->getAdminPool()->getAdminByClass(ClassUtils::getClass($noteHasRelatedObject))->generateObjectUrl('edit', $noteHasRelatedObject, array(), true),
+				'title' => (string)$noteHasRelatedObject,
 			);
 		}
 
-		$this->sendMailTemplate($command->getReminder()->getAssignee(), 'ApplicationCrmBundle:Email:reminder_notification.html.twig', array(
-			'reminder'          => $command->getReminder(),
-			'user'              => $command->getReminder()->getAssignee(),
-			'note_admin'        => $this->getAdminPool()->getAdminByClass(ClassUtils::getClass($command->getReminder()->getNote())),
+		if(null !== $command->getSubject()->getAssignee()) {
+
+        }
+
+		$this->sendMailTemplate($command->getSubject()->getAssignee(), 'ApplicationCrmBundle:Email:reminder_notification.html.twig', array(
+			'reminder'          => $command->getSubject(),
+			'user'              => $command->getSubject()->getAssignee(),
+			'note_admin'        => $this->getAdminPool()->getAdminByClass(ClassUtils::getClass($command->getSubject()->getNote())),
 			'related_objects'   => $relatedObjects,
 		));
 	}
