@@ -23,8 +23,8 @@ class CrmMailer extends ContainerAware
 			);
 		}
 
-		if(null !== $command->getSubject()->getAssignee()) {
-
+		if(null === $command->getSubject()->getAssignee()) {
+            return;
         }
 
 		$this->sendMailTemplate($command->getSubject()->getAssignee(), 'ApplicationCrmBundle:Email:reminder_notification.html.twig', array(
