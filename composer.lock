@@ -2801,12 +2801,12 @@
             "source": {
                 "type": "git",
                 "url": "http://gitlab.assist01.gbart.h3.hu/octet/ticketing.git",
-                "reference": "8f698b9643931a3c6158f32e690f72411fab1121"
+                "reference": "e0d548d771ea5e2431c6d10dfb1e1e958001a017"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://composer.assist01.gbart.h3.hu/repo/private/dists/octet/ticketing/1.0.9999999.9999999-dev/8f698b9643931a3c6158f32e690f72411fab1121.zip",
-                "reference": "8f698b9643931a3c6158f32e690f72411fab1121",
+                "url": "http://composer.assist01.gbart.h3.hu/repo/private/dists/octet/ticketing/1.0.9999999.9999999-dev/e0d548d771ea5e2431c6d10dfb1e1e958001a017.zip",
+                "reference": "e0d548d771ea5e2431c6d10dfb1e1e958001a017",
                 "shasum": null,
                 "mirrors": [
                     {
@@ -2853,7 +2853,7 @@
                 "task",
                 "ticket"
             ],
-            "time": "2016-09-22 12:13:14"
+            "time": "2016-09-29 10:43:27"
         },
         {
             "name": "paragonie/random_compat",
