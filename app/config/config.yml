@@ -104,6 +104,8 @@ sonata_admin:
     security:
       handler: sonata.admin.security.handler.role
     title: %sonata_admin.title%
+    options:
+      title_mode: single_image
     title_logo: bundles/applicationadmin/img/logo.png
     templates:
       dashboard: SonataAdminBundle:Core:dashboard.html.twig

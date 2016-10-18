@@ -1,0 +1,13 @@
+/*** Project variables ***/
+
+$screen-xl-min: 1500px;
+$screen-lg-max: 1920px;
+$screen-lg-min: 1200px;
+$screen-md-max: 1199px;
+$screen-md-min: 990px;
+$screen-sm-max: 989px;
+$screen-sm-min: 768px;
+$screen-xs-max: 767px;
+$screen-xs-min: 320px;
+
+@mixin project-default-transition()			{ @include css3-transition(all, 0.5s, ease); } // USE THIS: @include project-default-transition();

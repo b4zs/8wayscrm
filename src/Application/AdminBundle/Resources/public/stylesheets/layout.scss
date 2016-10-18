@@ -1,0 +1,135 @@
+.skin-black .sidebar span{
+    color: #eee;
+}
+
+a.logo {
+    background-color: #333!important;
+}
+
+ul.sidebar-menu > li {
+    padding-top: 0.5em!important;
+}
+
+ul.sidebar-menu > li > span,
+ul.sidebar-menu > li > a {
+    font-size: 1.1em;
+    padding-left: 1em;
+}
+
+ul.sidebar-menu li.current > span,
+ul.sidebar-menu li.current > a {
+    color: #fff;
+    font-weight: bold;
+}
+
+ul.sidebar-menu li.sidemenu-pull-right {
+    margin-top: -1.35em;
+    margin-right: 1em;
+}
+
+ul.sidebar-menu li.sidemenu-pull-right.sidemenu-pull-up {
+    margin-top: -2.30em;
+}
+
+ul.sidebar-menu li.sidemenu-pull-right a:hover {
+    background-color: #000000;
+}
+
+.box-danger > .box.box-success {
+    border-top-color: #f56954;
+}
+
+.sonata-filter-form-navbar {
+    padding-top: 10px;
+}
+
+.sonata-filter-form-navbar input,
+.sonata-filter-form-navbar .btn {
+    margin-left: 10px;
+}
+.sonata-filter-form-navbar button.btn {
+    margin-left: 20px;
+}
+
+.form-actions.stuck{
+    width: auto !important;
+    right: 0;
+}
+
+.sonata-reskin{
+	@import "project-mixins-css3";
+	@import "project-variables";
+
+	// mobile
+	@media (max-width: $screen-xs-max) {
+
+		&.sidebar-open{
+			overflow: hidden;
+		}
+	}
+
+	a,
+	.btn,
+	.form-control{
+		@include project-default-transition();
+	}
+
+    .logo{
+        width: 231px;
+
+        img{
+            display: inline-block;
+        }
+    }
+
+	.sidebar{
+
+		// mobile + tablet
+		@media (max-width: $screen-md-max) {
+			overflow-y: scroll !important;
+			-webkit-overflow-scrolling: touch !important;
+		}
+	}
+
+    .sidebar-menu{
+
+        > li{
+            position: relative;
+
+            a{
+				display: inline-block;
+                position: static;
+                line-height: 40px;
+
+                // desktop
+                @media (min-width: $screen-lg-min) {
+                	&:hover,
+                	&:focus {
+                		color: #FFFFFF;
+                	}
+                }
+            }
+        }
+
+        .fa-plus{
+             position: absolute;
+             top: 32px;
+             right: 15px;
+        }
+    }
+
+	.form-actions.stuck{
+		bottom: 36px;
+	}
+
+	.sidebar{
+
+		&-menu{
+
+			// mobile + tablet
+			@media (max-width: $screen-md-max) {
+				margin-bottom: 72px;
+			}
+		}
+	}
+}
