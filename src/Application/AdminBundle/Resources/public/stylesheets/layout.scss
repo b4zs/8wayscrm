@@ -89,40 +89,6 @@ ul.sidebar-menu li.sidemenu-pull-right a:hover {
 			overflow-y: scroll !important;
 			-webkit-overflow-scrolling: touch !important;
 		}
-	}
-
-    .sidebar-menu{
-
-        > li{
-            position: relative;
-
-            a{
-				display: inline-block;
-                position: static;
-                line-height: 40px;
-
-                // desktop
-                @media (min-width: $screen-lg-min) {
-                	&:hover,
-                	&:focus {
-                		color: #FFFFFF;
-                	}
-                }
-            }
-        }
-
-        .fa-plus{
-             position: absolute;
-             top: 32px;
-             right: 15px;
-        }
-    }
-
-	.form-actions.stuck{
-		bottom: 36px;
-	}
-
-	.sidebar{
 
 		&-menu{
 
@@ -130,6 +96,51 @@ ul.sidebar-menu li.sidemenu-pull-right a:hover {
 			@media (max-width: $screen-md-max) {
 				margin-bottom: 72px;
 			}
+
+			> li{
+				position: relative;
+
+				a{
+					display: block;
+					position: static;
+					line-height: 30px;
+
+					// mobile + tablet
+					@media (max-width: $screen-md-max) {
+						line-height: 40px;
+					}
+
+					// desktop
+					@media (min-width: $screen-lg-min) {
+						&:hover,
+						&:focus {
+							color: #FFFFFF;
+						}
+					}
+				}
+			}
+
+			.fa-plus{
+				position: absolute;
+				right: 15px;
+				top: 27px;
+
+				// mobile + tablet
+				@media (max-width: $screen-md-max) {
+					top: 32px;
+				}
+			}
+		}
+	}
+
+	.form-actions.stuck{
+		bottom: 36px;
+	}
+
+	.navbar{
+
+		&-right{
+			padding-right: 15px;
 		}
 	}
 }
