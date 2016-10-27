@@ -9,6 +9,8 @@ body.login{
     background-size: cover;
 }
 
+
+
 body.login,
 body.login .content{
     margin: 0;
@@ -41,4 +43,8 @@ body.login .content div.login .logo h1{
 body.login .content div.login .alert {
     padding: 15px;
     margin: 0 0 20px 0;
+}
+
+body.login .wrapper {
+    background-color: transparent;
 }
