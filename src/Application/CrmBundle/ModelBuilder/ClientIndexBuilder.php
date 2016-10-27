@@ -20,7 +20,7 @@ class ClientIndexBuilder extends ChainableModelBuilder
             $data = array();
 
             if($source->getOwner() instanceof UserInterface){
-                $data['owner'] = $source->getOwner()->getUsername();
+                $data['owner'] = $source->getOwner()->getFullname();
             }
 
             if($source->getProjectManager() instanceof UserInterface){
