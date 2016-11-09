@@ -92,6 +92,17 @@ ul.sidebar-menu li.sidemenu-pull-right a:hover {
 
 		&-menu{
 
+			max-height: calc(100vh - 50px);
+			overflow: auto;
+
+			// desktop
+			@media (min-width: $screen-lg-min) {
+				&:hover,
+				&:focus {
+					overflow: auto;
+				}
+			}
+
 			// mobile + tablet
 			@media (max-width: $screen-md-max) {
 				margin-bottom: 72px;
