@@ -75,6 +75,7 @@ ul.sidebar-menu li.sidemenu-pull-right a:hover {
 	}
 
     .logo{
+		position: fixed;
         width: 231px;
 
         img{
@@ -83,6 +84,11 @@ ul.sidebar-menu li.sidemenu-pull-right a:hover {
     }
 
 	.sidebar{
+
+		.octet-notes--controls--title{
+			font-size: 14px;
+			line-height: 34px;
+		}
 
 		// mobile + tablet
 		@media (max-width: $screen-md-max) {

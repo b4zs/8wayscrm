@@ -1,0 +1,53 @@
+{% extends '@SonataBlock/Block/block_base.html.twig' %}
+
+{% block block %}
+	<div class="octet-note"  id="widget_{{ id }}">
+		<div class="octet-notes--header clearfix">
+			<span class="octet-notes--controls--title pull-left">Notes</span>
+			<a  href="{{ note_admin.generateUrl('create', { context: context_ids  }) }}"
+			    onclick="return start_field_dialog_form_add_{{ id }}(this);"
+			    class="btn btn-success pull-right">
+				<i class="fa fa-plus"></i>
+			</a>
+			<a  href="{{ note_admin.generateUrl('list', { filter: { relatedObjects: {type: '', value: context|join(',')} } }) }}"
+			    target="_blank"
+			    class="btn pull-right">
+				<i class="fa fa-external-link"></i>
+			</a>
+			<span class="btn btn-blank pull-right loading-indicator"><i class="fa fa-refresh"></i></span>
+		</div>
+		<div id="field_container_{{ id }}">
+
+		</div>
+	</div>
+
+	<input type="hidden" id="{{ id }}" />
+	{% set sonata_admin = {
+		field_description: { associationadmin: note_admin, options: { link_parameters: { context: context } } },
+		edit: 'list',
+		root: { id: id, subject: { id: null }, uniqid: id, code: note_admin.code },
+		admin: note_admin,
+	} %}
+	{% include 'SonataDoctrineORMAdminBundle:CRUD:edit_modal.html.twig' %}
+	{% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
+	<script>
+		(function($){
+			var reloadContentUrl ="{{ url('ticketing_notes_block_content', { context: context_ids, id: id, limit: limit }) | raw }}";
+			var $container = $("#field_container_{{ id }}");
+			var $field = $("#{{ id }}");
+			var $loadingIndicator = $('#widget_{{ id }} .loading-indicator i')
+			function reload(){
+				$loadingIndicator.addClass('fa-spin');
+				$container.load(reloadContentUrl, function(){
+					$loadingIndicator.removeClass('fa-spin');
+					$container.trigger('ready');
+				});
+			}
+			$field.on("change", reload);
+			$loadingIndicator.on('click', reload);
+
+			reload();
+		})(jQuery)
+	</script>
+
+{% endblock %}
