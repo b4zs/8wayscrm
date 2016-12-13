@@ -53,9 +53,9 @@
     "liip/theme-bundle": "1.*",
     "nelmio/api-doc-bundle": "2.*",
 
-    "sonata-project/admin-bundle": "~3.4",
+    "sonata-project/admin-bundle": "~3.9",
     "sonata-project/media-bundle": ">=2.3",
-    "sonata-project/block-bundle": "3.1.*",
+    "sonata-project/block-bundle": "3.2.*",
 
     "sonata/object-identity-bundle": "1.*@dev",
     "sonata/tools-bundle": "1.*@dev",
