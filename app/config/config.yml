@@ -106,7 +106,7 @@ sonata_admin:
     title: %sonata_admin.title%
     options:
       title_mode: single_image
-    title_logo: bundles/applicationadmin/img/logo.png
+    title_logo: bundles/applicationadmin/img/logo_red.png
     templates:
       dashboard: SonataAdminBundle:Core:dashboard.html.twig
       user_block: ApplicationAdminBundle:Core:user_block.html.twig
