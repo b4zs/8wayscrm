@@ -24,7 +24,6 @@ class ReminderAssigneeToOidCommand extends AbstractTicketingMigrateCommand
 
             /** @var User $user */
             $user = $this->getTargetEntity($reminder->getAssignee());
-            var_dump($user);die;
             $this->insertToTmpTable(static::REMINDER_TEMP_TABLE, $reminder->getId(), $user->getObjectIdentity()->getId());
         }
 
