@@ -1,6 +1,7 @@
 <?php
 namespace Application\CrmBundle\EventListener;
 
+use Application\CrmBundle\Entity\Company;
 use Core\ObjectIdentityBundle\Model\ObjectIdentityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Application\CrmBundle\Entity\Contact;
@@ -32,6 +33,10 @@ class PostUpdateEventListener
         }
 
         if($object instanceof Contact) {
+            $this->manager->updateObjectIndex($object->getClient());
+        }
+
+        if($object instanceof Company) {
             $this->manager->updateObjectIndex($object->getClient());
         }
     }
