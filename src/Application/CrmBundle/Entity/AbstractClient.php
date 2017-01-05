@@ -11,6 +11,7 @@ use Application\UserBundle\Entity\Group;
 use Application\UserBundle\Entity\User;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
+use Core\ObjectIdentityBundle\Model\IndexableObjectIdentityAware;
 use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
 use Core\ObjectIdentityBundle\Model\ObjectIdentityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
-class AbstractClient implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
+class AbstractClient implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware, IndexableObjectIdentityAware
 
 {
     use ObjectIdentityAwareTrait;
