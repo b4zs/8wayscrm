@@ -106,6 +106,7 @@ services:
           - '@core_object_identity.manager'
         tags:
           - {name: doctrine.event_listener, event: postUpdate, method: postUpdate}
+          - {name: doctrine.event_listener, event: postPersist, method: postPersist}
 
     application_crm.block.dashboard_clients:
         class: Application\CrmBundle\Block\ClientsBlockService

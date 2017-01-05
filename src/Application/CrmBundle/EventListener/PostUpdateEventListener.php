@@ -24,9 +24,15 @@ class PostUpdateEventListener
         $this->manager = $manager;
     }
 
+    public function postPersist(LifecycleEventArgs $args) {
+        $this->updateIndex($args->getObject());
+    }
 
     public function postUpdate(LifecycleEventArgs $args) {
-        $object = $args->getObject();
+        $this->updateIndex($args->getObject());
+    }
+
+    protected function updateIndex($object) {
 
         if($object instanceof Project) {
             $this->manager->updateObjectIndex($object->getClient());
