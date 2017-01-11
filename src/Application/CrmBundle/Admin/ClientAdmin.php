@@ -203,20 +203,18 @@ class ClientAdmin extends Admin
 
         $formMapper->end();
 
-        if($this->getSubject()->getContacts()->count() > 0) {
-            $formMapper->with('Contact ', array('class' => 'col-md-12',));
-            $formMapper->add('contacts', 'sonata_type_collection', array(
-                'label'         => false,
-                'by_reference'  => false,
-            ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-                'link_parameters' => array(
-                    'parent_admin'  => 'client',
-                ),
-            ));
-            $formMapper->end();
-        }
+        $formMapper->with('Contact ', array('class' => 'col-md-12',));
+        $formMapper->add('contacts', 'sonata_type_collection', array(
+            'label'         => false,
+            'by_reference'  => false,
+        ), array(
+            'edit' => 'inline',
+            'inline' => 'table',
+            'link_parameters' => array(
+                'parent_admin'  => 'client',
+            ),
+        ));
+        $formMapper->end();
 
         $formMapper->with('Addresses', array('class' => 'col-md-12',));
             $formMapper->add('addresses', 'sonata_type_collection', array(
