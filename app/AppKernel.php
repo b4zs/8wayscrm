@@ -40,6 +40,7 @@ class AppKernel extends Kernel
 			new SonataAdminBundle(),
 	        new SonataBlockBundle(),
 	        new SonataDoctrineORMAdminBundle(),
+            new Application\ProjectAccountingBundle\ApplicationProjectAccountingBundle(),
             new Application\CrmBundle\ApplicationCrmBundle(),
 //            new CoreSecurityBundle(),
 //            new CoreToolsBundle(),
@@ -69,8 +70,9 @@ class AppKernel extends Kernel
 
             new Core\ObjectIdentityBundle\CoreObjectIdentityBundle(),
             new Application\ObjectIdentityBundle\ApplicationObjectIdentityBundle(),
-            //new Application\RedmineIntegrationBundle\ApplicationRedmineIntegrationBundle(),
+            new Application\RedmineIntegrationBundle\ApplicationRedmineIntegrationBundle(),
             new Application\ClassificationBundle\ApplicationClassificationBundle(),
+
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

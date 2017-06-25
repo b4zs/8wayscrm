@@ -26,7 +26,7 @@ class LoggableListener extends \Gedmo\Loggable\LoggableListener
 			$logEntry->setExtraData($object->getLogExtraData()->extraData);
 		}
 
-		if (array_key_exists('_extra_data', $logEntry->getData())) {
+		if (is_array($logEntry->getData()) && array_key_exists('_extra_data', $logEntry->getData())) {
 			$logEntry->setData(array_diff_assoc($logEntry->getData(), array('_extra_data' => true,)));
 		}
 	}

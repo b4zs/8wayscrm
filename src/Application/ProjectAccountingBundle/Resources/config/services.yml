@@ -1,0 +1,38 @@
+services:
+#    application_project_accounting.example:
+#        class: Application\ProjectAccountingBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    application_project_accounting.admin.work:
+        class: Application\ProjectAccountingBundle\Admin\WorkAdmin
+        arguments: [~, Application\ProjectAccountingBundle\Entity\Work, ApplicationProjectAccountingBundle:WorkAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Work, label: Work }
+
+    application_project_accounting.admin.work_schedule:
+        class: Application\ProjectAccountingBundle\Admin\WorkScheduleAdmin
+        arguments: [~, Application\ProjectAccountingBundle\Entity\WorkSchedule, ApplicationProjectAccountingBundle:WorkScheduleAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Work, label: Schedule }
+
+    application_project_accounting.admin.spent_time:
+        class: Application\ProjectAccountingBundle\Admin\SpentTimeAdmin
+        arguments: [~, Application\ProjectAccountingBundle\Entity\SpentTime, ApplicationProjectAccountingBundle:SpentTimeAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Work, label: 'Time logs' }
+
+    application_project_accounting.admin.invoice:
+        class: Application\ProjectAccountingBundle\Admin\InvoiceAdmin
+        arguments: [~, Application\ProjectAccountingBundle\Entity\Invoice, ApplicationProjectAccountingBundle:InvoiceAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Work, label: Invoices }
+
+    application_project_accounting.admin.payment:
+        class: Application\ProjectAccountingBundle\Admin\PaymentAdmin
+        arguments: [~, Application\ProjectAccountingBundle\Entity\Payment, ApplicationProjectAccountingBundle:PaymentAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Work, label: 'Payments' }
+
+    application_project_accounting.form.price_type:
+        class: Application\ProjectAccountingBundle\Form\PriceType
+        tags:
+            - { name: form.type, alias: accounting_price }

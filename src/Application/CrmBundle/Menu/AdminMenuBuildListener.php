@@ -27,8 +27,8 @@ class AdminMenuBuildListener extends ContainerAware
         if($this->isGranted('ROLE_SUPER_ADMIN')) {
             $this->addTeamMenu($menu);
         }
-		$this->modifyClientsMenu($menu);
-		$this->modifySuppliersMenu($menu);
+//		$this->modifyClientsMenu($menu);
+//		$this->modifySuppliersMenu($menu);
 		$this->modifyContactManager($menu);
 		$this->modifyProjectsMenu($menu);
 		$this->modifyContactPersons($menu);

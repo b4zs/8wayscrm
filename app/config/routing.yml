@@ -1,3 +1,7 @@
+application_project_accounting:
+    resource: "@ApplicationProjectAccountingBundle/Resources/config/routing.yml"
+    prefix:   /
+
 #application_reminde_integration:
 #    resource: "@ApplicationRedmineIntegrationBundle/Resources/config/routing.yml"
 #    prefix:   /admin/redmine

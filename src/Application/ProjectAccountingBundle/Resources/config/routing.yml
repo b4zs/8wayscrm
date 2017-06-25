@@ -1,0 +1,3 @@
+application_project_accounting_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ApplicationProjectAccountingBundle:Default:index }

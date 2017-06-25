@@ -267,7 +267,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
 
     function __toString()
     {
-        return $this->getClient() . ' - ' . $this->getName();
+        return $this->getName() . ($this->getClient() ? ' ('.$this->getClient() . ')' : '');
     }
 
     /**

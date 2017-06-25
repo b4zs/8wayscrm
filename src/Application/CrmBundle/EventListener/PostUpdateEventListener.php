@@ -34,15 +34,15 @@ class PostUpdateEventListener
 
     protected function updateIndex($object) {
 
-        if($object instanceof Project) {
+        if($object instanceof Project && $object->getClient()) {
             $this->manager->updateObjectIndex($object->getClient());
         }
 
-        if($object instanceof Contact) {
+        if($object instanceof Contact && $object->getClient()) {
             $this->manager->updateObjectIndex($object->getClient());
         }
 
-        if($object instanceof Company) {
+        if($object instanceof Company && $object->getClient()) {
             $this->manager->updateObjectIndex($object->getClient());
         }
     }
