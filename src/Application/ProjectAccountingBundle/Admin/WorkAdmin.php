@@ -33,7 +33,7 @@ class WorkAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('project', 'entity')
-            ->add('name')
+            ->addIdentifier('name')
             ->add('tracker', 'choice', array('choices' => WorkTracker::getChoices(), 'required' => false,))
             ->add('nature', 'choice', array('choices' => WorkNature::getChoices(), 'required' => false,))
             ->add('status', 'choice', array('choices' => WorkStatus::getChoices(), 'required' => false,))
@@ -57,16 +57,22 @@ class WorkAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->with('Work data', array('class' => 'col-md-6',))
             ->add('project', null, array('required' => true,))
             ->add('name', null, array('required' => true,))
-            ->add('description', null, array('required' => false,))
+            ->add('description', null, array('required' => false, 'attr' => array('rows' => '20')))
+            ->end()
+            ->with('Classification', array('class' => 'col-md-6',))
             ->add('tracker', 'choice', array('choices' => WorkTracker::getChoices(), 'required' => false,))
             ->add('nature', 'choice', array('choices' => WorkNature::getChoices(), 'required' => false,))
             ->add('status', 'choice', array('choices' => WorkStatus::getChoices(), 'required' => false,))
+            ->end()
+            ->with('Plan/Estimation', array('class' => 'col-md-6',))
+            ->add('deadline', 'sonata_type_date_picker', array('required' => false,))
             ->add('initialEstimatedTime', null, array('required' => false,))
             ->add('currentlyEstimatedTime', null, array('required' => false,))
             ->add('hourlyRate',  'accounting_price',  array('required' => false,))
-            ->add('deadline', 'sonata_type_date_picker', array('required' => false,))
+            ->end()
         ;
     }
 

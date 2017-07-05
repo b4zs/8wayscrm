@@ -57,14 +57,20 @@ class InvoiceAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('id')
-            ->add('description')
+            ->with('Work', array('class' => 'col-md-6',))
+            ->add('works')
+            ->add('project')
+            ->end()
+            ->with('Details', array('class' => 'col-md-6',))
             ->add('issuedAt')
             ->add('dueDate')
             ->add('status')
-            ->add('createdAt')
             ->add('total.amount')
             ->add('total.currency')
+            ->end()
+            ->with('Notes', array('class' => 'col-md-12',))
+            ->add('description')
+            ->end()
         ;
     }
 

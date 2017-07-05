@@ -51,12 +51,18 @@ class SpentTimeAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->with('Task', array('class' => 'col-md-6'))
+            ->add('project')
+            ->add('work')
+            ->end()
+            ->with('Log', array('class' => 'col-md-6'))
+            ->add('user')
             ->add('startDate', 'sonata_type_date_picker', array())
             ->add('duration', 'number', array())
+            ->end()
+            ->with('Notes', array('class' => 'col-md-12'))
             ->add('description', null, array('required' => false,))
-            ->add('user')
-            ->add('work')
-            ->add('project')
+            ->end()
         ;
     }
 

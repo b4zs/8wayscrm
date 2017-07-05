@@ -50,12 +50,16 @@ class WorkScheduleAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->with('Task', array('class' => 'col-md-6',))
             ->add('work', null, array('required' => true,))
             ->add('name', null, array('required' => true,))
             ->add('description', null, array('required' => false,))
+            ->end()
+            ->with('Schedule', array('class' => 'col-md-6',))
             ->add('user', null, array('required' => false,))
             ->add('scheduleDate', 'sonata_type_date_picker', array('required' => true,))
             ->add('scheduleDuration', 'number')
+            ->end()
         ;
     }
 
