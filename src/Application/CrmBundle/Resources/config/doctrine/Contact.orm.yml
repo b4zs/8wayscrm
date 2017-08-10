@@ -1,6 +1,9 @@
 Application\CrmBundle\Entity\Contact:
     type: entity
     table: crm__contact
+    gedmo:
+        loggable:
+            logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry
     id:
         id:
             type: integer

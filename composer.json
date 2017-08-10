@@ -1,9 +1,9 @@
 
 {
-  "name": "symfony/framework-standard-edition",
+  "name": "gbart/crm",
   "license": "MIT",
   "type": "project",
-  "description": "The \"Symfony Standard Edition\" distribution",
+  "description": "CRM for GBaRT - internal use only",
   "autoload": {
     "psr-4": { "": "src/", "SymfonyStandard\\": "app/SymfonyStandard/" }
   },
@@ -11,7 +11,7 @@
     {"type": "composer", "url": "http://composer.assist01.gbart.h3.hu/repo/private/"}
   ],
   "require": {
-    "php": ">=5.3.3,<=5.6.11",
+    "php": ">=5.6 | >7.0",
 
     "twig/twig": "~1.12",
     "twig/extensions": "~1.0",
@@ -35,7 +35,6 @@
     "symfony-cmf/routing-bundle": "~1.1",
 
     "knplabs/gaufrette": "~0.1.6",
-    "knplabs/knp-menu-bundle": "2.1.*",
 
     "sonata-project/easy-extends-bundle": "~2.1",
     "sonata-project/intl-bundle": "~2.2@dev",
@@ -56,6 +55,7 @@
     "sonata-project/admin-bundle": "~3.9",
     "sonata-project/media-bundle": ">=2.3",
     "sonata-project/block-bundle": "3.2.*",
+    "sonata-project/classification-bundle": "3.2.1",
 
     "sonata/object-identity-bundle": "1.*@dev",
     "sonata/tools-bundle": "1.*@dev",
@@ -64,8 +64,9 @@
     "jms/job-queue-bundle": "1.2.0",
 
     "phpoffice/phpexcel": "^1.8",
-    "octet/ticketing": "1.0.x-dev",
-    "octet/message-bus": "dev-master"
+    "octet/ticketing": "2.*",
+    "octet/message-bus": "dev-master",
+    "doctrine/doctrine-migrations-bundle": "^1.2"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"

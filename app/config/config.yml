@@ -110,6 +110,7 @@ sonata_admin:
     templates:
       dashboard: SonataAdminBundle:Core:dashboard.html.twig
       user_block: ApplicationAdminBundle:Core:user_block.html.twig
+      layout: SonataAdminBundle::app_standard_layout.html.twig
     assets:
       stylesheets:
         - bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css
@@ -151,6 +152,7 @@ sonata_admin:
       blocks:
         - { position: top, type: application_crm.block.dashboard_clients, class: 'col-md-12' }
         - { position: top, type: application_admin.block.dashboard.search, class: 'col-md-12' }
+
 
 sonata_block:
     default_contexts: [cms]

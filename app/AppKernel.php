@@ -72,6 +72,8 @@ class AppKernel extends Kernel
             new Application\ObjectIdentityBundle\ApplicationObjectIdentityBundle(),
             new Application\RedmineIntegrationBundle\ApplicationRedmineIntegrationBundle(),
             new Application\ClassificationBundle\ApplicationClassificationBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
 
         );
 

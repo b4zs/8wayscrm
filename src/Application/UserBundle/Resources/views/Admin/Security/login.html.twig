@@ -1,4 +1,4 @@
-{% extends '@SonataUser/Admin/Security/login.html.twig' %}
+{% extends "SonataUserBundle:Security:base_login.html.twig" %}
 
 {% block body_attributes %}class="sonata-bc skin-black fixed login"{% endblock %}
 
@@ -45,7 +45,7 @@
     </section>
 {% endblock sonata_wrapper %}
 
-{% block content %}
+{% block fos_user_content %}
     <div class="login panel panel-default col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
         <div class="panel-heading text-center">
             {% block logo %}
