@@ -1,0 +1,5 @@
+<th{% if(is_diff|default(false)) %} class="diff"{% endif %}>{% block name %}{{ admin.trans(field_description.label, {}, field_description.translationDomain) }}{% endblock %}</th>
+<td>{% block field %}
+<pre>{{ field_description.options.callback|call(value, object)|yaml_dump }}</pre>
+
+{% endblock %}</td>

@@ -1,0 +1,67 @@
+{% block choice_widget_expanded -%}
+    {% import '@ApplicationQuotationGenerator/helpers.html.twig' as qg_helpers %}
+    <div {{ block('widget_container_attributes') }}>
+        {% set choices = form.vars.choices %}
+        {%- for child in form %}
+            <div>
+                {{- form_widget(child, { attr: { style: 'margin-right: 5px;' } }) -}}
+                {% if child.vars.label|default(null) in ['<input>', '<textarea>'] and form.parent.customValue is defined %}
+                    <label for="" {% if child.vars.label == '<textarea>' %}style="width: 100%;"{% endif %}>
+                        {{ form_widget(form.parent.customValue) }}
+                    </label>
+                {% else %}
+                    {% set edge = choices[child.vars.value].data|default(null) %}
+                    {{- form_label(child, null, { label_attr: {  style: 'display:inline;' } }) -}}
+                    {% if edge and edge.getPrice() %}
+                        <span class="text-muted">({{ qg_helpers.action_parameter(constant('Application\\QuotationGeneratorBundle\\Enum\\GraphActionType::ADD_PRICE_ITEM'), edge.getPrice()) }})</span>
+                    {% endif %}
+
+                {% endif %}
+            </div>
+        {% endfor -%}
+    </div>
+{% endblock choice_widget_expanded %}
+
+{% block graph_traversal_step_widget %}
+    <div class="well col-md-12 js-graph-traversal-step-widget">
+        <small class="pull-right label label-success">Q{{ form.vars.value.step }}</small>
+
+        {% if is_granted('ROLE_ADMIN') %}
+        <a class="pull-right btn btn-xs btn-primary" href="{{ admin_get_pool().getAdminByAdminCode('application.quotation_generator.admin.graph_node').generateObjectUrl('edit', form.vars.value.node) }}" target="admin" title="Edit question and answers">#{{ form.vars.value.node.id }}</a>
+        {% endif %}
+        <p>{{ form.vars.value.node.name }}</p>
+        {#{{ dump(form.vars) }}#}
+
+        {% if form.chosen is defined and not form.selected is defined %}{{ form_widget(form.chosen) }}{% endif %}
+        {% if form.selected is defined %}{{ form_widget(form.selected) }}{% endif %}
+
+        {#{% if form.customValue is defined %}{{ form_row(form.customValue) }}{% endif %}#}
+
+        {% if render_submit|default(false) and form.vars.value.node.targetEdges.count > 0 %}
+            <input type="submit" value="next" class="btn btn-success" />
+        {% endif %}
+
+        <div class="hidden">
+            {{ form_widget(form.node) }}
+            {{ form_rest(form) }}
+        </div>
+
+        <code class="clearfix" style="padding: 0px; margin: 0px;">
+            {% if form.vars.value.chosenEdge and form.vars.value.chosenEdge.actions %}
+                <ul>
+                {% for action in form.vars.value.calculateSelectedEdgesActions %}
+                    <li>
+                        {{ action.edge.description|truncate(30) }}
+                        -
+                        {{ action.type|resolve_enum('Application\\QuotationGeneratorBundle\\Enum\\GraphActionType') }}: <span>{{ action.parameter }}</span>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </code>
+    </div>
+{% endblock %}
+
+{% block gb_open_button_widget %}
+	<a href="{{ admin_get_pool().getAdminByClass(form.vars.data|get_class).generateObjectUrl('edit', form.vars.data) }}" {{ block('widget_attributes') }}>{{ form.vars.label|trans }}</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+<html>
+<head>
+    {#<link rel="stylesheet" href="{{ asset('bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css', null, true) }}"/>#}
+</head>
+<body>
+<h1>Quotation</h1>
+{% include '@ApplicationQuotationGenerator/partials/summary_table.html.twig' with { steps: traversal.steps } %}
+
+</body>
+</html>
+

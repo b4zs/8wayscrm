@@ -1,0 +1,10 @@
+{% macro action_parameter(type, value) %}
+{% spaceless %}
+    {#<strong>{{ type|resolve_enum('Application\\QuotationGeneratorBundle\\Enum\\GraphActionType') }}:</strong>#}
+    {% if (type == constant('Application\\QuotationGeneratorBundle\\Enum\\GraphActionType::ADD_PRICE_ITEM')) %}
+        <span style="white-space: nowrap">EUR {{ value }}</span>
+    {% else %}
+        <p>{{ value|nl2br }}</p>
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}

@@ -1,0 +1,9 @@
+application_question_api:
+    resource: Application\QuotationGeneratorBundle\Controller\QuestionApiController
+    type: rest
+    defaults: { _format: json }
+
+application_fillout_api:
+    resource: Application\QuotationGeneratorBundle\Controller\FilloutApiController
+    type: rest
+    defaults: { _format: json }

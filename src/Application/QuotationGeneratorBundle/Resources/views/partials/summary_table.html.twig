@@ -1,0 +1,61 @@
+{% import '@ApplicationQuotationGenerator/helpers.html.twig' as qg_helpers %}
+<table class="table table-hover" {% if pdf|default(false) %}border="1" style="border-collapse: collapse; border:1px solid #aaa;"{% endif %}>
+    <thead>
+    <tr>
+        <th>Question</th>
+        <th>Answer</th>
+        <th>Feature</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for step in steps  %}
+        {% set nodePrinted = false %}
+        {% for edge in step.calculateSelectedEdges %}
+            <tr>
+                <td>
+                    {% if not nodePrinted %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="btn btn-xs btn-primary" href="{{ admin_get_pool().getAdminByAdminCode('application.quotation_generator.admin.graph_node').generateObjectUrl('edit', step.node) }}" target="admin" title="Edit question and answers">#{{ step.node.id }}</a>
+                        {% endif %}
+                        {{ step.node.name }}
+                    {% endif %}
+                    {% set nodePrinted = true %}
+                </td>
+                <td>
+                    {% if edge.isCustomValue %}
+                        {{ step.customValue|nl2br }}
+                    {% else %}
+                        {{ edge.description }}
+                    {% endif %}
+                </td>
+                    {% set maxCountPerGroup = 0 %}
+                    {% for type, typeActions in edge.buildActionsGroupedData() %}
+                        <td align="right">
+                            {#{{ dump(groupedActions) }}#}
+                            <ul class="list list-unstyled" style="list-style-type: none;">
+                                {% for ix, action in typeActions %}
+                                    <li>
+                                        {{ qg_helpers.action_parameter(type, action.parameter) }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    {% endfor %}
+            </tr>
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td></td>
+        <td><strong>Total:</strong></td>
+        {% set result = traversal.calculateSelectedEdgesSumActions %}
+        {% for type, typeResult in result %}
+            <td align="right">
+                {{ qg_helpers.action_parameter(type, typeResult) }}
+            </td>
+        {% endfor %}
+    </tr>
+    </tfoot>
+</table>

@@ -1,0 +1,23 @@
+Application\QuotationGeneratorBundle\Entity\QuestionAnswer:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        value:
+            type: text
+        createdAt:
+            type: string
+            length: 255
+
+    manyToOne:
+        question:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\Question
+            inversedBy: answers
+
+
+    lifecycleCallbacks: {  }

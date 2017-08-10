@@ -1,0 +1,55 @@
+Application\QuotationGeneratorBundle\Entity\Question:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        text:
+            type: string
+            length: 255
+        formType:
+            type: string
+            length: '32'
+        requiredUserRole:
+            type: string
+            length: '32'
+            nullable: true
+        alias:
+            type: string
+            length: '32'
+            nullable: true
+        stage:
+            type: integer
+            nullable: true
+        createdAt:
+            type: datetime
+        deletedAt:
+            nullable: true
+            type: string
+            length: 255
+
+
+    manyToOne:
+        category:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionCategory
+        group:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionGroup
+
+    oneToMany:
+        answers:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionAnswer
+            mappedBy: question
+        options:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionOption
+            mappedBy: question
+
+        actions:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionAction
+            mappedBy: question
+
+
+    lifecycleCallbacks: {  }

@@ -46,3 +46,6 @@ fos_user_resetting:
     resource: '@FOSUserBundle/Resources/config/routing/resetting.xml'
     prefix: /
 
+app_quotation_generator:
+    resource: "@ApplicationQuotationGeneratorBundle/Resources/config/routing.yml"
+    prefix: /api

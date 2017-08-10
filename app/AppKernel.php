@@ -74,6 +74,7 @@ class AppKernel extends Kernel
             new Application\ClassificationBundle\ApplicationClassificationBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Application\QuotationGeneratorBundle\ApplicationQuotationGeneratorBundle(),
 
         );
 

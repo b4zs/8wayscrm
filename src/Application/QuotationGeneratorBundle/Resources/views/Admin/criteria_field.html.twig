@@ -1,0 +1,5 @@
+{% extends admin.getTemplate('base_list_field') %}
+
+{%- block field %}
+<code>{{ field_description.options.compiler|call(value, object) }}</code>
+{% endblock -%}

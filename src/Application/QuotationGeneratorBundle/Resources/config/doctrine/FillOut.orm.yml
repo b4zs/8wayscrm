@@ -1,0 +1,27 @@
+Application\QuotationGeneratorBundle\Entity\FillOut:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: true
+        state:
+            type: json_array
+            nullable: false
+        createdAt:
+            type: datetime
+    oneToMany:
+        answers:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\FillOutAnswer
+            mappedBy: fillOut
+            cascade: [all]
+            orphanRemoval: true
+
+    lifecycleCallbacks: {  }

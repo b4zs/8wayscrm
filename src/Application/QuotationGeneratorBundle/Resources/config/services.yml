@@ -1,0 +1,88 @@
+services:
+#    application_quotation_generator.example:
+#        class: Application\QuotationGeneratorBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+
+    application.quotation_generator.view.pdf_renderer:
+        class: Application\QuotationGeneratorBundle\View\QuotationPdfRenderer
+        calls:
+            - [setContainer, [@service_container]]
+
+    application.quotation_generator.twig.extension.admin_pool_accessor:
+        class: Application\QuotationGeneratorBundle\Twig\AdminPoolAccessorExtension
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }
+
+
+    application.quotation_generator.twig.extension.lambda_function:
+        class: Application\QuotationGeneratorBundle\Twig\LambdaFunctionExtension
+        tags:
+            - { name: twig.extension }
+
+    application.quotation_generator.form.type.open_button:
+       class: Application\QuotationGeneratorBundle\Form\OpenButtonType
+       tags:
+           - { name: form.type, alias: gb_open_button }
+
+    application_quotation_generator.admin.question:
+        class: Application\QuotationGeneratorBundle\Admin\QuestionAdmin
+        arguments: [~, Application\QuotationGeneratorBundle\Entity\Question, ApplicationQuotationGeneratorBundle:QuestionAdmin]
+        calls:
+            - [addChild, [@application_quotation_generator.admin.question_option]]
+            - [addChild, [@application_quotation_generator.admin.question_action]]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: QG, label: Questions }
+
+    application_quotation_generator.admin.question_option:
+        class: Application\QuotationGeneratorBundle\Admin\QuestionOptionAdmin
+        arguments: [~, Application\QuotationGeneratorBundle\Entity\QuestionOption, ApplicationQuotationGeneratorBundle:QuestionOptionAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, label: QuestionOption, show_in_dashboard: false }
+
+    application_quotation_generator.admin.question_action:
+        class: Application\QuotationGeneratorBundle\Admin\QuestionActionAdmin
+        arguments: [~, Application\QuotationGeneratorBundle\Entity\QuestionAction, ApplicationQuotationGeneratorBundle:QuestionActionAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, label: QuestionAction, show_in_dashboard: false }
+
+    application_quotation_generator.admin.question_category:
+        class: Application\QuotationGeneratorBundle\Admin\QuestionCategoryAdmin
+        arguments: [~, Application\QuotationGeneratorBundle\Entity\QuestionCategory, ApplicationQuotationGeneratorBundle:QuestionCategoryAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: QG , label: Question Categories }
+
+    application_quotation_generator.admin.question_group:
+        class: Application\QuotationGeneratorBundle\Admin\QuestionGroupAdmin
+        arguments: [~, Application\QuotationGeneratorBundle\Entity\QuestionGroup, ApplicationQuotationGeneratorBundle:QuestionGroupAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: QG, label: Question Groups  }
+
+
+
+    application_event.action_type.imply_question:
+        class: Application\QuotationGeneratorBundle\ActionType\ImplyQuestion
+        calls:
+            - [setContainer, [@service_container]]
+
+    application_quotation_generator.admin.fill_out:
+        class: Application\QuotationGeneratorBundle\Admin\FillOutAdmin
+        arguments: [~, Application\QuotationGeneratorBundle\Entity\FillOut, SonataAdminBundle:CRUD]
+        calls:
+            - [addChild, [@application_quotation_generator.admin.fill_out_answer]]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: QG, label: Fillouts }
+
+    application_quotation_generator.admin.fill_out_answer:
+        class: Application\QuotationGeneratorBundle\Admin\FillOutAnswerAdmin
+        arguments: [~, Application\QuotationGeneratorBundle\Entity\FillOutAnswer, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Results, label: FillOutAnswer, show_in_dashboard: false }
+
+    application_quotation_generator.fillout_manager:
+        class: Application\QuotationGeneratorBundle\Service\FillOutManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @service_container
+

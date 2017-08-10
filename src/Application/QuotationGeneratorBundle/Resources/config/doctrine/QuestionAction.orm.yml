@@ -1,0 +1,39 @@
+Application\QuotationGeneratorBundle\Entity\QuestionAction:
+    type: entity
+    table: null
+    repositoryClass: Application\QuotationGeneratorBundle\Entity\ActionRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        criteria:
+            type: string
+            length: 255
+        actionType:
+            type: integer
+        actionParams:
+            type: json_array
+        position:
+            type: integer
+            nullable: true
+        createdAt:
+            type: datetime
+        deletedAt:
+            nullable: true
+            type: datetime
+
+    manyToOne:
+        question:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\Question
+            inversedBy: actions
+        questionOption:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionOption
+            inversedBy: actions
+        impliedQuestion:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\Question
+
+
+    lifecycleCallbacks: {  }

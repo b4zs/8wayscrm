@@ -1,0 +1,33 @@
+Application\QuotationGeneratorBundle\Entity\QuestionOption:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        text:
+            type: text
+        value:
+            type: string
+            length: 255
+        createdAt:
+            type: datetime
+        deletedAt:
+            nullable: true
+            type: datetime
+
+
+    manyToOne:
+        question:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\Question
+            inversedBy: options
+    oneToMany:
+        actions:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionAction
+            mappedBy: questionOption
+
+
+    lifecycleCallbacks: {  }

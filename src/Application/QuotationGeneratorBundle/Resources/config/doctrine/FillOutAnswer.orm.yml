@@ -1,0 +1,31 @@
+Application\QuotationGeneratorBundle\Entity\FillOutAnswer:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        value:
+            type: string
+            length: 255
+            nullable: true
+        createdAt:
+            type: datetime
+        step:
+            type: integer
+            nullable: true
+        data:
+            type: json_array
+    manyToOne:
+        question:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\Question
+        option:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionOption
+        fillOut:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\FillOut
+            inversedBy: answers
+
+    lifecycleCallbacks: {  }
