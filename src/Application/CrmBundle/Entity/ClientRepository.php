@@ -18,7 +18,8 @@ class ClientRepository extends EntityRepository
         $qb->groupBy('client.status');
         $qb->setParameter('status', $status);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_SINGLE_SCALAR);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return empty($result) ? 0 : $result['c'];
     }
 
     /**

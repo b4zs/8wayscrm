@@ -147,7 +147,7 @@ class FillOutManager
         if (!is_array($questionStack)) {
             throw new \RuntimeException('FillOut.state.questionStack should be an array. ' . json_encode($questionStack) . ' given.');
         }
-        
+
         return $questionStack;
     }
 
