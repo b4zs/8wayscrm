@@ -68,7 +68,7 @@ services:
 
     application_quotation_generator.admin.fill_out:
         class: Application\QuotationGeneratorBundle\Admin\FillOutAdmin
-        arguments: [~, Application\QuotationGeneratorBundle\Entity\FillOut, SonataAdminBundle:CRUD]
+        arguments: [~, Application\QuotationGeneratorBundle\Entity\FillOut, ApplicationQuotationGeneratorBundle:FillOutAdmin]
         calls:
             - [addChild, [@application_quotation_generator.admin.fill_out_answer]]
         tags:

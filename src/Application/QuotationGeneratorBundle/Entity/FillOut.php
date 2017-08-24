@@ -3,6 +3,7 @@
 namespace Application\QuotationGeneratorBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Exclude;
 use JMS\Serializer\Annotation\SerializedName;
@@ -111,6 +112,9 @@ class FillOut
         $this->answers->removeElement($answers);
     }
 
+    /**
+     * @return FillOutAnswer[]|Collection
+     */
     public function getAnswers()
     {
         return $this->answers;

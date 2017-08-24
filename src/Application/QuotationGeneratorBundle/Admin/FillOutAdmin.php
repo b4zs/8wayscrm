@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 class FillOutAdmin extends Admin
@@ -109,6 +110,12 @@ class FillOutAdmin extends Admin
                 ));
             }
         }
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        parent::configureRoutes($collection);
+        $collection->add('frontend', $this->getRouterIdParameter().'/frontend', array(), array('id' => '.+', '_method' => 'GET'));
     }
 
 

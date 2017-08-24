@@ -1,5 +1,10 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
+
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
@@ -25,6 +30,13 @@ require_once __DIR__.'/../app/AppKernel.php';
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
 $request = Request::createFromGlobals();
+
+if ('OPTIONS' === $request->getMethod()) {
+    echo '';
+    exit;
+}
+$request->setMethod($_SERVER['REQUEST_METHOD']);
+
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

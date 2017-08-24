@@ -62,11 +62,11 @@ class FillOutManager
         $fillout = $answer->getFillOut();
         $questionStack = $this->getQuestionStack($fillout);
 
-		$ix = array_search($answer->getQuestion()->getId(), $questionStack);
-		if (false !== $ix) {
-			unset($questionStack[$ix]);
-			$questionStack = array_values($questionStack);
-		}
+//		$ix = array_search($answer->getQuestion()->getId(), $questionStack);
+//		if (false !== $ix) {
+//			unset($questionStack[$ix]);
+//			$questionStack = array_values($questionStack);
+//		}
 
 		$this->setQuestionStack($fillout, $questionStack);
 
@@ -140,7 +140,7 @@ class FillOutManager
 		}
 	}
 
-    private function getQuestionStack(FillOut $fillout)
+    public function getQuestionStack(FillOut $fillout)
     {
         $state = $fillout->getState();
         $questionStack = $state['questionStack'];

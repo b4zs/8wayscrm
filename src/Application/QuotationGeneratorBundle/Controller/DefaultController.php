@@ -25,7 +25,5 @@ class DefaultController extends Controller
 		$questions = $this->container->get('doctrine.orm.default_entity_manager')->getRepository('ApplicationQuotationGeneratorBundle:Question')->findAll();
 
 		return $this->renderView('ApplicationQuotationGeneratorBundle::dump.html.twig', array('questions' => $questions));
-
 	}
-
 }

@@ -1,0 +1,11 @@
+<div ng-repeat="group in groups" class="col-md-6 question-group">
+    <h3>{{group}}</h3>
+    <ul class="list list-unstyled">
+        <li ng-repeat="question in questions|filter:{ 'group': group }">
+            <question question="question"></question>
+        </li>
+    </ul>
+</div>
+
+<div class="clearfix"></div>
+{{questions}}

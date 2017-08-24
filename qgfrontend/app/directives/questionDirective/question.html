@@ -1,0 +1,38 @@
+<div class="question">
+    <label>{{question.title}}</label>
+
+    <div ng-if="'text' == question.type">
+        <input type="text" ng-model="question.value"  ng-disabled="$root.loading" ng-blur="ctrl.valueChanged()">
+    </div>
+
+    <div ng-if="'textarea' == question.type">
+        <textarea ng-model="question.value"  ng-disabled="$root.loading"  ng-blur="ctrl.valueChanged()"></textarea>
+    </div>
+
+    <div ng-if="'number' == question.type">
+        <input type="number" ng-model="question.value"  ng-disabled="$root.loading"  ng-blur="ctrl.valueChanged()">
+    </div>
+
+    <div ng-if="'singlechoice' == question.type">
+        <div  ng-repeat="choice in question.choices">
+            <label>
+                <input type="radio" ng-value="choice.value" ng-model="question.value" ng-disabled="$root.loading"  ng-change="ctrl.valueChanged()">
+                {{choice.label}}
+            </label>
+            <small ng-if="choice.hint">{{choice.hint}}</small>
+        </div>
+    </div>
+
+    <div ng-if="'multiplechoice' == question.type">
+        <div  ng-repeat="choice in question.choices">
+            <label>
+                <input type="checkbox" ng-true-value="true" ng-model="question.checkboxValue[choice.value]" ng-change="ctrl.checkboxChange()"  ng-disabled="$root.loading"  ng-change="ctrl.valueChanged()">
+                {{choice.label}}
+            </label>
+            <small ng-if="choice.hint">{{choice.hint}}</small>
+        </div>
+    </div>
+
+    <small ng-if="question.hint">{{question.hint}}</small>
+    <code>{{question.value}}</code>
+</div>
