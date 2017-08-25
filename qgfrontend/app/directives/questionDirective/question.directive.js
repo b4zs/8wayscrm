@@ -32,6 +32,7 @@ class QuestionController {
 
   valueChanged() {
     console.log('QuestionController::valueChanged');
+    this.question.dirty = true;
     this.$scope.$root.$broadcast('answer.change', this.question);
   }
 

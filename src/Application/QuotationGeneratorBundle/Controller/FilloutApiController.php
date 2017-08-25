@@ -79,6 +79,7 @@ class FilloutApiController extends FOSRestController
     {
         /** @var FillOut $fillout */
         $fillout = $this->loadFillout($id);
+        $this->getFilloutManager()->updateFillOutState($fillout);
         $questionsResult = $this->buildFilloutQuestions($fillout);
 
         return $this->handleView($this->view(array(
@@ -106,12 +107,15 @@ class FilloutApiController extends FOSRestController
             } else {
                 $answer = new FillOutAnswer();
                 $answer->setQuestion($this->loadQuestion($questionData['questionId']));
-                $fillout->addAnswer($answer);
-                $this->getEntityManager()->persist($answer);
             }
 
-            if (isset($questionData['value'])) {
+            if (!empty($questionData['dirty'])) {
                 $answer->setValue($questionData['value']);
+
+                if (!$answer->getId()) {
+                    $fillout->addAnswer($answer);
+                    $this->getEntityManager()->persist($answer);
+                }
             }
         }
 
@@ -284,18 +288,32 @@ class FilloutApiController extends FOSRestController
         $this->getFilloutManager()->processAnswer($initialAnswer);
     }
 
-    private function buildFilloutQuestions($fillout)
+    private function buildFilloutQuestions(FillOut $fillout)
     {
         $questionsResult = array();
+        $questionStack = $this->getFilloutManager()->getQuestionStack($fillout);
+
         foreach ($fillout->getAnswers() as $answer) {
+            if (!in_array($answer->getQuestion()->getId(), $questionStack)) continue;
+
             $question = $this->buildAnswer($answer);
             $questionsResult[] = $question;
         }
 
         /** @var FillOutManager $filloutManager */
         $filloutManager = $this->container->get('application_quotation_generator.fillout_manager');
-        foreach ($filloutManager->getQuestionStack($fillout) as $questionId) {
-            $questionsResult[] = $this->buildQuestion($question = $this->loadQuestion($questionId));
+
+        $questionIds = array();
+        foreach ($questionsResult as $questionResult) {
+            $questionIds[] = $questionResult['questionId'];
+        }
+
+        foreach ($questionStack as $questionId) {
+            if (in_array($questionId, $questionIds)) continue;
+
+            $questionFromStack = $this->buildQuestion($question = $this->loadQuestion($questionId));
+            $questionIds[] = $questionFromStack['questionId'];
+            $questionsResult[] = $questionFromStack;
         }
         return $questionsResult;
     }

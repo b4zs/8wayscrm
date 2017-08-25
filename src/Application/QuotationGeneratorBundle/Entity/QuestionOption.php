@@ -2,6 +2,7 @@
 
 namespace Application\QuotationGeneratorBundle\Entity;
 
+use Application\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,12 @@ class QuestionOption
     private $value;
 
     private $question;
+
+    /** @var string */
+    private $hint;
+
+    /** @var  Media */
+    private $media;
 
     /**
      * @var Collection
@@ -210,6 +217,26 @@ class QuestionOption
     public function removeAction(QuestionAction $action)
     {
         $this->actions->removeElement($action);
+    }
+
+    public function getHint()
+    {
+        return $this->hint;
+    }
+
+    public function setHint($hint)
+    {
+        $this->hint = $hint;
+    }
+
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    public function setMedia($media)
+    {
+        $this->media = $media;
     }
 
 }

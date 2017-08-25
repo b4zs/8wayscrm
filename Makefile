@@ -50,8 +50,8 @@ db-migrate-from-scratch:
 	$(PHP) $(MEM) $(CON)  doctrine:fixtures:load --append --fixtures=src/Application/UserBundle/DataFixtures/UserFixture.php
 
 db-migration-generate:
-	make cc
-	$(PHP) $(MEM) $(CON)  doctrine:schema:drop --full-database --force
+	#make cc
+	#$(PHP) $(MEM) $(CON)  doctrine:schema:drop --full-database --force
 	$(PHP) $(MEM) $(CON)  doctrine:migrations:migrate --no-interaction
 	$(PHP) $(MEM) $(CON)  doctrine:migrations:diff
 	$(PHP) $(MEM) $(CON)  doctrine:migrations:migrate --no-interaction
@@ -90,3 +90,6 @@ run:
 
 q:
 	$(PHP) $(MEM) $(CON) jms-job-queue:run -r 900 --idle-time 1 --env=$(ENV) -vv
+
+qgrun:
+	cd qgfrontend && npm start

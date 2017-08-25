@@ -42,6 +42,7 @@ twig:
         resource:
             - 'form_div_layout.html.twig'
             - 'ApplicationAdminBundle:Form:fields.html.twig'
+            - 'ApplicationClassificationBundle::fields.html.twig'
             - 'CoreToolsBundle:Form:fields.html.twig'
             - 'CoreToolsBundle:Form:fields.html.twig'
             - 'SonataCoreBundle:Form:datepicker.html.twig'

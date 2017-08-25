@@ -50,6 +50,10 @@ Application\QuotationGeneratorBundle\Entity\Question:
         actions:
             targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionAction
             mappedBy: question
+    manyToMany:
+        tags:
+            targetEntity: Application\ClassificationBundle\Entity\Tag
+            cascade: ['persist']
 
 
     lifecycleCallbacks: {  }

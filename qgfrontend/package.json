@@ -1,5 +1,5 @@
 {
-  "name": "Boilerplate-Angular-ES6-webpack2",
+  "name": "QuotationGenerator-v2",
   "version": "3.1.0",
   "description": "Boilerpalte using Angular1.x with ES6.Using too webpack2 to build to aplication ",
   "main": "index.js",

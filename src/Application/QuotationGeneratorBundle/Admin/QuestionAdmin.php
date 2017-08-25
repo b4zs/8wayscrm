@@ -79,6 +79,9 @@ class QuestionAdmin extends Admin
                 'choices' => Stage::getChoices(),
                 'required' => false,
             ))
+            ->add('tags', 'app_classification_tags', array(
+                'required' => false,
+            ))
         ;
     }
 

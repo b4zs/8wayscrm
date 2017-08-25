@@ -18,7 +18,7 @@ class ImplyQuestion extends AbstractActionType
 			}
 
 			$impliedQuestionId = $action->getImpliedQuestion()->getId();
-			if (reset($state['questionStack']) !== $impliedQuestionId) {
+			if (reset($state['questionStack']) !== $impliedQuestionId && !in_array($impliedQuestionId, $state['questionStack'])) {
  			    array_unshift($state['questionStack'], $impliedQuestionId);
 			}
 

@@ -19,6 +19,7 @@ class QuestionOptionAdmin extends Admin
             ->add('id')
             ->add('text')
             ->add('value')
+            ->add('hint')
         ;
     }
 
@@ -30,6 +31,7 @@ class QuestionOptionAdmin extends Admin
         $listMapper
             ->add('text')
             ->add('value')
+            ->add('hint')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -48,6 +50,10 @@ class QuestionOptionAdmin extends Admin
             ->with('Choice')
             ->add('text')
             ->add('value')
+            ->add('hint')
+            ->add('media', 'sonata_type_model_list', array(
+                
+            ))
         ;
     }
 

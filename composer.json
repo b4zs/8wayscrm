@@ -66,7 +66,8 @@
     "phpoffice/phpexcel": "^1.8",
     "octet/ticketing": "2.*",
     "octet/message-bus": "dev-master",
-    "doctrine/doctrine-migrations-bundle": "^1.2"
+    "doctrine/doctrine-migrations-bundle": "^1.2",
+    "sonata/classification-bundle": "2.*@dev"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3"

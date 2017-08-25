@@ -3,8 +3,10 @@
 namespace Application\QuotationGeneratorBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Exclude;
+use Sonata\ClassificationBundle\Model\Tag;
 
 /**
  * Question
@@ -69,6 +71,11 @@ class Question
      */
     private $stage;
 
+    /**
+     * @var Tag[]|Collection
+     */
+    private $tags;
+
 
     /**
      * @var \DateTime
@@ -88,6 +95,7 @@ class Question
         $this->answres = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->actions = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
 
@@ -369,6 +377,16 @@ class Question
     public function setAlias($alias)
     {
         $this->alias = $alias;
+    }
+
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
     }
 
 

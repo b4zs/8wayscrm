@@ -1,0 +1,52 @@
+{% block app_classification_tags_widget %}
+    {% set attr = attr | default({}) | merge({class: attr.class | default('select2-form-control'), style: 'width: 100%' }) %}
+    {{ block('form_widget_simple') }}
+    <script>
+        (function($){
+            var hasSearchResults = false;
+            $('#{{ id }}').select2({
+                ajax: {
+                    url: '{{ url('application_classification_get_tags') }}',
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return { page: page, search: term, page_limit: 10 };
+                    },
+                    results: function(data, page) {
+                        var r = [], i = 0;
+                        hasSearchResults = data.results.length > 0;
+                        for (;i<data.results.length;i++) r.push({id:data.results[i], text: data.results[i]});
+                        data.results = r;
+                        return data;
+                    }
+                },
+                // Take default tags from the input value
+                initSelection: function (element, callback) {
+                    var data = [];
+
+                    function splitVal(string, separator) {
+                        var val, i, l;
+                        if (string === null || string.length < 1) return [];
+                        val = string.split(separator);
+                        for (i = 0, l = val.length; i < l; i = i + 1) val[i] = $.trim(val[i]);
+                        return val;
+                    }
+
+                    $(splitVal(element.val(), ",")).each(function () {
+                        data.push({
+                            id: this,
+                            text: this
+                        });
+                    });
+
+                    callback(data);
+                },
+                tokenSeparators: [","],
+                {% if allow_add %}
+                tags: true,
+                createSearchChoice : function (term) { return hasSearchResults ? null : {id: term, text: term}; },
+                {% endif %}
+                multiple: true
+            });
+        })(jQuery)
+    </script>
+{% endblock %}

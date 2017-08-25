@@ -29,5 +29,4 @@ class FillOutAdminController extends CRUDController
 
         ));
     }
-
 }

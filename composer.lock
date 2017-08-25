@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "20e84371600866dfc4774a155bc63c38",
+    "content-hash": "7cb486fc92cc381c16a90c03081b7646",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -5029,6 +5029,48 @@
             "time": "2016-05-20T09:05:03+00:00"
         },
         {
+            "name": "sonata/classification-bundle",
+            "version": "2.0.4",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@gitlab.assist01.gbart.h3.hu:53410/sonata/classification-bundle.git",
+                "reference": "73701a3758f407e36138f0706e4d1a9422f9e836",
+                "mirrors": [
+                    {
+                        "url": "ssh://git@gitlab.assist01.gbart.h3.hu:53410/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://composer.assist01.gbart.h3.hu/repo/private/dists/sonata/classification-bundle/2.0.4.0/73701a3758f407e36138f0706e4d1a9422f9e836.zip",
+                "reference": "73701a3758f407e36138f0706e4d1a9422f9e836",
+                "shasum": null,
+                "mirrors": [
+                    {
+                        "url": "http://composer.assist01.gbart.h3.hu/repo/private/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "sonata-project/classification-bundle": "~3.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Core\\ClassificationBundle\\": ""
+                }
+            },
+            "description": "Former classification bundle",
+            "keywords": [
+                "category",
+                "tag"
+            ],
+            "time": "2017-04-20T09:38:19+00:00"
+        },
+        {
             "name": "sonata/object-identity-bundle",
             "version": "1.0.2",
             "source": {
@@ -6672,7 +6714,8 @@
         "sonata/object-identity-bundle": 20,
         "sonata/tools-bundle": 20,
         "sonata/security-bundle": 20,
-        "octet/message-bus": 20
+        "octet/message-bus": 20,
+        "sonata/classification-bundle": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

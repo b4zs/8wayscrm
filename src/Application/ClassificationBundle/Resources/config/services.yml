@@ -1,1 +1,14 @@
 services:
+
+    application.classification.form.data_transformer.tags:
+        class: Application\ClassificationBundle\Form\DataTransformer\TagsDataTransformer
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @service_container
+
+    application.classification.form.type.tags:
+        class: Application\ClassificationBundle\Form\Type\TagsType
+        arguments:
+            - '@application.classification.form.data_transformer.tags'
+        tags:
+            - { name: form.type, alias: 'app_classification_tags' }

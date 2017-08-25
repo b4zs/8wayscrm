@@ -33,6 +33,10 @@ app_index:
     defaults:
         _controller: ApplicationCrmBundle:Default:index
 
+app_classification:
+    resource: '@ApplicationClassificationBundle/Resources/config/routing.yml'
+    prefix: /
+
 object_identity:
     resource: '@CoreObjectIdentityBundle/Resources/config/routing.yml'
     prefix: /

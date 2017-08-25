@@ -1,0 +1,4 @@
+application_classification_get_tags:
+    path: /admin/classification/get_tags
+    defaults:
+        _controller: ApplicationClassificationBundle:TagAdmin:getTags

@@ -38,21 +38,18 @@ class FillOutManager
 	{
 		$fillOut->resetState();
 
-		if (0 === $fillOut->getAnswers()->count()) {
-			$initialQuestion = $this->getInitialQuestion();
-			$questionStack = $this->getQuestionStack($fillOut);
-			$questionStack[] = $initialQuestion->getId();
-			$this->setQuestionStack($fillOut, $questionStack);
+        $initialQuestion = $this->getInitialQuestion();
+        $questionStack = $this->getQuestionStack($fillOut);
+        $questionStack[] = $initialQuestion->getId();
+        $this->setQuestionStack($fillOut, $questionStack);
 
-//			$initialAnswer = new FillOutAnswer();
-//			$initialAnswer->setQuestion($initialQuestion);
-//			$fillOut->addAnswer($initialAnswer);
-		} else {
-            foreach ($fillOut->getAnswers() as $answer) {
-                $this->processAnswer($answer);
-            }
+        //TODO: might has to befactored to recalculate qStack and reiterate the newly implied answers after each answer
+        foreach ($fillOut->getAnswers() as $answer) {
+            if (!in_array($answer->getQuestion()->getId(), $questionStack)) continue;
+
+            $this->processAnswer($answer);
+            $questionStack = $this->getQuestionStack($fillOut);
         }
-
 
 		return $fillOut->getState();
 	}
