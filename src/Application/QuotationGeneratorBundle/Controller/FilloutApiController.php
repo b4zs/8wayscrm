@@ -48,11 +48,21 @@ class FilloutApiController extends FOSRestController
             $options = array();
             /** @var QuestionOption $option */
             foreach ($question->getOptions() as $option) {
-                $options[] = array(
+                $option = array(
                     'label' => $option->getText(),
                     'value' => $option->getValue(),
                     'hint' => 'no hint',
                 );
+
+                if ($option->getMedia()) {
+                    $mediaUrl = $this->container->get('sonata.media.pool')
+                        ->getProvider($option->getMedia()->getProviderName())
+                        ->generatePublicUrl($option->getMedia(), 'reference');
+
+                    $option['image'] = $mediaUrl;
+                }
+
+                $options[] = $option;
             }
             $result['choices'] = $options;
         }

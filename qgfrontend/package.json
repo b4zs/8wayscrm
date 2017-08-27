@@ -31,12 +31,12 @@
     "style-loader": "^0.13.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.3.0"
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "angular-ui-router": "^0.4.2",
     "angular": "^1.6.3",
-    "angular-filter": "0.4.*"
+    "angular-filter": "0.4.*",
+    "angular-ui-router": "^0.4.2"
   }
 }

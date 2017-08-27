@@ -5,19 +5,20 @@ export class ApiClient {
 
     this.$http = $http;
     this.config = config;
+    this.id = 1;
     console.log(this.config)
   }
 
   fetchState() {
     return this.$http({
-      url: this.config.apiRoot+'/api/fillouts/3',
+      url: this.config.apiRoot+'/api/fillouts/'+this.id,
       method: 'GET',
     });
   }
 
   sendState(state) {
     return this.$http({
-      url: this.config.apiRoot+'/api/fillouts/3',
+      url: this.config.apiRoot+'/api/fillouts/'+this.id,
       method: 'POST',
       data: state
     });

@@ -14,8 +14,8 @@
         extends="Sonata\ClassificationBundle\Entity\BaseContext"
         >
 
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO"/>
+        <id name="id" type="string" length="16" column="id">
+            <generator strategy="NONE"/>
         </id>
 
     </entity>
