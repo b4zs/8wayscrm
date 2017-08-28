@@ -29,8 +29,8 @@ class QuestionOptionAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('text')
-            ->add('value')
+            ->addIdentifier('text')
+            ->addIdentifier('value')
             ->add('hint')
             ->add('_action', 'actions', array(
                 'actions' => array(

@@ -18,6 +18,9 @@
             <label>
                 <input type="radio" ng-value="choice.value" ng-model="question.value" ng-disabled="$root.loading"  ng-change="ctrl.valueChanged()">
                 {{choice.label}}
+                <div ng-if="choice.image" class="col-md-4">
+                    <img ng-attr-src="{{choice.image}}" class="img-responsive">
+                </div>
             </label>
             <small ng-if="choice.hint">{{choice.hint}}</small>
         </div>

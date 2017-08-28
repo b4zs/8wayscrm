@@ -34,6 +34,10 @@ class FilloutApiController extends FOSRestController
 
     private function buildQuestion(Question $question)
     {
+        $request = $this->container->get('request_stack')->getMasterRequest();
+        $basePath = $request->getSchemeAndHttpHost().$request->getBasePath();
+
+
         $result = array();
         $result['questionId'] = $question->getId();
         $result['title'] = $question->getText();
@@ -47,17 +51,18 @@ class FilloutApiController extends FOSRestController
         if ($question->getOptions()->count()) {
             $options = array();
             /** @var QuestionOption $option */
-            foreach ($question->getOptions() as $option) {
+            foreach ($question->getOptions() as $questionOption) {
                 $option = array(
-                    'label' => $option->getText(),
-                    'value' => $option->getValue(),
+                    'label' => $questionOption->getText(),
+                    'value' => $questionOption->getValue(),
                     'hint' => 'no hint',
                 );
 
-                if ($option->getMedia()) {
+                if ($questionOption->getMedia()) {
                     $mediaUrl = $this->container->get('sonata.media.pool')
-                        ->getProvider($option->getMedia()->getProviderName())
-                        ->generatePublicUrl($option->getMedia(), 'reference');
+                        ->getProvider($questionOption->getMedia()->getProviderName())
+                        ->generatePublicUrl($questionOption->getMedia(), 'reference');
+                    $mediaUrl = $basePath . $mediaUrl;
 
                     $option['image'] = $mediaUrl;
                 }
