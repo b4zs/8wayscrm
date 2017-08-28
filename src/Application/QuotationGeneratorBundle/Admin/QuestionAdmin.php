@@ -38,10 +38,11 @@ class QuestionAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('category', null, array(
-                'editable' => true,
-            ))
+//            ->add('category', null, array(
+//                'editable' => true,
+//            ))
             ->add('group')
+            ->add('tags')
             ->addIdentifier('text')
             ->addIdentifier('alias')
             ->add('formType')

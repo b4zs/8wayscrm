@@ -19,11 +19,19 @@ Application\QuotationGeneratorBundle\Entity\QuestionAction:
         position:
             type: integer
             nullable: true
+        quotationItemName:
+            type: string
+            length: 255
+            nullable: true
         createdAt:
             type: datetime
         deletedAt:
             nullable: true
             type: datetime
+
+    embedded:
+        quotationItemPrice:
+            class: Application\ProjectAccountingBundle\Entity\Price
 
     manyToOne:
         question:
@@ -32,8 +40,13 @@ Application\QuotationGeneratorBundle\Entity\QuestionAction:
         questionOption:
             targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionOption
             inversedBy: actions
-        impliedQuestion:
+    manyToMany:
+        implyQuestionsBySelection:
             targetEntity: Application\QuotationGeneratorBundle\Entity\Question
+        implyQuestionsByTags:
+            targetEntity: Application\ClassificationBundle\Entity\Tag
+        implyQuestionsByGroups:
+            targetEntity: Application\QuotationGeneratorBundle\Entity\QuestionGroup
 
 
     lifecycleCallbacks: {  }

@@ -2,6 +2,8 @@
 
 namespace Application\QuotationGeneratorBundle\Entity;
 
+use Application\ClassificationBundle\Entity\Tag;
+use Application\ProjectAccountingBundle\Entity\Price;
 use Application\QuotationGeneratorBundle\Enum\ActionType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -40,9 +42,25 @@ class QuestionAction
     private $questionOption;
 
     /**
-     * @var Question
+     * @var Question[]|Collection
      */
-    private $impliedQuestion;
+    private $implyQuestionsBySelection;
+
+    /**
+     * @var Tag[]|Collection
+     */
+    private $implyQuestionsByTags;
+
+    /**
+     * @var QuestionGroup[]|Collection
+     */
+    private $implyQuestionsByGroups;
+
+    /** @var  Price */
+    private $quotationItemPrice;
+
+    /** @var  string */
+    private $quotationItemName;
 
     /**
      * @var array
@@ -69,7 +87,9 @@ class QuestionAction
     function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->impliedQuestions = new ArrayCollection();
+        $this->implyQuestionsBySelection = new ArrayCollection();
+        $this->implyQuestionsByTags = new ArrayCollection();
+        $this->implyQuestionsByGroups = new ArrayCollection();
     }
 
     /**
@@ -243,22 +263,6 @@ class QuestionAction
     }
 
     /**
-     * @return Question
-     */
-    public function getImpliedQuestion()
-    {
-        return $this->impliedQuestion;
-    }
-
-    /**
-     * @param Question $impliedQuestion
-     */
-    public function setImpliedQuestion(Question $impliedQuestion = null)
-    {
-        $this->impliedQuestion = $impliedQuestion;
-    }
-
-    /**
      * alias for getQuestionOption
      * @return QuestionOption
      */
@@ -289,5 +293,53 @@ class QuestionAction
         $this->position = $position;
     }
 
+    public function getImplyQuestionsBySelection()
+    {
+        return $this->implyQuestionsBySelection;
+    }
 
+    public function setImplyQuestionsBySelection($implyQuestionsBySelection)
+    {
+        $this->implyQuestionsBySelection = $implyQuestionsBySelection;
+    }
+
+    public function getImplyQuestionsByTags()
+    {
+        return $this->implyQuestionsByTags;
+    }
+
+    public function setImplyQuestionsByTags($implyQuestionsByTags)
+    {
+        $this->implyQuestionsByTags = $implyQuestionsByTags;
+    }
+
+    public function getImplyQuestionsByGroups()
+    {
+        return $this->implyQuestionsByGroups;
+    }
+
+    public function setImplyQuestionsByGroups($implyQuestionsByGroups)
+    {
+        $this->implyQuestionsByGroups = $implyQuestionsByGroups;
+    }
+
+    public function getQuotationItemPrice()
+    {
+        return $this->quotationItemPrice;
+    }
+
+    public function setQuotationItemPrice(Price $quotationItemPrice)
+    {
+        $this->quotationItemPrice = $quotationItemPrice;
+    }
+
+    public function getQuotationItemName()
+    {
+        return $this->quotationItemName;
+    }
+
+    public function setQuotationItemName($quotationItemName)
+    {
+        $this->quotationItemName = $quotationItemName;
+    }
 }

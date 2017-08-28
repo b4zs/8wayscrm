@@ -6,6 +6,7 @@ use Application\QuotationGeneratorBundle\Entity\FillOut;
 use Application\QuotationGeneratorBundle\Entity\FillOutAnswer;
 use Application\QuotationGeneratorBundle\Entity\Question;
 use Application\QuotationGeneratorBundle\Entity\QuestionOption;
+use Application\QuotationGeneratorBundle\Enum\ActionType;
 use Application\QuotationGeneratorBundle\Form\FillOutAnswerType;
 use Application\QuotationGeneratorBundle\Form\FilloutType;
 use Application\QuotationGeneratorBundle\Service\FillOutManager;
@@ -42,7 +43,7 @@ class FilloutApiController extends FOSRestController
         $result['questionId'] = $question->getId();
         $result['title'] = $question->getText();
         $result['type'] = $question->getFormType();
-        $result['group'] = $question->getGroup();
+        $result['group'] = $question->getGroup() ? $question->getGroup()->getName() : null;
         $result['stage'] = $question->getStage();
         $result['alias'] = $question->getAlias();
         $result['category'] = $question->getCategory() ? $question->getCategory()->getName() : null;
@@ -56,6 +57,7 @@ class FilloutApiController extends FOSRestController
                     'label' => $questionOption->getText(),
                     'value' => $questionOption->getValue(),
                     'hint' => 'no hint',
+                    'price' => $this->calculateQuestionOptionPrice($questionOption),
                 );
 
                 if ($questionOption->getMedia()) {
@@ -331,5 +333,16 @@ class FilloutApiController extends FOSRestController
             $questionsResult[] = $questionFromStack;
         }
         return $questionsResult;
+    }
+
+    private function calculateQuestionOptionPrice(QuestionOption $questionOption)
+    {
+        foreach ($questionOption->getActions() as $questionAction) {
+            if (ActionType::ADD_QUOTATION_ITEM === $questionAction->getActionType()) {
+
+            }
+        }
+
+        return null;
     }
 }

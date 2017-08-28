@@ -89,7 +89,7 @@ class QuestionActionAdmin extends Admin
 				'choices'   => ActionType::getChoices(),
 			))
 			->addIdentifier('questionOption')
-			->add('impliedQuestion')
+//			->add('implyQuestionBySelection')
 //			->add('actionParams', null, array(
 //				'template' => 'ApplicationQuotationGeneratorBundle:Admin:object_field.html.twig'
 //			))
@@ -141,8 +141,17 @@ class QuestionActionAdmin extends Admin
 //		var_dump($action);die;
 
 		if ($action && $action->getActionType() === ActionType::IMPLY_QUESTION) {
-			$formMapper->add('impliedQuestion', 'sonata_type_model_list', array(
-				'btn_delete'        => false,
+			$formMapper->add('implyQuestionsBySelection', 'entity', array( //TODO: ezt jo lenne ajaxosan megoldani
+                'multiple' => true,
+                'class' => 'Application\\QuotationGeneratorBundle\\Entity\\Question',
+			), array());
+			$formMapper->add('implyQuestionsByTags', 'entity', array(
+                'multiple' => true,
+                'class' => 'Application\\ClassificationBundle\\Entity\\Tag',
+			), array());
+			$formMapper->add('implyQuestionsByGroups', 'entity', array(
+                'multiple' => true,
+                'class' => 'Application\\QuotationGeneratorBundle\\Entity\\QuestionGroup',
 			), array());
 		}
 

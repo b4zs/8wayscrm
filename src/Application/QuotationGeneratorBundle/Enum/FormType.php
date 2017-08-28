@@ -13,6 +13,7 @@ class FormType
 			'multiplechoice'    => 'multiple choice',
 			'number'            => 'number',
 			'text'              => 'text',
+			'textarea'          => 'textarea',
 		);
 
 	}

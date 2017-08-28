@@ -193,7 +193,7 @@ class QuestionOption
     }
 
     /**
-     * @return Collection
+     * @return QuestionAction[]|Collection
      */
     public function getActions()
     {
