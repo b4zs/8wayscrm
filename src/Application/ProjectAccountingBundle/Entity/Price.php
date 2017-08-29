@@ -37,4 +37,12 @@ class Price
     {
         $this->currency = $currency;
     }
+
+    public function toArray()
+    {
+        return array(
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+        );
+    }
 }

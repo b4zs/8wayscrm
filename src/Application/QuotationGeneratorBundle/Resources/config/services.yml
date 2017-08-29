@@ -66,6 +66,11 @@ services:
         calls:
             - [setContainer, [@service_container]]
 
+    application_event.action_type.add_quotation_item:
+        class: Application\QuotationGeneratorBundle\ActionType\AddQuotationItem
+        calls:
+            - [setContainer, [@service_container]]
+
     application_quotation_generator.admin.fill_out:
         class: Application\QuotationGeneratorBundle\Admin\FillOutAdmin
         arguments: [~, Application\QuotationGeneratorBundle\Entity\FillOut, ApplicationQuotationGeneratorBundle:FillOutAdmin]

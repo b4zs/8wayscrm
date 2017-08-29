@@ -2,6 +2,7 @@
 
 namespace Application\QuotationGeneratorBundle\Admin;
 
+use Application\ProjectAccountingBundle\Form\PriceType;
 use Application\QuotationGeneratorBundle\Entity\QuestionAction;
 use Application\QuotationGeneratorBundle\Enum\ActionType;
 use Application\QuotationGeneratorBundle\Form\YamlArrayType;
@@ -135,6 +136,7 @@ class QuestionActionAdmin extends Admin
 		$formMapper->add('actionType', 'choice', array(
 			'label' => 'Type',
 			'choices' => ActionType::getChoices(),
+            'expanded' => true,
 		));
 
 
@@ -155,13 +157,18 @@ class QuestionActionAdmin extends Admin
 			), array());
 		}
 
-		$formMapper->add('actionParams', new YamlArrayType(), array(
-			'label' => 'Params (yaml)',
-			'required' => false,
-			'attr' => array(
-				'rows' => 10,
-			),
-		));
+		if ($action && $action->getActionType() === ActionType::ADD_QUOTATION_ITEM) {
+            $formMapper->add('quotationItemName', 'text', array());
+            $formMapper->add('quotationItemPrice', 'accounting_price', array());
+        }
+
+//		$formMapper->add('actionParams', new YamlArrayType(), array(
+//			'label' => 'Params (yaml)',
+//			'required' => false,
+//			'attr' => array(
+//				'rows' => 10,
+//			),
+//		));
 	}
 
 	/**

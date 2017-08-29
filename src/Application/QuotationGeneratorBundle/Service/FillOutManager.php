@@ -44,11 +44,48 @@ class FillOutManager
         $this->setQuestionStack($fillOut, $questionStack);
 
         //TODO: might has to befactored to recalculate qStack and reiterate the newly implied answers after each answer
+        $fillOutQuestionsAnswers = [];
         foreach ($fillOut->getAnswers() as $answer) {
-            if (!in_array($answer->getQuestion()->getId(), $questionStack)) continue;
+            $fillOutQuestionsAnswers[$answer->getQuestion()->getId()] = $answer;
+        }
 
-            $this->processAnswer($answer);
-            $questionStack = $this->getQuestionStack($fillOut);
+        $alreadyProcessedQuestions = [];
+
+        while (true) {
+            $this->log('QuestionStack at while loop iteration start: '.json_encode($questionStack));
+
+            $managedToProcessAnything = false;
+            foreach ($questionStack as $questionId) {
+                if (in_array($questionId, $alreadyProcessedQuestions)) {
+                    continue;
+                }
+
+                if (!isset($fillOutQuestionsAnswers[$questionId])) {
+                    continue;
+                }
+                
+                $answer = $fillOutQuestionsAnswers[$questionId];
+
+                $this->processAnswer($answer);
+                $questionStack = $this->getQuestionStack($fillOut);
+                $this->log('QuestionStack after processing answer: '.json_encode($questionStack));
+
+                $alreadyProcessedQuestions[] = $questionId;
+                $managedToProcessAnything = true;
+            }
+
+            if (!$managedToProcessAnything) {
+                $this->log('nothing has been processed');
+                break;
+            } else {
+                $this->log('some items has been processed, redoing while loop');
+            }
+
+
+//            if (!in_array($answer->getQuestion()->getId(), $questionStack)) {
+//                $this->log('Skipping Q#'.$answer->getQuestion()->getId(). ' A#'.$answer->getId(). ' due its not in qstack');
+//                continue;
+//            }
         }
 
 		return $fillOut->getState();
@@ -56,6 +93,7 @@ class FillOutManager
 
 	public function processAnswer(FillOutAnswer $answer)
 	{
+	    $this->log('Processing Answer #'.$answer->getId());
         $fillout = $answer->getFillOut();
         $questionStack = $this->getQuestionStack($fillout);
 
@@ -86,6 +124,7 @@ class FillOutManager
 
 			try {
 				$result = $expressionLanguage->evaluate($action->getCriteria(),	$scope);
+				$this->log($action->getCriteria().' = '.json_encode($result));
 			} catch (\RuntimeException $e) {
 				$result = null;
 			}
@@ -153,6 +192,11 @@ class FillOutManager
         $state = $fillout->getState();
         $state['questionStack'] = $questionStack;
         $fillout->setState($state);
+    }
+
+    private function log($string)
+    {
+//        echo $string.PHP_EOL;
     }
 
 }

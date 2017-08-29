@@ -31,6 +31,8 @@ class Version20170828112934 extends AbstractMigration
         $this->addSql('ALTER TABLE question_action DROP FOREIGN KEY FK_4091A39A4847D827');
         $this->addSql('DROP INDEX IDX_4091A39A4847D827 ON question_action');
         $this->addSql('ALTER TABLE question_action DROP implied_question_id');
+        $this->addSql('ALTER TABLE object_identity__index ADD CONSTRAINT FK_A01544A9EFEA8D6C FOREIGN KEY (objectidentity_id) REFERENCES object_identity (id);');
+        $this->addSql('ALTER TABLE question_action ADD quotation_item_name VARCHAR(255) DEFAULT NULL, ADD quotation_item_price_amount DOUBLE PRECISION DEFAULT NULL, ADD quotation_item_price_currency VARCHAR(3) DEFAULT NULL;');
     }
 
     /**

@@ -163,6 +163,7 @@ class FillOut
     {
         $this->state = array(
             'questionStack' => array(),
+            'quotation' => array(),
         );
     }
 

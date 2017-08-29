@@ -56,8 +56,8 @@ class FilloutApiController extends FOSRestController
                 $option = array(
                     'label' => $questionOption->getText(),
                     'value' => $questionOption->getValue(),
-                    'hint' => 'no hint',
-                    'price' => $this->calculateQuestionOptionPrice($questionOption),
+                    'hint'  => $questionOption->getHint(),
+                    'quotation' => $this->calculateQuestionOptionPrice($questionOption),
                 );
 
                 if ($questionOption->getMedia()) {
@@ -97,12 +97,8 @@ class FilloutApiController extends FOSRestController
         /** @var FillOut $fillout */
         $fillout = $this->loadFillout($id);
         $this->getFilloutManager()->updateFillOutState($fillout);
-        $questionsResult = $this->buildFilloutQuestions($fillout);
-
-        return $this->handleView($this->view(array(
-            'questions' => $questionsResult,
-            'questionStack' => $fillout->getState()['questionStack'],
-        )));
+        $responseData = $this->buildResponse($fillout);
+        return $this->handleView($this->view($responseData));
     }
 
     public function postAction($id)
@@ -139,12 +135,8 @@ class FilloutApiController extends FOSRestController
         $this->getFilloutManager()->updateFillOutState($fillout);
         $this->getEntityManager()->flush();
 
-        $questionsResult = $this->buildFilloutQuestions($fillout);
-
-        return $this->handleView($this->view(array(
-            'questions' => $questionsResult,
-            'questionStack' => $fillout->getState()['questionStack'],
-        )));
+        $responseData = $this->buildResponse($fillout);
+        return $this->handleView($this->view($responseData));
 //        $form = $this->createForm(new FilloutType());
 //
 //        $form->submit($request->request->all());
@@ -325,6 +317,7 @@ class FilloutApiController extends FOSRestController
             $questionIds[] = $questionResult['questionId'];
         }
 
+
         foreach ($questionStack as $questionId) {
             if (in_array($questionId, $questionIds)) continue;
 
@@ -332,6 +325,16 @@ class FilloutApiController extends FOSRestController
             $questionIds[] = $questionFromStack['questionId'];
             $questionsResult[] = $questionFromStack;
         }
+
+        usort($questionsResult, function($a, $b) {
+            $av = isset($a['answerId']) ? $a['answerId'] : $a['questionId'];
+            $bv = isset($b['answerId']) ? $b['answerId'] : $b['questionId'];
+
+            return $av < $bv
+               ? -1
+               : 1;
+        });
+
         return $questionsResult;
     }
 
@@ -339,10 +342,29 @@ class FilloutApiController extends FOSRestController
     {
         foreach ($questionOption->getActions() as $questionAction) {
             if (ActionType::ADD_QUOTATION_ITEM === $questionAction->getActionType()) {
+                $quotation = array(
+                    'price' => $questionAction->getQuotationItemPrice()->toArray(),
+                    'name' => $questionAction->getQuotationItemName(),
+                );
 
+                return $quotation;
             }
         }
 
         return null;
+    }
+
+    protected function buildResponse(FillOut $fillout)
+    {
+        $questionsResult = $this->buildFilloutQuestions($fillout);
+        $state = $fillout->getState();
+        $quotation = $state['quotation'];
+
+        $responseData = array(
+            'questions'     => $questionsResult,
+            'questionStack' => $fillout->getState()['questionStack'],
+            'quotation'     => $quotation
+        );
+        return $responseData;
     }
 }

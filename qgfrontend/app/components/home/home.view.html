@@ -3,4 +3,13 @@
     <h1>qg v2 app</h1>
 
     <questions questions="ctrl.state.questions"></questions>
+
+    <h3>quotation</h3>
+    <table class="table table-striped">
+        <tr ng-repeat="quotationItem in ctrl.state.quotation">
+            <td>{{quotationItem.name}}</td>
+            <td>{{quotationItem.price.currency}}</td>
+            <td>{{quotationItem.price.amount}}</td>
+        </tr>
+    </table>
 </div>
