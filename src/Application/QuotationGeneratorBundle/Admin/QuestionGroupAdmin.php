@@ -47,6 +47,7 @@ class QuestionGroupAdmin extends Admin
         $formMapper
 //            ->add('id')
             ->add('name')
+            ->add('class')
         ;
     }
 

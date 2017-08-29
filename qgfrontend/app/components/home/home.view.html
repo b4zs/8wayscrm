@@ -5,8 +5,15 @@
     <questions questions="ctrl.state.questions"></questions>
 
     <h3>quotation</h3>
+    <div style="position: fixed; right: 0px; top: 20px; padding: 3px; background: rgba(255,255,255, 0.5); opacity: 0.7;">
+        <h3 class="text-center">
+            total:
+            <br>
+            {{ctrl.state.quotation.total.currency}}{{ctrl.state.quotation.total.amount}}
+        </h3>
+    </div>
     <table class="table table-striped">
-        <tr ng-repeat="quotationItem in ctrl.state.quotation">
+        <tr ng-repeat="quotationItem in ctrl.state.quotation.items">
             <td>{{quotationItem.name}}</td>
             <td>{{quotationItem.price.currency}}</td>
             <td>{{quotationItem.price.amount}}</td>

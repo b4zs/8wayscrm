@@ -26,6 +26,11 @@ class Question
     /**
      * @var string
      */
+    private $hint;
+
+    /**
+     * @var string
+     */
     private $formType;
 
     /**
@@ -387,6 +392,16 @@ class Question
     public function setTags($tags)
     {
         $this->tags = $tags;
+    }
+
+    public function getHint()
+    {
+        return $this->hint;
+    }
+
+    public function setHint($hint)
+    {
+        $this->hint = $hint;
     }
 
 

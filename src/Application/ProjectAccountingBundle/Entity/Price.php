@@ -18,6 +18,26 @@ class Price
      */
     private $currency = 'HUF';
 
+    public function __construct($amount, $currency)
+    {
+        $this->amount = $amount;
+        $this->currency = $currency;
+    }
+
+    public static function fromArray(array $data)
+    {
+        return new Price($data['amount'], $data['currency']);
+    }
+
+    public function toArray()
+    {
+        return array(
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+        );
+    }
+
+
     public function getAmount()
     {
         return $this->amount;
@@ -38,11 +58,12 @@ class Price
         $this->currency = $currency;
     }
 
-    public function toArray()
+    public function add(Price $price)
     {
-        return array(
-            'amount' => $this->getAmount(),
-            'currency' => $this->getCurrency(),
-        );
+        if ($price->getCurrency() !== $this->getCurrency()) {
+            throw new \InvalidArgumentException('Currency mismatch');
+        }
+
+        $this->setAmount($this->getAmount()+$price->getAmount());
     }
 }

@@ -11,6 +11,9 @@ Application\QuotationGeneratorBundle\Entity\Question:
         text:
             type: string
             length: 255
+        hint:
+            type: text
+            nullable: true
         formType:
             type: string
             length: '32'
@@ -31,7 +34,6 @@ Application\QuotationGeneratorBundle\Entity\Question:
             nullable: true
             type: string
             length: 255
-
 
     manyToOne:
         category:

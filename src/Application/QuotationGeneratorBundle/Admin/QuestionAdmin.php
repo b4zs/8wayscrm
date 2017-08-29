@@ -68,6 +68,7 @@ class QuestionAdmin extends Admin
             ->add('category', null, array('required' => false))
             ->add('group', null, array('required' => false))
             ->add('text')
+            ->add('hint', 'textarea', array('required' => false,))
             ->add('alias', null, array('required' => false))
             ->add('formType', 'choice', array(
                 'choices' => FormType::getChoices(),

@@ -1,5 +1,7 @@
 <div class="question">
-    <label>{{question.title}} - Q#{{question.questionId}} A#{{question.answerId}}</label>
+    <label class="clearfix">{{question.title}}</label>
+    <code>Q=#{{question.questionId}}, A=#{{question.answerId}}, value={{question.value}}</code>
+    <small ng-if="question.hint" class="clearfix" style="padding-left: 10px;"><p>{{question.hint}}</p></small>
 
     <div ng-if="'text' == question.type">
         <input type="text" ng-model="question.value"  ng-disabled="$root.loading" ng-blur="ctrl.valueChanged()">
@@ -21,9 +23,9 @@
                 <div ng-if="choice.image" class="col-md-4">
                     <img ng-attr-src="{{choice.image}}" class="img-responsive">
                 </div>
-                <small ng-if="choice.hint">{{choice.hint}}</small>
-                <small ng-if="choice.quotation">{{choice.quotation.price.currency+' '+choice.quotation.price.amount}} ({{choice.quotation.name}})</small>
+                <small ng-if="choice.hint" style="font-weight: normal;">{{choice.hint}}</small>
             </label>
+            <small ng-if="choice.quotation"><br>{{choice.quotation.price.currency+' '+choice.quotation.price.amount}} ({{choice.quotation.name}})</small>
         </div>
     </div>
 
@@ -37,6 +39,5 @@
         </div>
     </div>
 
-    <small ng-if="question.hint">{{question.hint}}</small>
-    <code>{{question.value}}</code>
+
 </div>

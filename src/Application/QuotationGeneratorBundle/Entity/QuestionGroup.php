@@ -19,6 +19,8 @@ class QuestionGroup
      */
     private $name;
 
+    private $class;
+
 
     /**
      * Get id
@@ -56,5 +58,15 @@ class QuestionGroup
     function __toString()
     {
         return $this->name ?: 'new';
+    }
+
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    public function setClass($class)
+    {
+        $this->class = $class;
     }
 }

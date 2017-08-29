@@ -4,6 +4,7 @@
 namespace Application\QuotationGeneratorBundle\ActionType;
 
 
+use Application\ProjectAccountingBundle\Entity\Price;
 use Application\QuotationGeneratorBundle\Entity\FillOutAnswer;
 use Application\QuotationGeneratorBundle\Entity\QuestionAction;
 
@@ -24,9 +25,13 @@ class AddQuotationItem extends AbstractActionType
             'price' => $action->getQuotationItemPrice()->toArray(),
         ];
 
-        $state['quotation'][] = $quotationItem;
+        $state['quotation']['items'][] = $quotationItem;
+        $total = isset($state['quotation']['total']) ? Price::fromArray($state['quotation']['total']) : new Price(0.0, 'EUR');
 
-//        var_dump($state);die;
+        $total->add($action->getQuotationItemPrice());
+
+        $state['quotation']['total'] = $total->toArray();
+
 
         $answer->getFillOut()->setState($state);
     }

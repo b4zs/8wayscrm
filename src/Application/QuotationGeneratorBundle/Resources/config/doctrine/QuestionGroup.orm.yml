@@ -11,4 +11,8 @@ Application\QuotationGeneratorBundle\Entity\QuestionGroup:
         name:
             type: string
             length: 255
+        class:
+            type: string
+            lenght: 64
+            nullable: true
     lifecycleCallbacks: {  }

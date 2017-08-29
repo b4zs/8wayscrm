@@ -42,6 +42,7 @@ class FilloutApiController extends FOSRestController
         $result = array();
         $result['questionId'] = $question->getId();
         $result['title'] = $question->getText();
+        $result['hint'] = $question->getHint();
         $result['type'] = $question->getFormType();
         $result['group'] = $question->getGroup() ? $question->getGroup()->getName() : null;
         $result['stage'] = $question->getStage();
