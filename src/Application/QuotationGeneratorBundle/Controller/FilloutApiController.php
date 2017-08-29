@@ -5,6 +5,7 @@ namespace Application\QuotationGeneratorBundle\Controller;
 use Application\QuotationGeneratorBundle\Entity\FillOut;
 use Application\QuotationGeneratorBundle\Entity\FillOutAnswer;
 use Application\QuotationGeneratorBundle\Entity\Question;
+use Application\QuotationGeneratorBundle\Entity\QuestionGroup;
 use Application\QuotationGeneratorBundle\Entity\QuestionOption;
 use Application\QuotationGeneratorBundle\Enum\ActionType;
 use Application\QuotationGeneratorBundle\Form\FillOutAnswerType;
@@ -255,7 +256,7 @@ class FilloutApiController extends FOSRestController
     }
 
     /**
-     * @return mixed
+     * @return Question
      */
     protected function loadQuestion($questionId)
     {
@@ -318,7 +319,6 @@ class FilloutApiController extends FOSRestController
             $questionIds[] = $questionResult['questionId'];
         }
 
-
         foreach ($questionStack as $questionId) {
             if (in_array($questionId, $questionIds)) continue;
 
@@ -361,10 +361,30 @@ class FilloutApiController extends FOSRestController
         $state = $fillout->getState();
         $quotation = $state['quotation'];
 
+        $groups = array();
+        foreach ($questionsResult as $questionResult) {
+            $questionId = $questionResult['questionId'];
+            $question = $this->loadQuestion($questionId);
+
+            if (!$question->getGroup()) {
+                $groups['default'] = array(
+                    'name' => 'default',
+                    'class' => '',
+                );
+            } else {
+                $groups[$question->getGroup()->getName()] = array(
+                    'name' => $question->getGroup()->getName(),
+                    'class' => $question->getGroup()->getClass(),
+                );
+            }
+
+        }
+
         $responseData = array(
             'questions'     => $questionsResult,
             'questionStack' => $fillout->getState()['questionStack'],
-            'quotation'     => $quotation
+            'quotation'     => $quotation,
+            'groups'        => $groups,
         );
         return $responseData;
     }

@@ -20,11 +20,6 @@ class QuestionsController {
 
   setQuestions(data) {
     this.$scope.questions = data;
-
-
-    this.$scope.groups = [];
-
-    this.updateGroups();
   }
 
   getTestData() {
@@ -99,6 +94,7 @@ export class QuestionsDirective {
     this.scope = {
       title: '@',
       questions: '=',
+      groups: '=',
     }
   }
 }
