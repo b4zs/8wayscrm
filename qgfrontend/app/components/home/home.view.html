@@ -1,6 +1,7 @@
 <div class="container">
     <div style="position: absolute;left:5px; right: 5px;" class="text-right" ng-show="$root.loading">loading</div>
     <h1>qg v2 app</h1>
+    <label for="">debug <input type="checkbox" ng-model="$root.debug"></label>
 
     <questions questions="ctrl.state.questions" groups="ctrl.state.groups"></questions>
 
