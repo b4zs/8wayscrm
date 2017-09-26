@@ -27,7 +27,7 @@ services:
 
     application_crm.admin.project:
         class: Application\CrmBundle\Admin\ProjectAdmin
-        arguments: [~, Application\CrmBundle\Entity\Project, SonataAdminBundle:CRUD]
+        arguments: [~, Application\CrmBundle\Entity\Project, ApplicationCrmBundle:ProjectAdmin]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Projects, label: All projects }
 

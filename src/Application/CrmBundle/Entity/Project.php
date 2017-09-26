@@ -81,6 +81,10 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
      */
     private $groups;
 
+    private $parent;
+
+    private $childs;
+
     /**
      * Constructor
      */
@@ -88,6 +92,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     {
         $this->memberships = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fileset = new Gallery();
         $this->createdAt = new \DateTime();
         $this->initObjectIdentity();
@@ -353,4 +358,39 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
         return $this->getName();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param mixed $parent
+     * @return $this
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getChilds()
+    {
+        return $this->childs;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $childs
+     * @return $this
+     */
+    public function setChilds($childs)
+    {
+        $this->childs = $childs;
+        return $this;
+    }
 }

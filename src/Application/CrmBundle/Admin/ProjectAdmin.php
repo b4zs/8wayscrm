@@ -20,6 +20,7 @@ class ProjectAdmin extends Admin
             ->add('name')
 //            ->add('createdAt')
 //            ->add('description')
+            ->add('parent')
             ->add(
                 'status',
                 'doctrine_orm_choice',
@@ -50,6 +51,7 @@ class ProjectAdmin extends Admin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
+        $this->setListMode('list');
         $listMapper
             ->addIdentifier('id')
             ->addIdentifier('name')
@@ -78,6 +80,7 @@ class ProjectAdmin extends Admin
 
         $formMapper->with('Project', array('class' => 'col-md-6'));
             $formMapper->add('name');
+            $formMapper->add('parent');
 
             if ('lead' !== $parentAdmin) {
                 $formMapper->add('client', 'sonata_type_model_list', array(

@@ -37,7 +37,15 @@ Application\CrmBundle\Entity\Project:
         deletedAt:
             type: datetime
             nullable: true
+
     manyToOne:
+        parent:
+            targetEntity: Project
+            inversedBy: childs
+            joinColumn:
+                name: parent_id
+                referencedColumnName: id
+
         client:
             targetEntity: Application\CrmBundle\Entity\Client
             inversedBy: projects
@@ -53,6 +61,10 @@ Application\CrmBundle\Entity\Project:
         groups:
             targetEntity: Application\UserBundle\Entity\Group
     oneToMany:
+        childs:
+            targetEntity: Project
+            mappedBy: parent
+
         memberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership
             mappedBy: project
