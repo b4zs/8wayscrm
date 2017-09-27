@@ -9,34 +9,65 @@
 {% endblock %}
 
 {% block list_table %}
-     custom table
-    <div class="col-xs-12 col-md-12">
-        {% if admin.datagrid.results|length > 0 %}
-            {% for object in admin.datagrid.results %}
-                <div class="object-row">
-                    <h2>Project</h2>
-                    {% for field_description in admin.list.elements %}
-                        {{ object|render_list_element(field_description) }}
-                    {% endfor %}
-                    {% if object.childs is defined and object.childs|length %}
-                        <div class="childs">
-                            <h3>Childs</h3>
-                            {% for child in object.childs %}
-                                <div class="col-xs-12">
-                                    {% for child_field_description in admin.list.elements %}
-                                        {{ child|render_list_element(child_field_description) }}
-                                    {% endfor %}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
+
+    <script>
+        var data = [];
+    </script>
+
+    {% if admin.datagrid.results|length > 0 %}
+        {% for object in admin.datagrid.results %}
+
+            {% if object.parent == null %}
+                <script>
+                    {% set parent = "node_" ~ object.id %}
+                    var {{ parent }} = {};
+                    {{ parent }}.text = "Main project - " + "{{ object.name }}";
+                    {{ _self.recursiveChildProjects(object, parent) }}
+                    data.push({{ parent }});
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% macro recursiveChildProjects(object, parent) %}
+        {% if object.childs is defined and object.childs|length %}
+            {{ parent }}.nodes = [];
+            {% for child in object.childs %}
+                {% set object_name = "node_" ~ child.id %}
+
+                var {{ object_name }} = {
+                text: "Sub project - {{ child.name }}"
+                };
+                {{ _self.recursiveChildProjects(child, object_name) }}
+                {{ parent }}.nodes.push({{ object_name }});
             {% endfor %}
         {% endif %}
-    </div>
+    {% endmacro %}
 
-
-
+    {#<div class="col-xs-12 col-md-12">#}
+    {#{% if admin.datagrid.results|length > 0 %}#}
+    {#{% for object in admin.datagrid.results %}#}
+    {#<div class="object-row">#}
+    {#<h2>Project</h2>#}
+    {#{% for field_description in admin.list.elements %}#}
+    {#{{ object|render_list_element(field_description) }}#}
+    {#{% endfor %}#}
+    {#{% if object.childs is defined and object.childs|length %}#}
+    {#<div class="childs">#}
+    {#<h3>Childs</h3>#}
+    {#{% for child in object.childs %}#}
+    {#<div class="col-xs-12">#}
+    {#{% for child_field_description in admin.list.elements %}#}
+    {#{{ child|render_list_element(child_field_description) }}#}
+    {#{% endfor %}#}
+    {#</div>#}
+    {#{% endfor %}#}
+    {#</div>#}
+    {#{% endif %}#}
+    {#</div>#}
+    {#{% endfor %}#}
+    {#{% endif %}#}
+    {#</div>#}
 
     {#<div class="col-xs-12 col-md-12">#}
     {#{% set batchactions = admin.batchactions %}#}
@@ -268,44 +299,14 @@
 
     {#<!-- Required Javascript -->#}
     {#<script src="jquery.js"></script>#}
-
-    <div id="tree"></div>
+    <div class="col-xs-12 col-md-12">
+        <h2>Projects</h2>
+        <div id="tree"></div>
+    </div>
 
     <script src="{{ asset('assets/vendor/bootstrap-treeview/src/js/bootstrap-treeview.js') }}"></script>
     <script>
-        var data = [
-            {
-                text: "Parent 1",
-                nodes: [
-                    {
-                        text: "Child 1",
-                        nodes: [
-                            {
-                                text: "Grandchild 1"
-                            },
-                            {
-                                text: "Grandchild 2"
-                            }
-                        ]
-                    },
-                    {
-                        text: "Child 2"
-                    }
-                ]
-            },
-            {
-                text: "Parent 2"
-            },
-            {
-                text: "Parent 3"
-            },
-            {
-                text: "Parent 4"
-            },
-            {
-                text: "Parent 5"
-            }
-        ];
+
         function getTree() {
             // Some logic to retrieve, or generate tree structure
             return data;

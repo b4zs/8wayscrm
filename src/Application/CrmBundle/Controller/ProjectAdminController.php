@@ -65,7 +65,7 @@ class ProjectAdminController extends Controller
         return $this->render('ApplicationCrmBundle:ProjectAdmin:list.html.twig', array(
             'action' => 'list',
             'form' => $formView,
-            'datagrid' => $dataGrid,
+            'datagrid' => json_encode($dataGrid),
             'csrf_token' => $this->getCsrfToken('sonata.batch'),
         ));
     }
