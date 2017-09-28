@@ -136,6 +136,14 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     }
 
     /**
+     * @param $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Set name
      *
      * @param string $name

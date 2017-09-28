@@ -16,8 +16,6 @@
 
     {% if admin.datagrid.results|length > 0 %}
         {% for object in admin.datagrid.results %}
-
-            {% if object.parent == null %}
                 <script>
                     {% set parent = "node_" ~ object.id %}
                     var {{ parent }} = {};
@@ -29,14 +27,13 @@
                     {{ _self.recursiveChildProjects(object, parent) }}
                     data.push({{ parent }});
                 </script>
-            {% endif %}
         {% endfor %}
     {% endif %}
 
     {% macro recursiveChildProjects(object, parent) %}
-        {% if object.childs is defined and object.childs|length %}
+        {% if object.children is defined and object.children|length %}
             {{ parent }}.nodes = [];
-            {% for child in object.childs %}
+            {% for child in object.children %}
                 {% set object_name = "node_" ~ child.id %}
 
                 var {{ object_name }} = {

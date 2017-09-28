@@ -12,12 +12,6 @@ use Symfony\Component\Finder\Finder;
 
 class ImportProjectsCommand extends ContainerAwareCommand
 {
-    private $csvParsingOptions = array(
-        'finder_in' => 'app/Resources/',
-        'finder_name' => 'projects.csv',
-        'ignoreFirstLine' => true
-    );
-
     protected function configure()
     {
         $this
@@ -27,79 +21,98 @@ class ImportProjectsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $csv = $this->parseCSV();
-
-
-//
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-//
-        foreach ($csv as $row) {
-            if (isset($row[1]) && $row[1]) {
+        $rows = $this->parseCSV();
 
-                $project = new Project();
-                $project->setName($row[1]);
-//
-                $em->persist($project);
+        foreach ($rows as $row) {
+            if (count($row) < 2 || !$row[0]) {
+                continue;
             }
 
-//            return ;
+            $project = new Project();
+            $project->setId($row[0]);
+            $project->setName($row[1]);
+
+            if (isset($row[3])) {
+                $project->setDescription($row[3]);
+            }
+
+            $em->persist($project);
         }
-//
+
         $em->flush();
+
+        foreach ($rows as $row) {
+            if (count($row) < 2 || !$row[0] || !$row[2]) {
+                continue;
+            }
+
+            $projectId = (int)$row[0];
+            $parentId = (int)$row[2];
+
+            if($projectId == 0 || $parentId == 0) {
+                continue;
+            }
+
+            $parentReference = $em->getReference(Project::class, $row[2]);
+
+            if (!$parentReference) {
+                continue;
+            }
+
+            $project = $em->getRepository(Project::class)->findOneBy([
+                'id' => $row[0]
+            ]);
+
+            if (!$project) {
+                continue;
+            }
+
+
+            $project->setParent($parentReference);
+            try {
+                $em->persist($project);
+                $em->flush();
+            } catch (\Exception $e) {
+            }
+        }
     }
 
     private function parseCSV()
     {
         $csv = null;
-        $ignoreFirstLine = $this->csvParsingOptions['ignoreFirstLine'];
-        $finder = new Finder();
-        $finder->files()
-            ->in($this->csvParsingOptions['finder_in'])
-            ->name($this->csvParsingOptions['finder_name']);
-
-        foreach ($finder as $file) {
-            $csv = $file;
-        }
+        $path = $this->getContainer()->get('kernel')->getRootDir().'/Resources/projects.csv';
 
         $rows = array();
-        $columns = [];
 
-        if (($handle = fopen($csv->getRealPath(), "r")) !== FALSE) {
-            $i = 0;
-            while (($data = fgetcsv($handle, null, ";")) !== FALSE) {
-                foreach ($data as $line) {
-                    $i++;
+        $i = 0;
+        $file = fopen($path, 'r');
+        while (($data = fgetcsv($file, null, ";")) !== FALSE) {
+            foreach ($data as $line) {
+                $i++;
 
-                    if ($i == 1) {
-                        $columns = explode(',', $line);
-                        $columns = array_map(
-                            function ($str) {
-                                return str_replace('"', '', $str);
-                            },
-                            $columns
-                        );
-                        continue;
-                    }
-
-                    $lineArray = explode(',', $line);
-                    $lineArray = array_map(
-                        function ($str) {
-                            return str_replace('"', '', $str);
-                        },
-                        $lineArray
-                    );
-
-                    $f = 0;
-                    $finalDataArray = [];
-                    foreach ($lineArray as $dataRow) {
-                        $finalDataArray[] = $dataRow;
-                        $f++;
-                    }
-                    $rows[] = $finalDataArray;
+                if($i == 1) {
+                    continue;
                 }
+
+                $lineArray = explode(',', $line);
+                $lineArray = array_map(
+                    function ($str) {
+                        return str_replace('"', '', $str);
+                    },
+                    $lineArray
+                );
+
+                $f = 0;
+                $finalDataArray = [];
+                foreach ($lineArray as $dataRow) {
+                    $finalDataArray[] = $dataRow;
+                    $f++;
+                }
+                $rows[] = $finalDataArray;
             }
-            fclose($handle);
         }
+        fclose($file);
 
         return $rows;
     }
