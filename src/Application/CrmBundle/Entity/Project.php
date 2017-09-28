@@ -10,10 +10,9 @@ use Application\UserBundle\Entity\Group;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
@@ -73,7 +72,9 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
      */
     private $logExtraData;
 
-    /** @var  Gallery */
+    /**
+     * @var Gallery
+     */
     private $fileset;
 
     /**
@@ -81,18 +82,44 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
      */
     private $groups;
 
-    private $parent;
+    /**
+     * @var ArrayCollection
+     */
+    private $children;
 
-    private $childs;
+    /**
+     * @var integer
+     */
+    private $lft;
+
+    /**
+     * @var integer
+     */
+    private $lvl;
+
+    /**
+     * @var integer
+     */
+    private $rgt;
+
+    /**
+     * @var integer
+     */
+    private $root;
+
+    /**
+     * @var Project
+     */
+    private $parent;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->memberships = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->childs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->memberships = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+        $this->children = new ArrayCollection();
         $this->fileset = new Gallery();
         $this->createdAt = new \DateTime();
         $this->initObjectIdentity();
@@ -101,7 +128,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -124,7 +151,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -170,7 +197,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -193,7 +220,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -216,7 +243,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get length
      *
-     * @return string 
+     * @return string
      */
     public function getLength()
     {
@@ -251,7 +278,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get memberships
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMemberships()
     {
@@ -272,7 +299,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
 
     function __toString()
     {
-        return $this->getName() . ($this->getClient() ? ' ('.$this->getClient() . ')' : '');
+        return $this->getName().($this->getClient() ? ' ('.$this->getClient().')' : '');
     }
 
     /**
@@ -359,6 +386,96 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param ArrayCollection $children
+     * @return $this
+     */
+    public function setChildren(ArrayCollection $children)
+    {
+        $this->children = $children;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLft()
+    {
+        return $this->lft;
+    }
+
+    /**
+     * @param int $lft
+     * @return $this
+     */
+    public function setLft($lft)
+    {
+        $this->lft = $lft;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLvl()
+    {
+        return $this->lvl;
+    }
+
+    /**
+     * @param int $lvl
+     * @return $this
+     */
+    public function setLvl($lvl)
+    {
+        $this->lvl = $lvl;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRgt()
+    {
+        return $this->rgt;
+    }
+
+    /**
+     * @param mixed $rgt
+     * @return $this
+     */
+    public function setRgt($rgt)
+    {
+        $this->rgt = $rgt;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    /**
+     * @param mixed $root
+     * @return $this
+     */
+    public function setRoot($root)
+    {
+        $this->root = $root;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getParent()
@@ -373,24 +490,6 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     public function setParent($parent)
     {
         $this->parent = $parent;
-        return $this;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getChilds()
-    {
-        return $this->childs;
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $childs
-     * @return $this
-     */
-    public function setChilds($childs)
-    {
-        $this->childs = $childs;
         return $this;
     }
 }

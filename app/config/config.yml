@@ -79,7 +79,17 @@ doctrine:
             json: Sonata\Doctrine\Types\JsonType
 
     orm:
+        mappings:
+            gedmo_tree:
+                type: annotation
+                prefix: Gedmo\Tree\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                alias: GedmoTree
+                is_bundle: false
+
         auto_generate_proxy_classes: "%kernel.debug%"
+
+
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         resolve_target_entities:
@@ -236,8 +246,11 @@ sonata_media:
             directory:  %kernel.root_dir%/../web/uploads/media
             create:     false
 
-
-
+stof_doctrine_extensions:
+    default_locale: %locale%
+    orm:
+        default:
+            tree: true
 
 sonata_block:
     blocks:

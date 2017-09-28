@@ -22,25 +22,29 @@ class ImportProjectsCommand extends ContainerAwareCommand
     {
         $this
             // the name of the command (the part after "bin/console")
-            ->setName('import:projects')
-        ;
+            ->setName('import:projects');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $csv = $this->parseCSV();
 
+
+//
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-
+//
         foreach ($csv as $row) {
-            $output->writeln($row['name']);
-            $project = new Project();
-            $project->setName($row['name']);
-            $project->setParent($row['parent']);
+            if (isset($row[1]) && $row[1]) {
 
-            $em->persist($project);
+                $project = new Project();
+                $project->setName($row[1]);
+//
+                $em->persist($project);
+            }
+
+//            return ;
         }
-
+//
         $em->flush();
     }
 
@@ -58,15 +62,41 @@ class ImportProjectsCommand extends ContainerAwareCommand
         }
 
         $rows = array();
+        $columns = [];
 
         if (($handle = fopen($csv->getRealPath(), "r")) !== FALSE) {
             $i = 0;
             while (($data = fgetcsv($handle, null, ";")) !== FALSE) {
-                $i++;
-                if ($ignoreFirstLine && $i == 1) {
-                    continue;
+                foreach ($data as $line) {
+                    $i++;
+
+                    if ($i == 1) {
+                        $columns = explode(',', $line);
+                        $columns = array_map(
+                            function ($str) {
+                                return str_replace('"', '', $str);
+                            },
+                            $columns
+                        );
+                        continue;
+                    }
+
+                    $lineArray = explode(',', $line);
+                    $lineArray = array_map(
+                        function ($str) {
+                            return str_replace('"', '', $str);
+                        },
+                        $lineArray
+                    );
+
+                    $f = 0;
+                    $finalDataArray = [];
+                    foreach ($lineArray as $dataRow) {
+                        $finalDataArray[] = $dataRow;
+                        $f++;
+                    }
+                    $rows[] = $finalDataArray;
                 }
-                $rows[] = $data;
             }
             fclose($handle);
         }

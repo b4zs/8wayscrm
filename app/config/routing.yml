@@ -33,6 +33,12 @@ app_index:
     defaults:
         _controller: ApplicationCrmBundle:Default:index
 
+app_test:
+    path: /import-test
+    defaults:
+        _controller: ApplicationCrmBundle:Default:importProjects
+
+
 object_identity:
     resource: '@CoreObjectIdentityBundle/Resources/config/routing.yml'
     prefix: /

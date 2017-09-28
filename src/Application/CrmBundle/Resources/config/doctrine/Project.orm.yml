@@ -1,6 +1,7 @@
 Application\CrmBundle\Entity\Project:
     type: entity
     table: crm__project
+    repositoryClass: Application\CrmBundle\Repository\ProjectRepository
     id:
         id:
             type: integer
@@ -8,8 +9,12 @@ Application\CrmBundle\Entity\Project:
             generator:
                 strategy: AUTO
     gedmo:
+        tree:
+            type: nested
+
         loggable:
             logEntryClass: Core\LoggableEntityBundle\Entity\LogEntry
+
         soft_deleteable:
             field_name: deletedAt
             time_aware: false
@@ -19,32 +24,58 @@ Application\CrmBundle\Entity\Project:
             length: 255
             gedmo:
                 - versioned
+
         description:
             type: text
             nullable: true
             gedmo:
                 - versioned
+
         status:
             type: string
             length: '16'
             gedmo:
                 - versioned
+
         createdAt:
             type: datetime
+
         updatedAt:
             type: datetime
             nullable: true
+
         deletedAt:
             type: datetime
             nullable: true
 
+        lft:
+            type: integer
+            gedmo:
+              - treeLeft
+        rgt:
+            type: integer
+            gedmo:
+              - treeRight
+        root:
+            type: integer
+            nullable: true
+            gedmo:
+              - treeRoot
+        lvl:
+            type: integer
+            gedmo:
+              - treeLevel
+
     manyToOne:
         parent:
-            targetEntity: Project
-            inversedBy: childs
+            targetEntity: Application\CrmBundle\Entity\Project
+            inversedBy: children
             joinColumn:
                 name: parent_id
                 referencedColumnName: id
+                onDelete: CASCADE
+            gedmo:
+                - treeParent
 
         client:
             targetEntity: Application\CrmBundle\Entity\Client
@@ -57,15 +88,19 @@ Application\CrmBundle\Entity\Project:
         objectIdentity:
             targetEntity: Application\ObjectIdentityBundle\Entity\ObjectIdentity
             cascade: [all]
+
     manyToMany:
         groups:
             targetEntity: Application\UserBundle\Entity\Group
-    oneToMany:
-        childs:
-            targetEntity: Project
-            mappedBy: parent
 
-        memberships:
+    oneToMany:
+       children:
+           targetEntity: Application\CrmBundle\Entity\Project
+           mappedBy: parent
+           orderBy:
+              lft: ASC
+
+       memberships:
             targetEntity: Application\CrmBundle\Entity\ProjectMembership
             mappedBy: project
             cascade: [all]
