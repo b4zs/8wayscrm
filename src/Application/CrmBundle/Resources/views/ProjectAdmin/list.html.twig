@@ -12,44 +12,32 @@
 
     <script>
         var serializedData = {{ serializedData|raw }};
-
-        console.log(serializedData);
         var data = [];
+
+        $.each(serializedData, function(i, node) {
+            var item = {};
+            item.text = node.name;
+
+            recursiveChildProjects(node, item);
+
+            data.push(item);
+        });
+
+        function recursiveChildProjects(object, parent) {
+            if(object.__children.length) {
+                parent.nodes = [];
+
+                $.each(object.__children, function (i, e) {
+                    var child = {};
+                    child.text = e.name;
+
+                    recursiveChildProjects(e, child);
+
+                    parent.nodes.push(child);
+                })
+            }
+        }
     </script>
-
-    {% if admin.datagrid.results|length > 0 %}
-        {% for object in admin.datagrid.results %}
-                <script>
-                    {% set parent = "node_" ~ object.id %}
-                    var {{ parent }} = {};
-                    {{ parent }}.text = "Main project - " + "{{ object.name }} -"
-                    {% if object.client %}
-                         + " <b> Client - {{ object.client }} </b>"
-                    {% endif %}
-                    ;
-                    {{ _self.recursiveChildProjects(object, parent) }}
-                    data.push({{ parent }});
-                </script>
-        {% endfor %}
-    {% endif %}
-
-    {% macro recursiveChildProjects(object, parent) %}
-        {% if object.children is defined and object.children|length %}
-            {{ parent }}.nodes = [];
-            {% for child in object.children %}
-                {% set object_name = "node_" ~ child.id %}
-
-                var {{ object_name }} = {
-                text: "Sub project - {{ child.name }}"
-                {% if child.client %}
-                + " - <b> Client - {{ child.client }} </b>"
-                {% endif %}
-                };
-                {{ _self.recursiveChildProjects(child, object_name) }}
-                {{ parent }}.nodes.push({{ object_name }});
-            {% endfor %}
-        {% endif %}
-    {% endmacro %}
 
     <div class="col-xs-12 col-md-12">
         <h2>Projects</h2>
