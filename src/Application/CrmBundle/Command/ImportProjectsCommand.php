@@ -25,63 +25,67 @@ class ImportProjectsCommand extends ContainerAwareCommand
         $rows = $this->parseCSV();
 
         foreach ($rows as $row) {
-            if (count($row) < 2 || !$row[0]) {
-                continue;
-            }
-
             $project = new Project();
             $project->setId($row[0]);
             $project->setName($row[1]);
-
-            if (isset($row[3])) {
-                $project->setDescription($row[3]);
-            }
 
             $em->persist($project);
         }
 
         $em->flush();
 
+        $counter = 0;
+        $sizeOfRows = count($rows);
+
         foreach ($rows as $row) {
-            if (count($row) < 2 || !$row[0] || !$row[2]) {
+            $counter++;
+            $projectId = $row[0];
+            $parentId = $row[2];
+
+            $output->writeln("id: {$projectId} - parent: {$parentId}");
+
+            if($parentId == 'NULL') {
+                $output->writeln("no parent");
                 continue;
             }
 
-            $projectId = (int)$row[0];
-            $parentId = (int)$row[2];
+            $parent = $em->getRepository(Project::class)->findOneBy([
+                'id' => (int)$parentId
+            ]);
 
-            if($projectId == 0 || $parentId == 0) {
-                continue;
-            }
-
-            $parentReference = $em->getReference(Project::class, $row[2]);
-
-            if (!$parentReference) {
+            if (!$parent) {
+                $output->writeln("does not found the parent");
                 continue;
             }
 
             $project = $em->getRepository(Project::class)->findOneBy([
-                'id' => $row[0]
+                'id' => (int)$projectId
             ]);
 
             if (!$project) {
+                $output->writeln("does not found the project");
                 continue;
             }
 
 
-            $project->setParent($parentReference);
+            $project->setParent($parent);
+
             try {
                 $em->persist($project);
                 $em->flush();
+                $output->writeln("{$counter}/{$sizeOfRows} item has been loaded..");
             } catch (\Exception $e) {
+                $output->writeln($e->getMessage());
             }
         }
+
+
     }
 
     private function parseCSV()
     {
         $csv = null;
-        $path = $this->getContainer()->get('kernel')->getRootDir().'/Resources/projects.csv';
+        $path = $this->getContainer()->get('kernel')->getRootDir().'/Resources/query_result.csv';
 
         $rows = array();
 
@@ -91,20 +95,15 @@ class ImportProjectsCommand extends ContainerAwareCommand
             foreach ($data as $line) {
                 $i++;
 
-                if($i == 1) {
+                if ($i == 1) {
                     continue;
                 }
 
                 $lineArray = explode(',', $line);
-                $lineArray = array_map(
-                    function ($str) {
-                        return str_replace('"', '', $str);
-                    },
-                    $lineArray
-                );
 
                 $f = 0;
                 $finalDataArray = [];
+
                 foreach ($lineArray as $dataRow) {
                     $finalDataArray[] = $dataRow;
                     $f++;

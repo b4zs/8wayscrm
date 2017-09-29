@@ -1,0 +1,755 @@
+id,name,parent_id
+1,IBUSZ tender,33
+2,story board,1
+3,Livis,11
+4,Naex,96
+5,JEDE,96
+7,Le Manége de Dully,17
+8,8 Ways Media,17
+10,koffeinshop,5
+11,Liveinfo,96
+13,Mahartlog,96
+14,képeslap,13
+16,GRS Recruitment,17
+17,8 Ways,NULL
+18,JedeCRM,96
+19,XCopy,96
+20,landing page,19
+21,Visite Privée,17
+22,NTT-2000,96
+24,Árpi feladatok,96
+25,Aesthetica minisite,24
+26,BPPI hírlevél tervezés,24
+27,Budapest Klinikken,96
+32,myOpelService,33
+33,Rewart,96
+35,Alcor,96
+38,Reklámzabálók,96
+39,DEV,NULL
+40,NTH,96
+43,PerfectTransfer,96
+44,weboldal,43
+45,Cokemaci,81
+46,Cin Cin Amica,96
+47,Játékmester,56
+49,Pascal Huni,17
+50,NORIBAT SA,17
+51,Delman,17
+52,Sylva,96
+53,NKEK,52
+54,Riskpartners,96
+55,Tescomobile,96
+56,Brightly,96
+58,Mercato webshop,96
+59,WMACi,56
+60,Profield,56
+62,Postapont,56
+63,Postapont Fórum,62
+64,Heliforce,96
+65,API,62
+66,ICDO,17
+67,Reisner Frank & Partner,96
+68,Fairfax Yeaman,17
+69,Logitech,96
+70,Bonduelle - a mi zöldségesünk,33
+72,Leasing market,96
+75,Kattanj rá és nyerj!,69
+76,Nivea ,33
+77,Nivea promóciós site,76
+79,Lacom,96
+80,Signoart studio,96
+81,Coca-Cola,33
+82,Coke FIFA,81
+83,Coke BURN,81
+84,Főgáz,52
+85,Curzon Land,17
+86,Antenna Hungária,33
+88,LED plafon,350
+89,HaverVagy v2,36
+94,Pick szeged,56
+96,GBaRT,NULL
+97,Profield - PMK,60
+99,unibind.hu,96
+100,Csomagautomata microsite,62
+101,FB app,83
+102,Coke Lidl,81
+104,MJSZ,96
+105,HeppDental,96
+106,Chabrier,17
+107,Wang Mester,96
+109,FC Lancy,17
+110,Polgár optika,96
+111,ACE & Company,17
+112,Dr.Oetker,33
+113,Jet-info,17
+115,Redmine frontend,418
+116,La Reserve,17
+117,Hotel Les Trois Couronnes,17
+118,Client portal,51
+120,Happiness Consulting,33
+121,HC-Survey CRM,120
+122,Jobies,17
+123,Wega,17
+124,BurnF1 promó site,83
+125,Szurkolj velünk,69
+128,Fitness by California,17
+130,MailOnTime (a.k.a Mailtimer),17
+131,IBUSZ posztok,1
+133,FMR Bar,17
+134,Bonbonetti,33
+136,Multibox,96
+137,Multitube,136
+138,Meyrin FC,17
+139,Friskies,56
+141,Nestea,33
+142,FaceJob,96
+143,LED,350
+144,WOM,33
+146,Goldpartner,96
+147,FanJune,96
+148,Rossmills,17
+149,Goodyear,33
+150,Sonata CMS,418
+151,Microplane shop,96
+152,Akadémia kiadó,96
+153,Dronograph,96
+156,_Kreatív ötlet gyűjtés,418
+157,MultiWeb,136
+158,MERSSAD,17
+160,Energia-bróker,96
+161,PROBOND,NULL
+163,2Pets,96
+165,RECRM - recruitment crm system,NULL
+167,Star Játszóház,96
+169,JAR Capital,17
+170,Group Site,116
+171,La Reserve Geneva,116
+172,Fanta,33
+173,Wizzair,56
+174,GBaRT Management,418
+175,Budapest Plasztikai Intézet,96
+176,ELMÜ,33
+177,Heineken,33
+178,Bonathan Technologies,17
+179,DM,33
+180,Web SEO Wire,17
+181,Játssz velünk és nyerj!,69
+182,Tsé Fung,17
+183,Tsé Fung Group Page,182
+184,Tsé Fung Geneve,182
+185,Tsé Fung St Petersburg,182
+189,GPS,96
+190,LaReserve HR,116
+191,Allview,96
+192,Cisel,17
+194,Pillangó Patika,96
+195,Energizer,33
+196,La Reserve Blog,116
+197,Micro Express,96
+198,Mahart Passnave,96
+199,Gyermekbántalmazás,96
+202,Uni5,17
+203,Swiss Addict,17
+205,LoyalBank,508
+206,Budapest sétarepülés,96
+207,Globalis partner,17
+208,GIGI,96
+209,ACE Client portal,111
+210,Pick 2014 fogyasztói promóció,33
+211,Talent Advisor,17
+212,De Bethune,17
+213,Trocadero,96
+214,Global Terv,96
+215,DeLonghi,56
+216,MailOnTime web,130
+217,Budaörsi Római Katolikus Egyházközség,24
+218,Dr.György Emília,24
+219,Sunflower,96
+221,Attar Corporation,17
+222,Skylab,202
+223,Swiss Linguist,17
+224,OMMIK,96
+225,Pick 2014 trade promóció,33
+226,Insens,17
+227,ACE templates,111
+228,La Reserve Paris,116
+231,Ooops,33
+232,Pick reklám,33
+233,La Reserve Ramatuelle,116
+234,Geneva Vintage Watch,17
+235,Zempléni kommunikáció,96
+236,Szféraeurópa,96
+237,HomeGourmet,17
+238,Fabienne Gautier ,17
+239,Nyerő ünnep,69
+241,PROBOND - FEJLESZTÉSEK,161
+244,Nyerő játék,62
+245,Pharmacie at home,17
+246,Talwinder,17
+247,Rapilium,17
+248,OMSI,17
+250,Superkupon,33
+251,Lasserre,17
+252,Jobies test,122
+253,Panama Advisory Group,17
+254,Michel Reybier Hospitality,116
+255,Along Came Cindy Blog,17
+256,StreetGourmet,17
+257,Decemberi átmeneti promó,86
+258,CIB,56
+259,Örvény rajz,33
+260,UnitAid,17
+261,Helvetica Partners,17
+262,Aetas,17
+263,hosting-automation,418
+264,BOS Bikes,17
+265,Militarytechnics,96
+266,British Pantry,96
+267,CRC,96
+268,Laptop.hu,96
+269,Nordic Life,96
+270,LoyalBank - content management,205
+271,PoziTeam,96
+272,BiOrganic Nutrition,17
+274,Spirithome,96
+275,Sucafina,17
+276,MyMetics,17
+277,Marketer,33
+278,Denise's Burger,17
+280,Bitcoin webshop,96
+281,8ways project template,NULL
+282,International Cosmetics Distributor,17
+284,Heritage Capital,96
+285,Luxfero,96
+286,Master Jet,17
+287,Ligetmosó,96
+288,Kedvezménykuponok készítése,33
+289,Kids Voice,17
+292,Support feladatok,33
+293,Nivea - Bárhol otthon,33
+294,GDF suez,52
+295,AD Construction,17
+297,Coop Parc du Rhône,17
+299,Les Saveurs Du Liban,17
+300,Nyerő ünnep - Húsvét,69
+301,Adatrögzítő,19
+302,Pénz7,79
+303,Cili és Dani esküvői oldal,96
+304,ISF,17
+305,One FM,17
+306,Driving4Free,17
+307,logitech EDI,69
+308,Quotation Generator,418
+309,Residence rent,96
+310,Sparfell,17
+311,Alive app,17
+312,PROBOND - Backlog,161
+315,Égi lámpás,96
+318,Dyras,96
+319,Malika,17
+320,Avocat Kraus,17
+321,ACGi,17
+326,First-tech,96
+327,Air Algerie,17
+329,Pouly,17
+331,Labatec,17
+333,IPS,205
+334,Profield corporate site,60
+335,Bombaüzlet,96
+336,Loyalbank.com website,205
+337,Herz,33
+338,Família,33
+339,FRK,96
+340,Luxusautókozmetika,96
+342,Alutent,96
+343,Speedwings,17
+346,Mercato,96
+347,Fleet Services,96
+348,Human existence,56
+349,Colombusim.com corp. site,205
+350,Stellar Lighting,96
+351,Herbioticum sebkenőcs,96
+352,PrestaShop base,418
+353,Flamingo Bar,96
+356,JNC Avocat,17
+357,IPS tasks,205
+358,Webstone Ltd.,17
+359,Logitech 2015 nyári promó,69
+360,Mahart Tours,96
+361,8Cap demo,442
+363,BFM,17
+365,Europe Media,96
+366,Bistro Mandarin,107
+367,Weisshorn,17
+368,Colombusim.hu,205
+369,Nest Living,17
+371,Johnson & Johnson,33
+373,Aesthetica - mellnagyobbítás portál,24
+374,DVM group,96
+375,Duna Transznacionális Program (DTP\, interregdanube),96
+376,GBaRT projekt sablon,418
+377,Mahart info,96
+378,Aptitudes Placement Sàrl,17
+379,Nemzeti Emlékezet Bizottság,24
+380,Loyalfunds,205
+381,Advanced Shields,17
+382,Mediametrix,79
+384,Auchan promóció,371
+385,Kínai konyha,107
+386,Harckocsi,96
+387,Spar promóció - 1.,371
+388,Máltai befektetési alap,96
+389,Michel Reybier,116
+390,Logitech 2015 őszi promó,69
+391,Frix,96
+392,Ingyenkávégép,5
+393,Coke Meal - 2015,81
+394,Global electric factory,96
+395,Szivattyú javítás,96
+396,Victoria Jungfrau Collection,17
+397,Le sourire de Lucie,17
+398,Heritage Capital Fund,96
+399,Pick 2015 trade promóció,33
+400,Hair Medical,17
+401,Investment,96
+402,Coke Vodafone,81
+403,Pick 2015 fogyasztói promóció,33
+404,Capvest,17
+405,Eyes Magazine,17
+406,Petrolin,17
+407,Nulla év,24
+408,Addex Therapeutics,17
+409,iStudy,17
+410,Abyss World,17
+411,Edvin Marton,96
+412,Hajozas,96
+413,Spar promóció - 2.,371
+414,HSSC,96
+415,Vidék történet,24
+416,Hotel du Palais,17
+417,Foodster,96
+418,GBaRT - internal,96
+420,Sendy,418
+421,Sitebuild Framework,418
+422,Design,418
+423,Bossmedia,96
+424,Pizzamonster,96
+425,Stella Payment Solutions,205
+426,MicroExpress,96
+427,Gérance,17
+428,Bridgestone,33
+429,Denis Dental,96
+430,Streetfood & Grill,424
+431,Oil 2015,33
+432,Lasserre Giftbox,251
+433,Le fournil Romand,17
+434,Spice Management,17
+435,SalesCRM,418
+436,Propaganda,17
+437,Next Privacy,17
+438,Siematic Budapest,96
+439,Audemars Piguet,17
+440,Dankin & Associates,17
+441,RJ Management,17
+442,8Cap Suite,17
+443,ENTAC,96
+444,Basic Commodities,17
+445,Nescens,17
+446,Logitech 2015 téli promó,69
+447,FB Complex,96
+448,La Reserve Conciergerie,116
+449,SweDent,96
+450,8wayscrm - 8cloud.ch,435
+451,MG JOB,122
+452,HTCC,96
+453,Richemont,17
+456,Geneva Airport,17
+457,Money Plus Card,205
+458,L design,96
+459,GBaRT teszt,96
+460,Emmanuel Levain,17
+461,Wang Happy Noodles,107
+462,Toute des Championne,17
+463,Violet,17
+464,Nestlé,17
+465,Evyra,17
+466,Roosevelt 7/8,96
+468,PR Directory,453
+469,Autó Kártörténet - AKT,96
+470,Edwards Sandwiches,17
+472,Váci 1,374
+473,Baboo,17
+474,Decimus,17
+476,Cla-Val,17
+477,Carré Lumière,17
+478,Perfektum,96
+479,Krimmo,17
+480,Tesco,371
+481,Capocaccia,17
+482,Gyermekfotó,96
+483,Pick 2016 tender,33
+486,The Sand Dollar Sculpture,17
+487,Hotelis,17
+488,Turtle Island (Tortuga),17
+489,Disconnection Totale,17
+490,Alta Booking,17
+491,Arzier,17
+492,Zazazou,17
+493,Szolnoki baglyok,96
+494,H Coiffure,17
+495,Csillag Dental,96
+496,BatYmar,17
+497,NextGen,96
+498,Giftbox demo,17
+499,Felix Constructions,17
+500,Artizians,536
+501,Dr. Zempléni Kinga,96
+502,Forever Institut,17
+503,Nivea - tengernyi gondoskodás,33
+504,Amberg Group,17
+505,Myloyex,205
+506,Lonberg,96
+507,Swiss Digital First,17
+508,Profis,96
+509,Sparfell International Lease Corporation (silc),310
+510,Decisive Partners,17
+511,HomeBistrot,17
+512,Spacecode,17
+513,Burn 2016 tavasz,83
+514,8caps website,442
+516,Antistressmassage,96
+517,COOP Gottaz,17
+518,Concorde,96
+519,Mini presentation site,465
+520,edmletter.com ,175
+521,Coke HORECA B2C,81
+523,Lartigue,17
+524,Bridgestone vásárlói promóció,428
+525,Bridgestone gumiszervizeknek promóció,428
+526,Bridgestone landing,428
+527,Bridgestone pontgyűjtő,428
+528,Chateau les Crostes,17
+529,Zoe bar,17
+530,Roosevelt,374
+531,Banque Gonet,17
+532,LEM,17
+533,Platz,96
+534,O-I Wine Vision,17
+535,Coke Tesco - 2016.,81
+536,Starpower,NULL
+537,Love from Margot Foundation,536
+538,Mike Murphy,536
+539,Angular CMS,418
+540,Coke horeca waiter,81
+541,PR Conference (Connectivity),453
+542,Photo Corner,17
+543,Pharmanuntius,NULL
+544, Agence KARACTER,17
+545,My Green Energy,17
+546,Immo-crowdfunding,545
+547,Renovip,17
+548,M3 Real Estate,17
+549,La Clinique des Alpes,17
+550,TÚK!,96
+551,Oil 2016,33
+552,WhiteShield,96
+553,Spar promóció 3. - 2016. nyár,371
+554,Promenade Gardens,374
+555,Santoro webshop,58
+556,ASA Turnkey Solutions,NULL
+557,Jump the line app,556
+558,Tini Vagyok,96
+559,World of Waves,17
+560,MinDigFoci,86
+561,Aegon,33
+562,BJ Office,17
+563,Félkarú rabló - 2016 foci-s,86
+564,Loyal Gold,205
+565,LATC-svg,205
+566,Urban Washers,17
+567,Dreher,584
+568,Valeomed,96
+569,Siófood,417
+570,listamed.com,391
+571,GoldBerryPink,17
+572,Szervita,96
+573,BSR center,374
+574,Arany Ászok,584
+575,Hirdetés kalkulátor,687
+576,Kőbányai,584
+577,Burn 2016 nyár,83
+581,MayCo,17
+582,Coke Vodafone 2.0,81
+583,Stickers,96
+584,IS Innovative Solutions,96
+585,Transform Into Joy,536
+586,Formance,96
+587,Danone Oikos,33
+588,La Reserve Paris Apartment,228
+589,PCR (Prestige Car Romand),17
+590,Foodster CH,417
+591,Kozel,584
+592,Jouan de Rham,17
+593,Multibrand - 2016,371
+594,easyredmine,174
+595,Listov_HK,575
+596,Penny Market,33
+597,Hot wheels,584
+598,EasyService,17
+601,UR Capital,17
+604,Fisher-Price,584
+605,Conser Invest,17
+608,Oodience,838
+609,Risk Finance,96
+610,Wear We Belong,17
+613,Pick 2016 fogyasztói promóció,33
+614,Mind2Body,17
+617,Cocacolateszt,33
+618,Inside Budapest,96
+619,ACE & Company web 2.0,111
+622,Custom body workshop,NULL
+623,Les jardins d'Ehden,17
+626,Coke Meal - 2016,81
+627,Pick 2016 trade promóció,33
+628,Horizon Development,374
+629,Univer,33
+630,Horváth Rozi brand site,33
+631,Shay,NULL
+632,MyDreams,631
+634,Renov'up,17
+637,Monoqi,17
+640,Lions Club,17
+643,C5 base,NULL
+644,Loyexpro,205
+645,King Bau,96
+663,MPO,17
+664,8ways project test,NULL
+665,Les Trois Phéniciens (Gibran\, 3P),17
+666,digitLINE,96
+667,MarkoCrackers,96
+668,Pöttyös,33
+669,Thomas projektjei,96
+670,Burn Pimp Your House,83
+672,Barbie,96
+673,RobToth,838
+674,Inexto,17
+675,LnL,96
+676,8WAYS.HU,NULL
+677,Ptilara,17
+678,Stellar Lighting blog,350
+679,Dubai,96
+680,Dubai prezi,679
+681,Készülj.hu,371
+682,VALLAT Groupe,17
+683,Ricola - 2017 tavasz,33
+684,Prodiak.hu,96
+685,Flottaman,96
+686,Corgi (borntobe),96
+687,Hirdetési megoldások,96
+688,Maggi,33
+690,ONYX,17
+691,EuroStreeFurniture,365
+692,REWART,NULL
+693,Aegon,692
+694,Antenna Hungária,692
+695,Alcatel,692
+696,Bridgestone,692
+697,Coke,692
+698,Decathlon,692
+699,Dr. Oetker,692
+700,Friesland,692
+701,Goodyear,692
+702,JnJ,692
+703,Kotányi,692
+704,Magyar Termék,692
+705,Nestlé,692
+706,OIL Mabanaft,692
+707,Pick,692
+708,Ricola,692
+709,Spar,692
+710,Superkupon,692
+711,Tchibo,692
+712,Univer,692
+713,Penny,692
+714,Beiersdorf NIVEA,692
+715,Baba-Mama Program,693
+716,Aegon online,693
+717,Aegon sales ösztönző,693
+718,Antenna Hungária Loyalty program,694
+719,Bridgestone Facebook,696
+720,Bridgestone First Stop Facebook,696
+721,Daytone árajánlat,696
+722,Bridgestone adatbázis Call Center,696
+723,Bridgestone Nyári,696
+724,Bridgestone Téli,696
+725,Coke summer promotion,697
+726,Netre szomjazol? 3.0,697
+727,BURN,697
+728,Nestea,697
+730,Pöttyös,700
+731,Frico,700
+732,Goodyear Facebook,701
+733,Goodyear Premio Facebook,701
+734,Johnson&Johnson Get Ready promotion,702
+735,Horváth Rozi site,703
+736,Horváth Rozi Facebook,703
+737,Horváth Rozi csomagolás design,703
+738,Kotányi Facebook,703
+739,KOTÁNYI Országos promóció,703
+740,Kotányi WOM,703
+741,Kotányi Séf Akadémia,703
+742,Kotányi recept applikáció,703
+743,Balaton,705
+744,Maggi kocka,705
+745,Pick digitális project,707
+746,HERZ WOM,707
+747,Ricola,708
+748,Ricola nemzetközi,708
+749,SPARKupon,709
+750,Superkupon,710
+751,Univer Star Wars,712
+755,REWART WEBSITE,692
+756,8WAYS.CH,17
+757,Aegon Karszalag,693
+758,Adonis,17
+759,Marenco,17
+761,Danone Loyalty 2017,692
+762,PICK Őszi 2016,707
+763,Coke Spar,697
+764,REWART FÜZET ,692
+765,REWART XMAS ,692
+766,Pilet & Renaud,17
+767,Bamboo paper,96
+768,Vállalkozz.info,458
+769,SARANTIS,692
+770,Bosquet Fleurs,17
+771,DrivingCar,17
+773,STATISZTIKA,692
+774,Tissot Immobilier,17
+775,Inexto web,674
+776,PICK B2B loyalty 2017,707
+778,Areda,17
+779,Caminoteca,423
+780,Amram Capital,17
+781,Sullana,17
+782,Gelatiamo,33
+783,Nutella,584
+784,budmil,NULL
+785,budmil,692
+786,Color Dreams,96
+787,FANTA,697
+788,Rewart project template,NULL
+789,Bonduelle,692
+790,Bonduelle Loyalty 2.0 - Pontgyűjtő,789
+791,Landliebe,700
+792,Alcatel,33
+793,Máté fotó optika,96
+794,Ad Village,96
+795,8ways project template,17
+796,SanaNeo,17
+797,REWART WEBSITE Folytat,755
+798,Sauber,423
+799,Magyar Termék,33
+800,Egyéni feladatok,NULL
+801,Apollo Energy Gum,584
+802,NCP1 2017,727
+803,Leaderspa,NULL
+804,Probond - MK,161
+805,AdEaters,96
+806,Interiman,17
+807,Euromedic,692
+808,Horváth Rozi régiós promó,703
+809,Car saddles,96
+810,Burn Light up your summer,83
+811,Clinique Podologique,17
+812,Euromedic,33
+813,Kertvédelem,96
+814,Rewart project template,NULL
+816,Ragonese,692
+817,BSS,NULL
+818,Buda Gardens,374
+820,Rewart project template,96
+821,Koffeinservice,5
+822,Prevot,NULL
+823,Coty,692
+824,Coke&Grill,697
+825,Coke grill,81
+826,IDUN LOOR,17
+827,Boudo Art,96
+828,We Love Kreatív,692
+829,Coke summer,81
+830,Békatutaj,NULL
+831,Redmine Tracker,418
+832,Tracker,NULL
+833,Thyssenkrupp-Stainless,96
+834,Horváth Rozi - régiós promó,33
+835,Rewart test project,NULL
+836,Mesterkonyha,458
+837,Argento,96
+838,Rob,NULL
+839,OONU,838
+840,Playground,NULL
+841,Dreher 2017,584
+842,Risk Finance microsite,609
+844,Ozzie,NULL
+845,CIF-Doing Good,697
+846,Detki,NULL
+847,Vizes VB,694
+848,GBART Tracker,NULL
+849,Uzemeltetes,418
+850,Karácsonyi promóció,699
+851,Epayzz,508
+852,Mary-Ker Pasta,692
+853,Coke Telekom,81
+854,AdEaters Dubai,805
+855,Lamborghini,17
+856,Q10,714
+857,8ways sub,664
+858,TeenInk,NULL
+859,Ricola 2017-2018,708
+860,Vizes VB,86
+861,Arany Ászok 2017,584
+862,Ripli Zsuzsanna,458
+863,Herz SPAR ,707
+864,hotmomsclub.com,838
+865,Általános promós kérések,692
+866,NaturAqua Emotion,697
+867,Axbo,38
+868,Kőbányai 2017,584
+869,Cappy,33
+870,Mars,692
+871,Logitech 2017 - F1,69
+872,Family Beach,96
+873,Naturaqua Emotion,33
+874,Horváth Rozi országos promó,703
+875,Korostej Hajdu sajt,692
+876,Five4success,33
+877,Landliebe,33
+878,Enchantimals,584
+879,Glo-Story,96
+880,Kotányi,33
+881,Hungaropharma,692
+882,Austin.com,838
+883,Horváth Rozi országos promóció,33
+884,Partyssimo,96
+885,Hajdú sajt,33
+886,Iván Fenyő,838
+888,Cappy 2018,697
+890,Terápia Másképp (demo project),96
+891,Pick 2017 - Együtt egy asztalnál,33
+892,Ricola - 2017 ősz,33
+893,Bridgestone vásárlói promóció 2017,428
+894,PrestaShop base 1.7.x,352
+895,PICK 2017 - Közös családi pillanatok promó,707
+896,HARRIS,NULL
+897,Paid Surveys at Home,896
+898,Click4Surveys,896
+899,Opportunity Trade,96
+900,Kotányi országos promóció,880
+901,Hungaropharma,33
+902,Schlumberger /Tradeforce,692
+903,Dr. Oetker Ristorante pizza&Coke co-promo,699
+904,Teszt_0918,692
+905,Buffalo Antique,96
+906,Magyar Termék 2018,704
+907,4MyDog Store,96

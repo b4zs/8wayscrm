@@ -4,8 +4,8 @@
 namespace Application\CrmBundle\Repository;
 
 
-use Doctrine\ORM\EntityRepository;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
-class ProjectRepository extends EntityRepository
+class ProjectRepository extends NestedTreeRepository
 {
 }

@@ -3,6 +3,11 @@
 
 namespace Application\CrmBundle\Controller;
 
+use Application\CrmBundle\Entity\Project;
+use Application\CrmBundle\Repository\ProjectRepository;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Gedmo\Tree\Node;
+use JMS\Serializer\Serializer;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -32,7 +37,15 @@ class ProjectAdminController extends Controller
 
         $dataGrid->setValue('context', null, $context);
 
-        $data = $dataGrid->getQuery()->execute(array());
+//        $data = $dataGrid->getQuery()->execute(array());
+
+        /** @var NestedTreeRepository $repo */
+        $repo = $this->getDoctrine()->getManager()->getRepository(Project::class);
+        $arrayTree = $repo->childrenHierarchy();
+        /** @var Serializer $serializer */
+        $serializer = $this->get('jms_serializer');
+        $serializedData = $serializer->serialize($arrayTree, 'json');
+
 //
 //        // retrieve the main category for the tree view
 //        $category = $this->container->get('sonata.classification.manager.category')->getRootCategory($context);
@@ -67,6 +80,7 @@ class ProjectAdminController extends Controller
             'form' => $formView,
             'datagrid' => json_encode($dataGrid),
             'csrf_token' => $this->getCsrfToken('sonata.batch'),
+            'serializedData' => $serializedData,
         ));
     }
 }

@@ -6,8 +6,6 @@ Application\CrmBundle\Entity\Project:
         id:
             type: integer
             id: true
-            generator:
-                strategy: AUTO
     gedmo:
         tree:
             type: nested
