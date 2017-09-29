@@ -330,4 +330,4 @@ jms_serializer:
         directories:
             Project:
                 namespace_prefix: "Application\\CrmBundle\\Entity"
-                path: "%kernel.root_dir%/Resources/serializer/Project"
+                path: "%kernel.root_dir%/Resources/serializer"

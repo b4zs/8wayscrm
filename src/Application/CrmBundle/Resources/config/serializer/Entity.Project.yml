@@ -1,6 +1,6 @@
 Application\CrmBundle\Entity\Project:
     exclusion_policy: ALL
-    exclude: true
+    exclude: false
     read_only: false
     access_type: public_method # defaults to property
 #    discriminator:
@@ -24,10 +24,20 @@ Application\CrmBundle\Entity\Project:
 #    xml_namespaces:
 #        "": http://your.default.namespace
 #        atom: http://www.w3.org/2005/Atom
-#    properties:
-#        some-property:
-#            exclude: true
+    properties:
+        id:
+            expose: true
+
+        name:
+            expose: true
+
+        parent:
+            expose: true
+
+#        client:
 #            expose: true
+
+#            exclude: true
 #            exclude_if: expr
 #            expose_if: expr
 #            skip_when_empty: false
@@ -60,9 +70,9 @@ Application\CrmBundle\Entity\Project:
 #                namespace: http://www.w3.org/2005/Atom
 #            max_depth: 2
 
-    handler_callbacks:
-        serialization:
-            json: serializeToJson
+#    handler_callbacks:
+#        serialization:
+#            json: serializeToJson
 
 #    callback_methods:
 #        pre_serialize: [foo, bar]

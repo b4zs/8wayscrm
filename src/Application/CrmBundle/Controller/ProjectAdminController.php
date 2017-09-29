@@ -36,12 +36,16 @@ class ProjectAdminController extends Controller
         }
 
         $dataGrid->setValue('context', null, $context);
-
+//        $dataGrid->getQuery()->
 //        $data = $dataGrid->getQuery()->execute(array());
 
         /** @var NestedTreeRepository $repo */
         $repo = $this->getDoctrine()->getManager()->getRepository(Project::class);
-        $arrayTree = $repo->childrenHierarchy();
+        $arrayTree = $repo->getChildrenQueryBuilder()->getQuery()->getResult();
+//        $arrayTree = $repo->childrenQueryBuilder()->where('')
+
+//        $repo->
+
         /** @var Serializer $serializer */
         $serializer = $this->get('jms_serializer');
         $serializedData = $serializer->serialize($arrayTree, 'json');

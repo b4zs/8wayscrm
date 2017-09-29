@@ -14,12 +14,10 @@ class ProjectAdmin extends Admin
     /**
      * @param DatagridMapper $datagridMapper
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $dataGridMapper)
     {
-        $datagridMapper
+        $dataGridMapper
             ->add('name')
-//            ->add('createdAt')
-//            ->add('description')
             ->add('parent')
             ->add(
                 'status',
@@ -30,6 +28,7 @@ class ProjectAdmin extends Admin
                 'choice',
                 array('choices' => ProjectStatus::getChoices(), 'multiple' => true,)
             )
+
             ->add('client', 'doctrine_orm_callback', array(
                 'callback' => function($queryBuilder, $alias, $field, $value){
                     $aliases = $queryBuilder->getRootAliases();

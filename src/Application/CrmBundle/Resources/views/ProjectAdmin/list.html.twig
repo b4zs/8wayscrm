@@ -14,9 +14,10 @@
         var serializedData = {{ serializedData|raw }};
         var data = [];
 
+        console.log(serializedData);
+
         $.each(serializedData, function(i, node) {
-            var item = {};
-            item.text = node.name;
+            var item = createItem(node);
 
             recursiveChildProjects(node, item);
 
@@ -28,14 +29,32 @@
                 parent.nodes = [];
 
                 $.each(object.__children, function (i, e) {
-                    var child = {};
-                    child.text = e.name;
+                    var child = createItem(e);
 
                     recursiveChildProjects(e, child);
 
                     parent.nodes.push(child);
                 })
             }
+        }
+
+        function createItem(node) {
+            var item = {};
+            var href = "{{ path('admin_application_crm_project_edit', {'id' : 'project_id'}) }}";
+            href = href.replace("project_id", node.id);
+            var name = node.name;
+
+            if(node.client) {
+                name = name + ' - ' + node.client;
+            }
+
+            item.text = name;
+            item.icon = "glyphicon glyphicon-stop";
+            item.href = href;
+            item.tags = [node.status];
+            item.selectable = false;
+
+            return item;
         }
     </script>
 
@@ -52,7 +71,11 @@
             return data;
         }
 
-        $('#tree').treeview({data: getTree()});
+        $('#tree').treeview({
+            data: getTree(),
+            enableLinks: true,
+            showTags: true,
+        });
     </script>
 
     {#/Users/davidkovacs/Projects/8wayscrm/web/assets/#}
