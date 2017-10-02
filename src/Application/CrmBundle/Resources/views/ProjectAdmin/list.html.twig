@@ -10,29 +10,69 @@
 
 {% block list_table %}
 
+    {#  Source and documentation
+        -----------------------------------------------
+        https://jonmiles.github.io/bootstrap-treeview/
+        https://github.com/jonmiles/bootstrap-treeview
+     #}
+
     <script>
         var serializedData = {{ serializedData|raw }};
         var data = [];
+        var lastResultNumber = {{ lastResultNumber }};
+        var count = {{ countResults }};
 
-        console.log(serializedData);
+        $(document).on('click', '#load-more-project', function () {
+            var url = $(this).data('url');
 
-        $.each(serializedData, function(i, node) {
-            var item = createItem(node);
+            $.ajax({
+                url: url,
+                data: {
+                    numberOfFirstRow: lastResultNumber
+                },
+                method: 'POST'
+            }).done(function (resp) {
+                lastResultNumber += 10;
+                var respData = resp.serializedData;
+                respData = $.parseJSON(respData);
 
-            recursiveChildProjects(node, item);
+                $.each(respData, function (i, node) {
+                    var item = createItem(node);
+                    recursiveChildProjects(node, item);
+                    data.push(item);
+                });
 
-            data.push(item);
+                initializeTree();
+            });
         });
 
+        function buildTreeData(serializedData) {
+            $.each(serializedData, function (i, node) {
+                var item = createItem(node);
+
+                recursiveChildProjects(node, item);
+
+                data.push(item);
+            });
+        }
+
+        function initializeTree() {
+            $('#tree').treeview({
+                data: getTree(),
+                enableLinks: true,
+                showTags: true,
+                levels: 1,
+            });
+        }
+
         function recursiveChildProjects(object, parent) {
-            if(object.__children.length) {
+            if (object.children.length) {
                 parent.nodes = [];
 
-                $.each(object.__children, function (i, e) {
+                $.each(object.children, function (i, e) {
                     var child = createItem(e);
 
                     recursiveChildProjects(e, child);
-
                     parent.nodes.push(child);
                 })
             }
@@ -44,7 +84,7 @@
             href = href.replace("project_id", node.id);
             var name = node.name;
 
-            if(node.client) {
+            if (node.client) {
                 name = name + ' - ' + node.client;
             }
 
@@ -56,25 +96,34 @@
 
             return item;
         }
-    </script>
-
-    <div class="col-xs-12 col-md-12">
-        <h2>Projects</h2>
-        <div id="tree"></div>
-    </div>
-
-    <script src="{{ asset('assets/vendor/bootstrap-treeview/src/js/bootstrap-treeview.js') }}"></script>
-    <script>
 
         function getTree() {
             // Some logic to retrieve, or generate tree structure
             return data;
         }
+    </script>
 
-        $('#tree').treeview({
-            data: getTree(),
-            enableLinks: true,
-            showTags: true,
+    <div class="col-xs-12 col-md-12">
+        <h2>Projects</h2>
+        <div id="tree"></div>
+        <a
+                id="load-more-project"
+                class="btn btn-default"
+                style="display: none"
+                data-url="{{ path('admin_application_crm_project_loadMoreProject') }}"
+        >Load more
+        </a>
+    </div>
+
+    <script src="{{ asset('assets/vendor/bootstrap-treeview/src/js/bootstrap-treeview.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            if (lastResultNumber < count) {
+                $('#load-more-project').show();
+            }
+
+            buildTreeData(serializedData);
+            initializeTree();
         });
     </script>
 

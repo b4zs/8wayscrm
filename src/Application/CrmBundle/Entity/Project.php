@@ -394,11 +394,19 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     }
 
     /**
+     * @param bool $maxLength
      * @return ArrayCollection
      */
-    public function getChildren()
+    public function getChildren($maxLength = false)
     {
-        return $this->children;
+        if(!$maxLength) {
+            return $this->children;
+        }
+
+        return $this->children->filter(function ($child) {
+        /** @var $child Project */
+            return $child->getLvl() <= 1;
+        });
     }
 
     /**

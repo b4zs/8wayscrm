@@ -1,11 +1,9 @@
 services:
-
     application_crm.admin.contact:
         class: Application\CrmBundle\Admin\ContactAdmin
         arguments: [~, Application\CrmBundle\Entity\Contact, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Contact Persons, label: Contact Persons}
-#
 
     application_crm.admin.address:
         class: Application\CrmBundle\Admin\AddressAdmin
@@ -117,3 +115,4 @@ services:
             - '@sonata.admin.pool'
         tags:
             - { name: sonata.block }
+

@@ -19,7 +19,7 @@ class ClientRepository extends EntityRepository
         $qb->setParameter('status', $status);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        return empty($result) ? 0 : $result['c'];
+        return empty($result) ? 0 : $result[0]['c'];
     }
 
     /**

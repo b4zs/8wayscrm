@@ -10,6 +10,7 @@ imports:
 parameters:
     locale: en
     sonata_user.google_authenticator.server: http://example.com
+    jms_serializer.doctrine_proxy_subscriber.class: Application\CrmBundle\EventListener\DoctrineProxyHandler
 
 framework:
     #esi:             ~

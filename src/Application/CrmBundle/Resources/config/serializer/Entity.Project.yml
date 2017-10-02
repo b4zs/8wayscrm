@@ -31,7 +31,10 @@ Application\CrmBundle\Entity\Project:
         name:
             expose: true
 
-        parent:
+#        parent:
+#            expose: true
+
+        children:
             expose: true
 
 #        client:
