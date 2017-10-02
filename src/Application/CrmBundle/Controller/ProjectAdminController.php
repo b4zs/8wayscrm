@@ -42,6 +42,10 @@ class ProjectAdminController extends Controller
         $result = $this->getResult(0);
         $serializeObject = $this->serializeObject($result);
 
+        /**
+         * TODO apply filters under the parent
+         */
+
         return $this->render('ApplicationCrmBundle:ProjectAdmin:list.html.twig', array(
             'action' => 'list',
             'form' => $formView,
@@ -65,6 +69,21 @@ class ProjectAdminController extends Controller
             'countResults' => $count,
             'lastResultNumber' => ($numberOfFirstRow + 10)
         ]);
+    }
+
+    public function loadChildrenAction(Request $request)
+    {
+        $parentId = $request->request->get('request');
+        /** @var NestedTreeRepository $repo */
+        $repo = $this->getDoctrine()->getManager()->getRepository(Project::class);
+        /** @var Project $parent */
+        $parent = $repo->findOneBy([
+            'id' => $parentId,
+        ]);
+
+        $children = $parent->getChildren(false);
+        
+        return $this->serializeObject($children);
     }
 
     /**

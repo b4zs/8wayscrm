@@ -394,10 +394,18 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     }
 
     /**
+     * @return int
+     */
+    public function numberOfChildren()
+    {
+        return $this->children->count();
+    }
+
+    /**
      * @param bool $maxLength
      * @return ArrayCollection
      */
-    public function getChildren($maxLength = false)
+    public function getChildren($maxLength = true)
     {
         if(!$maxLength) {
             return $this->children;

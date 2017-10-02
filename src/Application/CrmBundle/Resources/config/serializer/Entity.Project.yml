@@ -3,27 +3,10 @@ Application\CrmBundle\Entity\Project:
     exclude: false
     read_only: false
     access_type: public_method # defaults to property
-#    discriminator:
-#        field_name: type
-#        disabled: false
-#        map:
-#            some-value: ClassName
-#        groups: [foo, bar]
-#        xml_attribute: true
-#        xml_element:
-#            cdata: false
-#            namespace: http://www.w3.org/2005/Atom
-#    virtual_properties:
-#        getSomeProperty:
-#            serialized_name: foo
-#            type: integer
-#        expression_prop:
-#            exp: object.getName()
-#            serialized_name: foo
-#            type: integer
-#    xml_namespaces:
-#        "": http://your.default.namespace
-#        atom: http://www.w3.org/2005/Atom
+    virtual_properties:
+        numberOfChildren:
+            serialized_name: numberOfChildren
+            type: integer
     properties:
         id:
             expose: true
@@ -31,53 +14,8 @@ Application\CrmBundle\Entity\Project:
         name:
             expose: true
 
-#        parent:
-#            expose: true
-
         children:
             expose: true
 
 #        client:
 #            expose: true
-
-#            exclude: true
-#            exclude_if: expr
-#            expose_if: expr
-#            skip_when_empty: false
-#            access_type: public_method # defaults to property
-#            accessor: # access_type must be set to public_method
-#                getter: getSomeOtherProperty
-#                setter: setSomeOtherProperty
-#            type: string
-#            serialized_name: foo
-#            since_version: 1.0
-#            until_version: 1.1
-#            groups: [foo, bar]
-#            xml_attribute: true
-#            xml_value: true
-#            inline: true
-#            read_only: true
-#            xml_key_value_pairs: true
-#            xml_list:
-#                inline: true
-#                entry_name: foo
-#                namespace: http://www.w3.org/2005/Atom
-#            xml_map:
-#                inline: true
-#                key_attribute_name: foo
-#                entry_name: bar
-#                namespace: http://www.w3.org/2005/Atom
-#            xml_attribute_map: true
-#            xml_element:
-#                cdata: false
-#                namespace: http://www.w3.org/2005/Atom
-#            max_depth: 2
-
-#    handler_callbacks:
-#        serialization:
-#            json: serializeToJson
-
-#    callback_methods:
-#        pre_serialize: [foo, bar]
-#        post_serialize: [foo, bar]
-#        post_deserialize: [foo, bar]

@@ -13,7 +13,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 class ProjectAdmin extends Admin
 {
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $dataGridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $dataGridMapper)
     {
@@ -197,6 +197,7 @@ class ProjectAdmin extends Admin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('loadMoreProject');
+        $collection->add('loadChildren');
     }
 
 
