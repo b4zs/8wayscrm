@@ -22,6 +22,11 @@
         var lastResultNumber = {{ lastResultNumber }};
         var count = {{ countResults }};
 
+        $(document).on('click', '.node-tree', function() {
+            var nodeId = $(this).data('nodeid');
+
+        });
+
         $(document).on('click', '#load-more-project', function () {
             var url = $(this).data('url');
 
@@ -33,8 +38,8 @@
                 method: 'POST'
             }).done(function (resp) {
                 lastResultNumber += 10;
+
                 var respData = resp.serializedData;
-                respData = $.parseJSON(respData);
 
                 $.each(respData, function (i, node) {
                     var item = createItem(node);
@@ -66,7 +71,7 @@
         }
 
         function recursiveChildProjects(object, parent) {
-            if (object.numberOfChildren) {
+            if (object.hasChildren) {
                 parent.nodes = [];
 
                 $.each(object.children, function (i, e) {
@@ -84,8 +89,8 @@
             href = href.replace("project_id", node.id);
             var name = node.name;
 
-            if (node.client) {
-                name = name + ' - ' + node.client;
+            if (node.client_name) {
+                name = name + ' - ' + node.client_name;
             }
 
             item.text = name;
@@ -94,6 +99,7 @@
             item.tags = [node.status];
             item.selectable = false;
 
+            //@TODO
             //@TODO add custom data to item ex.: data-id, numbersOfChildren, initialized or not
             //@TODO in case of element children variable is not initialized, call the ajax function and get children var
             //@TODO add children elements under the parent
@@ -117,7 +123,6 @@
         >Load more
         </a>
     </div>
-
     <script src="{{ asset('assets/vendor/bootstrap-treeview/src/js/bootstrap-treeview.js') }}"></script>
     <script>
         $(document).ready(function () {

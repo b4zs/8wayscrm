@@ -4,9 +4,18 @@ Application\CrmBundle\Entity\Project:
     read_only: false
     access_type: public_method # defaults to property
     virtual_properties:
-        numberOfChildren:
-            serialized_name: numberOfChildren
+        hasChildren:
+            serialized_name: hasChildren
+            type: boolean
+
+        getClientName:
+            serialized_name: client_name
+            type: string
+
+        getClientId:
+            serialized_name: client_id
             type: integer
+
     properties:
         id:
             expose: true
@@ -17,5 +26,5 @@ Application\CrmBundle\Entity\Project:
         children:
             expose: true
 
-#        client:
-#            expose: true
+        status:
+            expose: true

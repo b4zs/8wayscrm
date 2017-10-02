@@ -95,6 +95,7 @@ Application\CrmBundle\Entity\Project:
        children:
            targetEntity: Application\CrmBundle\Entity\Project
            mappedBy: parent
+           fetch: EXTRA_LAZY
            orderBy:
               lft: ASC
 

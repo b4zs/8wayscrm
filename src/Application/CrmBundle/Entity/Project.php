@@ -394,11 +394,15 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function numberOfChildren()
+    public function hasChildren()
     {
-        return $this->children->count();
+        if($this->getLft() + 1 !== $this->getRgt()){
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -407,14 +411,19 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
      */
     public function getChildren($maxLength = true)
     {
-        if(!$maxLength) {
-            return $this->children;
+        //@TODO load once only one level
+
+
+        if ($this->getLvl() > 0) {
+            return new ArrayCollection();
         }
 
-        return $this->children->filter(function ($child) {
-        /** @var $child Project */
-            return $child->getLvl() <= 1;
-        });
+        return $this->children;
+
+//        return $this->children->filter(function ($child) {
+//        /** @var $child Project */
+//            return $child->getLvl() <= 1;
+//        });
     }
 
     /**
@@ -515,5 +524,23 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     {
         $this->parent = $parent;
         return $this;
+    }
+
+    public function getClientName()
+    {
+        if ($this->getClient()) {
+            return $this->getClient()->getCanonicalName();
+        }
+
+        return '';
+    }
+
+    public function getClientId()
+    {
+        if ($this->getClient()) {
+            return $this->getClient()->getId();
+        }
+
+        return '';
     }
 }

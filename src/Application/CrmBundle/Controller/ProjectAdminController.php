@@ -62,7 +62,7 @@ class ProjectAdminController extends Controller
         $numberOfFirstRow = $request->request->get('numberOfFirstRow');
         $count = $this->countResult();
         $result = $this->getResult($numberOfFirstRow);
-        $serializeObject = $this->serializeObject($result);
+        $serializeObject = $this->serializeObject($result, 'array');
 
         return new JsonResponse([
             'serializedData' => $serializeObject,
@@ -124,12 +124,18 @@ class ProjectAdminController extends Controller
 
     /**
      * @param $data
-     * @return mixed|string
+     * @param string $format
+     * @return array|mixed|string
      */
-    private function serializeObject($data)
+    private function serializeObject($data, $format = 'json')
     {
         /** @var Serializer $serializer */
         $serializer = $this->get('jms_serializer');
-        return $serializer->serialize($data, 'json');
+
+        if($format == 'array') {
+            return $serializer->toArray($data);
+        }
+
+        return $serializer->serialize($data, $format);
     }
 }
