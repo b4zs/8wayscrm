@@ -10,6 +10,20 @@
 
 {% block list_table %}
 
+    <style>
+        .tools-frame {
+            float:right;
+            margin: 0 15px;
+            background: #f4f4f4;
+            padding: 5px;
+        }
+
+        .tools-frame a {
+            margin: 0 5px;
+        }
+
+    </style>
+
     {#  Source and documentation
         -----------------------------------------------
         https://jonmiles.github.io/bootstrap-treeview/
@@ -21,11 +35,8 @@
         var data = [];
         var lastResultNumber = {{ lastResultNumber }};
         var count = {{ countResults }};
-
-        $(document).on('click', '.node-tree', function() {
-            var nodeId = $(this).data('nodeid');
-
-        });
+        var index = {};
+        var index_ref = {};
 
         $(document).on('click', '#load-more-project', function () {
             var url = $(this).data('url');
@@ -42,7 +53,7 @@
                 var respData = resp.serializedData;
 
                 $.each(respData, function (i, node) {
-                    var item = createItem(node);
+                    var item = createItem(node, i);
                     recursiveChildProjects(node, item);
                     data.push(item);
                 });
@@ -53,7 +64,7 @@
 
         function buildTreeData(serializedData) {
             $.each(serializedData, function (i, node) {
-                var item = createItem(node);
+                var item = createItem(node, i);
 
                 recursiveChildProjects(node, item);
 
@@ -61,12 +72,94 @@
             });
         }
 
+        function openAddNewProject(el) {
+            console.log('test', el);
+            var parent = $(el).closest('.list-group-item');
+            var id = parent.data('nodeid');
+            var row = $('#tree').treeview('getNode', id);
+
+            var newProjectPath = row.newChildPath;
+
+            redirect(newProjectPath);
+        }
+
+        function openDetailsLink(el) {
+            var parent = $(el).closest('.list-group-item');
+            var id = parent.data('nodeid');
+            var row = $('#tree').treeview('getNode', id);
+
+            var href = row.href;
+
+            redirect(href);
+        }
+
+        function openRemoveLink(el) {
+            var parent = $(el).closest('.list-group-item');
+            var id = parent.data('nodeid');
+            var row = $('#tree').treeview('getNode', id);
+
+            var newProjectPath = row.deletePath;
+
+            redirect(newProjectPath);
+        }
+
+        function redirect(path) {
+            if(path) {
+                window.location.href = path;
+            }
+        }
+
         function initializeTree() {
-            $('#tree').treeview({
+            var selector = $('#tree');
+
+            selector.treeview({
                 data: getTree(),
                 enableLinks: true,
                 showTags: true,
-                levels: 1,
+                template: {
+                    icon: '<span class="icon"></span>',
+                    badge: '<span class="badge"></span>',
+                    link: '<a href="#" style="color:inherit;"></a>',
+                    tools: '<span class="tools-frame">' +
+                                '<span class="project-loader" style="display: none">loading.. <i class="fa fa-spinner"></i></span>' +
+                                '<a href="#" class="details-link" onclick="openDetailsLink(this)"><span class="glyphicon glyphicon-cog"></span></a>' +
+                                '<a href="#" class="trash-link" onclick="openRemoveLink(this)"><span class="glyphicon glyphicon-trash"></span></a>' +
+                                '<a href="#" class="plus-link" onclick="openAddNewProject(this)"><span class="glyphicon glyphicon-plus"></span></a>' +
+                            '</span>'
+                }
+            });
+
+            selector.on('nodeExpanded', function (event, nodeData) {
+                if (nodeData.nodes.length == 0 && nodeData.hasChildren) {
+                    var childrenResp = getChildren(nodeData.id);
+                    childrenResp.done(function (resp) {
+                        var children = [];
+
+                        $.each(resp, function (i, node) {
+                            var item = createItem(node);
+                            recursiveChildProjects(node, item);
+                            children.push(item);
+                        });
+
+                        index[nodeData.id].nodes = children;
+                        index[nodeData.id].state = index[nodeData.id].state || {};
+                        index[nodeData.id].state.expanded = true;
+                        index[nodeData.id].state.selected = false;
+
+                        initializeTree();
+                    });
+
+                }
+            });
+        }
+
+        function getChildren(id) {
+            return $.ajax({
+                url: "{{ path('admin_application_crm_project_loadChildren') }}",
+                data: {
+                    id: id,
+                },
+                method: 'POST'
             });
         }
 
@@ -83,11 +176,14 @@
             }
         }
 
-        function createItem(node) {
+        function createItem(node, i) {
             var item = {};
             var href = "{{ path('admin_application_crm_project_edit', {'id' : 'project_id'}) }}";
-            href = href.replace("project_id", node.id);
+            var deletePath =  "{{ path('admin_application_crm_project_delete', {'id' : 'project_id'}) }}";
             var name = node.name;
+
+            href = href.replace("project_id", node.id);
+            deletePath = deletePath.replace("project_id", node.id);
 
             if (node.client_name) {
                 name = name + ' - ' + node.client_name;
@@ -98,17 +194,18 @@
             item.href = href;
             item.tags = [node.status];
             item.selectable = false;
+            item.id = node.id;
+            item.hasChildren = node.hasChildren;
+            item.newChildPath = "{{ path('admin_application_crm_project_create') }}";
+            item.deletePath = deletePath;
 
-            //@TODO
-            //@TODO add custom data to item ex.: data-id, numbersOfChildren, initialized or not
-            //@TODO in case of element children variable is not initialized, call the ajax function and get children var
-            //@TODO add children elements under the parent
+            index[node.id] = item;
+            index_ref[i] = item;
 
             return item;
         }
 
         function getTree() {
-            // Some logic to retrieve, or generate tree structure
             return data;
         }
     </script>

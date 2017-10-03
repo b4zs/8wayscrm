@@ -37,7 +37,6 @@ class ProjectAdminController extends Controller
 
         $dataGrid->setValue('context', null, $context);
         $formView = $dataGrid->getForm()->createView();
-
         $count = $this->countResult();
         $result = $this->getResult(0);
         $serializeObject = $this->serializeObject($result);
@@ -73,7 +72,7 @@ class ProjectAdminController extends Controller
 
     public function loadChildrenAction(Request $request)
     {
-        $parentId = $request->request->get('request');
+        $parentId = $request->request->get('id');
         /** @var NestedTreeRepository $repo */
         $repo = $this->getDoctrine()->getManager()->getRepository(Project::class);
         /** @var Project $parent */
@@ -83,7 +82,9 @@ class ProjectAdminController extends Controller
 
         $children = $parent->getChildren(false);
         
-        return $this->serializeObject($children);
+        $object = $this->serializeObject($children, 'array');
+
+        return new JsonResponse($object);
     }
 
     /**
