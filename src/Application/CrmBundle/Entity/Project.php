@@ -411,8 +411,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
      */
     public function getChildren($maxLength = true)
     {
-        //@TODO load once only one level
-        if ($this->getLvl() > 0 && $maxLength == true) {
+        if ($maxLength == true) {
             return new ArrayCollection();
         }
 

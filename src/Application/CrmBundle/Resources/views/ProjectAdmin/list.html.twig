@@ -73,14 +73,13 @@
         }
 
         function openAddNewProject(el) {
-            console.log('test', el);
             var parent = $(el).closest('.list-group-item');
             var id = parent.data('nodeid');
             var row = $('#tree').treeview('getNode', id);
 
             var newProjectPath = row.newChildPath;
 
-            redirect(newProjectPath);
+            redirect(newProjectPath + '?parent_id=' + row.id);
         }
 
         function openDetailsLink(el) {
@@ -104,6 +103,8 @@
         }
 
         function redirect(path) {
+            console.log('path', path);
+
             if(path) {
                 window.location.href = path;
             }
@@ -122,7 +123,7 @@
                     link: '<a href="#" style="color:inherit;"></a>',
                     tools: '<span class="tools-frame">' +
                                 '<span class="project-loader" style="display: none">loading.. <i class="fa fa-spinner"></i></span>' +
-                                '<a href="#" class="details-link" onclick="openDetailsLink(this)"><span class="glyphicon glyphicon-cog"></span></a>' +
+                                '<a href="#" class="details-link" onclick="openDetailsLink(this)"><span class="glyphicon glyphicon-pencil"></span></a>' +
                                 '<a href="#" class="trash-link" onclick="openRemoveLink(this)"><span class="glyphicon glyphicon-trash"></span></a>' +
                                 '<a href="#" class="plus-link" onclick="openAddNewProject(this)"><span class="glyphicon glyphicon-plus"></span></a>' +
                             '</span>'
