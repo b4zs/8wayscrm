@@ -27,7 +27,6 @@ class ProjectAdminController extends Controller
 
         $filters = $request->get('filter');
 
-        // set the default context
         if (!$filters || !array_key_exists('context', $filters)) {
             $context = $this->admin->getPersistentParameter('context',
                 $this->get('sonata.media.pool')->getDefaultContext());
@@ -38,9 +37,25 @@ class ProjectAdminController extends Controller
         $dataGrid->setValue('context', null, $context);
         $formView = $dataGrid->getForm()->createView();
         $count = $this->countResult();
-        $result = $this->getResult(0);
-        $serializeObject = $this->serializeObject($result);
+        $isFilterSet = false;
 
+        if ($filters !== null) {
+            $isFilterSet = true;
+        }
+
+        if ($isFilterSet) {
+            return $this->render($this->admin->getTemplate('list'), array(
+                'action' => 'list',
+                'form' => $formView,
+                'datagrid' => $dataGrid,
+                'csrf_token' => $this->getCsrfToken('sonata.batch'),
+                'isFilterSet' => $isFilterSet,
+            ));
+        }
+
+        $result = $this->getResult(0);
+
+        $serializeObject = $this->serializeObject($result);
         /**
          * TODO apply filters under the parent
          */
@@ -48,11 +63,12 @@ class ProjectAdminController extends Controller
         return $this->render('ApplicationCrmBundle:ProjectAdmin:list.html.twig', array(
             'action' => 'list',
             'form' => $formView,
-            'datagrid' => json_encode($dataGrid),
+            'datagrid' => $dataGrid,
             'csrf_token' => $this->getCsrfToken('sonata.batch'),
             'serializedData' => $serializeObject,
             'countResults' => $count,
             'lastResultNumber' => 10,
+            'isFilterSet' => $isFilterSet,
         ));
     }
 
@@ -81,7 +97,7 @@ class ProjectAdminController extends Controller
         ]);
 
         $children = $parent->getChildren(false);
-        
+
         $object = $this->serializeObject($children, 'array');
 
         return new JsonResponse($object);
@@ -96,7 +112,7 @@ class ProjectAdminController extends Controller
         $limit = 10;
         /** @var NestedTreeRepository $repo */
         $repo = $this->getDoctrine()->getManager()->getRepository(Project::class);
-        $result = $repo->createQueryBuilder('node')
+        $qb = $repo->createQueryBuilder('node')
             ->select('node')
             ->where('node.lvl = 0')
             ->setFirstResult($numberOfFirstElement)
@@ -104,7 +120,7 @@ class ProjectAdminController extends Controller
             ->getQuery()
             ->getResult();
 
-        return $result;
+        return $qb;
     }
 
     /**
@@ -133,7 +149,7 @@ class ProjectAdminController extends Controller
         /** @var Serializer $serializer */
         $serializer = $this->get('jms_serializer');
 
-        if($format == 'array') {
+        if ($format == 'array') {
             return $serializer->toArray($data);
         }
 
