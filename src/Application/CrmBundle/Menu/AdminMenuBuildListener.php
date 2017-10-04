@@ -93,9 +93,7 @@ class AdminMenuBuildListener extends ContainerAware
 				array('filter' => array('status' => array('type' => '', 'value' => array(
 					ProjectStatus::ASSESSMENT,
 					ProjectStatus::QUOTATION,
-					ProjectStatus::PREPARATION,
 					ProjectStatus::EXECUTION,
-					ProjectStatus::DELIVERED,
 				),)))
 			));
 
