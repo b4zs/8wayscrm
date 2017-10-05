@@ -12,7 +12,7 @@
 
     <style>
         .tools-frame {
-            float:right;
+            float: right;
             margin: 0 15px;
             background: #f4f4f4;
             padding: 5px;
@@ -103,9 +103,7 @@
         }
 
         function redirect(path) {
-            console.log('path', path);
-
-            if(path) {
+            if (path) {
                 window.location.href = path;
             }
         }
@@ -122,11 +120,11 @@
                     badge: '<span class="badge"></span>',
                     link: '<a href="#" style="color:inherit;"></a>',
                     tools: '<span class="tools-frame">' +
-                                '<span class="project-loader" style="display: none">loading.. <i class="fa fa-spinner"></i></span>' +
-                                '<a href="#" class="details-link" onclick="openDetailsLink(this)"><span class="glyphicon glyphicon-pencil"></span></a>' +
-                                '<a href="#" class="trash-link" onclick="openRemoveLink(this)"><span class="glyphicon glyphicon-trash"></span></a>' +
-                                '<a href="#" class="plus-link" onclick="openAddNewProject(this)"><span class="glyphicon glyphicon-plus"></span></a>' +
-                            '</span>'
+                    '<span class="project-loader" style="display: none">loading.. <i class="fa fa-spinner"></i></span>' +
+                    '<a href="#" class="details-link" onclick="openDetailsLink(this)"><span class="glyphicon glyphicon-pencil"></span></a>' +
+                    '<a href="#" class="trash-link" onclick="openRemoveLink(this)"><span class="glyphicon glyphicon-trash"></span></a>' +
+                    '<a href="#" class="plus-link" onclick="openAddNewProject(this)"><span class="glyphicon glyphicon-plus"></span></a>' +
+                    '</span>'
                 }
             });
 
@@ -180,7 +178,7 @@
         function createItem(node, i) {
             var item = {};
             var href = "{{ path('admin_application_crm_project_edit', {'id' : 'project_id'}) }}";
-            var deletePath =  "{{ path('admin_application_crm_project_delete', {'id' : 'project_id'}) }}";
+            var deletePath = "{{ path('admin_application_crm_project_delete', {'id' : 'project_id'}) }}";
             var name = node.name;
 
             href = href.replace("project_id", node.id);
@@ -190,10 +188,33 @@
                 name = name + ' - ' + node.client_name;
             }
 
+            var statuses = {};
+
+            statuses.new = 'N';
+            statuses.assessment = 'A';
+            statuses.quotation = 'Q';
+            statuses.contact = 'C';
+            statuses.execution = 'E';
+            statuses.done = 'D';
+
             item.text = name;
             item.icon = "glyphicon glyphicon-stop";
             item.href = href;
-            item.tags = [node.status];
+            item.tags = [];
+
+            $.each(statuses, function (i, e) {
+                var className = 'label-default';
+
+                if (node.status == i) {
+                    className = 'label-success';
+                }
+
+                item.tags.push({
+                    name: e,
+                    className: className
+                });
+            });
+
             item.selectable = false;
             item.id = node.id;
             item.hasChildren = node.hasChildren;

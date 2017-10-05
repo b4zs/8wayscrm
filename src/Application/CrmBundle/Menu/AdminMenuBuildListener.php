@@ -107,18 +107,18 @@ class AdminMenuBuildListener extends ContainerAware
 				'class' => 'pull-right sidemenu-pull-right sidemenu-pull-up'
 			));
 
-			foreach ($statuses as $status => $statusData) {
-				$this->createdMenuItems[$adminCode.'#'.$status] = $statusItem = $this->getKnpMenuFactory()->createItem($status, array(
-					'uri' => $admin->generateUrl(
-						'list',
-						array('filter' => array('status' => array('type' => '', 'value' => array($status),)))
-					),
-					'label' => ucfirst($status),
-				));
-				$statusItem->setExtra('icon', $statusData['icon']);
-
-				$mainMenuItem->addChild($statusItem);
-			}
+//			foreach ($statuses as $status => $statusData) {
+//				$this->createdMenuItems[$adminCode.'#'.$status] = $statusItem = $this->getKnpMenuFactory()->createItem($status, array(
+//					'uri' => $admin->generateUrl(
+//						'list',
+//						array('filter' => array('status' => array('type' => '', 'value' => array($status),)))
+//					),
+//					'label' => ucfirst($status),
+//				));
+//				$statusItem->setExtra('icon', $statusData['icon']);
+//
+//				$mainMenuItem->addChild($statusItem);
+//			}
 		}
 	}
 

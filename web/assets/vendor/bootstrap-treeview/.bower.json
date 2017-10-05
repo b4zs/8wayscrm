@@ -29,12 +29,12 @@
     "bootstrap": ">= 3.0.0"
   },
   "devDependencies": {},
-  "_release": "923c8e3bc9",
+  "_release": "d72d3649cc",
   "_resolution": {
     "type": "commit",
-    "commit": "923c8e3bc9339402110adbddf186c62bba52ab97"
+    "commit": "d72d3649cce28db4f974c3c9f100fb8b57c80971"
   },
   "_source": "http://gitlab.assist01.gbart.h3.hu/bower/bootstrap-treeview.git",
-  "_target": "923c8e3bc9339402110adbddf186c62bba52ab97",
+  "_target": "d72d3649cce28db4f974c3c9f100fb8b57c80971",
   "_originalSource": "http://gitlab.assist01.gbart.h3.hu/bower/bootstrap-treeview.git"
 }

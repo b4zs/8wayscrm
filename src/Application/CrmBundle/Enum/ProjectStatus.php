@@ -29,8 +29,8 @@ class ProjectStatus
             self::QUOTATION => array('label' => ucfirst(self::QUOTATION), 'icon' => 'fa fa-calculator'),
             self::EXECUTION => array('label' => ucfirst(self::EXECUTION), 'icon' => 'fa fa-gears'),
             self::NEW => array('label' => ucfirst(self::NEW), 'icon' => 'fa fa-remove'),
-            self::DONE => array('label' => ucfirst(self::DONE), 'icon' => 'fa fa-remove'),
-            self::CONTRACT => array('label' => ucfirst(self::CONTRACT), 'icon' => 'fa fa-remove'),
+            self::DONE => array('label' => ucfirst(self::DONE), 'icon' => 'fa fa-check-square'),
+            self::CONTRACT => array('label' => ucfirst(self::CONTRACT), 'icon' => 'fa fa-sticky-note-o'),
         );
     }
 

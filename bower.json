@@ -16,6 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap-treeview": "http://gitlab.assist01.gbart.h3.hu/bower/bootstrap-treeview.git#923c8e3bc9339402110adbddf186c62bba52ab97"
+    "bootstrap-treeview": "http://gitlab.assist01.gbart.h3.hu/bower/bootstrap-treeview.git#d628f81e5e3b7b948eabfd78c99f4e70e792b4ea"
   }
 }

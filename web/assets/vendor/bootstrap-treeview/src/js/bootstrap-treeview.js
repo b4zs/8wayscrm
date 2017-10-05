@@ -609,9 +609,12 @@
             // Add tags as badges
             if (_this.options.showTags && node.tags) {
                 $.each(node.tags, function addTag(id, tag) {
+                    var badgeTag = $(_this.template.badge);
+
+                    badgeTag.addClass(tag.className);
                     treeItem
-                        .append($(_this.template.badge)
-                            .append(tag)
+                        .append(badgeTag
+                            .append(tag.name)
                         );
                 });
             }
