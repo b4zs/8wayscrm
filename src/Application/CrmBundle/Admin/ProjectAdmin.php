@@ -144,12 +144,35 @@ class ProjectAdmin extends Admin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
+        $showMapper->with('Project', array('class' => 'col-md-7',));
         $showMapper
             ->add('id')
             ->add('name')
             ->add('createdAt')
             ->add('description')
-            ->add('status');
+            ->add('status')
+        ;
+        $showMapper->end();
+
+        $showMapper->with('Memberships', array('class' => 'col-md-5',));
+        $showMapper->add('memberships');
+        $showMapper->end();
+
+        $showMapper->with('Files', array('class' => 'col-md-5',));
+        $showMapper->add('fileset.galleryHasMedias');
+        $showMapper->end();
+
+        $showMapper->with('Sub projects', array('class' => 'col-md-7',));
+        $showMapper
+            ->add('originalChildren', null, [
+                'template' => 'ApplicationCrmBundle:ProjectAdmin:project_children.html.twig'
+            ])
+        ;
+        $showMapper->end();
+
+
+
+
     }
 
     /**

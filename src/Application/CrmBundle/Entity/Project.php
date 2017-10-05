@@ -305,11 +305,6 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
         return $this->client;
     }
 
-    function __toString()
-    {
-        return $this->getName().($this->getClient() ? ' ('.$this->getClient().')' : '');
-    }
-
     /**
      * @return \DateTime
      */
@@ -405,6 +400,10 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
         return false;
     }
 
+    public function getOriginalChildren()
+    {
+        return $this->children;
+    }
     /**
      * @param bool $maxLength
      * @return ArrayCollection
@@ -534,5 +533,10 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
         }
 
         return '';
+    }
+
+    function __toString()
+    {
+        return $this->getName().($this->getClient() ? ' ('.$this->getClient().')' : '');
     }
 }

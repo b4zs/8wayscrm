@@ -8,6 +8,7 @@ services:
       tags:
           - { name: sonata.admin.extension, global: true }
           - { name: kernel.event_listener, event: sonata.block.event.sonata.admin.edit.form.bottom, method: onAdminEditFormBottom }
+          - { name: kernel.event_listener, event: sonata.block.event.sonata.admin.show.bottom, method: onAdminEditFormBottom }
 
   core.loggable_entity.block.entity_log:
       class: Core\LoggableEntityBundle\Block\EntityLogBlockService

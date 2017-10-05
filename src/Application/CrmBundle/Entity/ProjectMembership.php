@@ -133,5 +133,10 @@ class ProjectMembership
         $this->user = $user;
     }
 
+    function __toString()
+    {
+       return (string)$this->user;
+    }
+
 
 }

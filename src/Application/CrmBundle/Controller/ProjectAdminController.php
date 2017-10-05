@@ -13,6 +13,33 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProjectAdminController extends Controller
 {
+    public function showAction($id = null)
+    {
+        $request = $this->getRequest();
+        $id = $request->get($this->admin->getIdParameter());
+        $object = $this->admin->getObject($id);
+
+        if (!$object) {
+            throw $this->createNotFoundException(sprintf('unable to find the object with id : %s', $id));
+        }
+
+        $this->admin->checkAccess('show', $object);
+
+        $preResponse = $this->preShow($request, $object);
+
+        if ($preResponse !== null) {
+            return $preResponse;
+        }
+
+        $this->admin->setSubject($object);
+
+        return $this->render('ApplicationCrmBundle:ProjectAdmin:show.html.twig', array(
+            'action' => 'show',
+            'object' => $object,
+            'elements' => $this->admin->getShow(),
+        ), null);
+    }
+
     public function listAction(Request $request = null)
     {
         if (false === $this->admin->isGranted('LIST')) {
