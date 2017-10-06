@@ -170,9 +170,6 @@ class ProjectAdmin extends Admin
         ;
         $showMapper->end();
 
-
-
-
     }
 
     /**

@@ -1,0 +1,32 @@
+{% extends sonata_block.templates.block_base %}
+
+{% block block_class %} cms-clients-block{% if not block.hasParent() %} cms-container-root{% endif %}{% if settings.class %} {{ settings.class }}{% endif %}{% endblock %}
+
+{# render container block #}
+{% block block %}
+    <div class="box box-success">
+        <div class="box-header">
+            <h4 class="box-title">{{ 'label.block.file_category.header'|trans }}</h4>
+        </div>
+        <div class="box-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    {% for key, category in categories %}
+                        <h3>{{ key }}</h3>
+                        <ul>
+                            {% for item in category %}
+                                <li>
+                                    {{ item }}
+                                    {{ item.name }}
+                                    {{ item.id }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

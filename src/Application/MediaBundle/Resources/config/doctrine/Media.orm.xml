@@ -17,5 +17,7 @@
             <generator strategy="AUTO"/>
         </id>
 
+        <field name="fileCategory" column="file_category" type="string" length="50" nullable="true" />
+
     </entity>
 </doctrine-mapping>

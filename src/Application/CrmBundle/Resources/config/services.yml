@@ -106,6 +106,16 @@ services:
           - {name: doctrine.event_listener, event: postUpdate, method: postUpdate}
           - {name: doctrine.event_listener, event: postPersist, method: postPersist}
 
+    application_crm.block.file_categories:
+        class: Application\CrmBundle\Block\FileCategoryBlockService
+        arguments:
+            - 'application_crm.block.file_categories'
+            - '@templating'
+            - '@doctrine.orm.entity_manager'
+            - '@sonata.admin.pool'
+        tags:
+            - { name: sonata.block }
+
     application_crm.block.dashboard_clients:
         class: Application\CrmBundle\Block\ClientsBlockService
         arguments:

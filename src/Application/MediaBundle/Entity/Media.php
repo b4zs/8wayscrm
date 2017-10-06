@@ -29,6 +29,11 @@ class Media extends BaseMedia
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $fileCategory;
+
+    /**
      * Get id
      *
      * @return integer $id
@@ -36,5 +41,23 @@ class Media extends BaseMedia
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileCategory()
+    {
+        return $this->fileCategory;
+    }
+
+    /**
+     * @param string $fileCategory
+     * @return $this
+     */
+    public function setFileCategory($fileCategory)
+    {
+        $this->fileCategory = $fileCategory;
+        return $this;
     }
 }

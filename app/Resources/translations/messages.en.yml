@@ -8,3 +8,6 @@
 'label.block.clients.new_clients': 'New clients'
 'label.block.clients.new_clients_details': 'New clients on this week'
 'label.block.clients.clients_by_status': 'Clients by status'
+
+'label.block.file_category.header': 'File Categories'
+'label.block.file_category.new_file': 'New File'
