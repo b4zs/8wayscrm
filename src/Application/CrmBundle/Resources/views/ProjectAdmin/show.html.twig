@@ -51,4 +51,5 @@
     {{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}
     {{ sonata_block_render_event('render_reminders', {'context': [object] }) }}
     {{ sonata_block_render_event('render_tasks', {'context': [object] }) }}
+    {{ sonata_block_render_event('render_file_categories', {'context': [object] }) }}
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends sonata_block.templates.block_base %}
 
-{% block block_class %} cms-clients-block{% if not block.hasParent() %} cms-container-root{% endif %}{% if settings.class %} {{ settings.class }}{% endif %}{% endblock %}
+{% block block_class %} cms-file-category-block{% if not block.hasParent() %} cms-container-root{% endif %}{% if settings.class %} {{ settings.class }}{% endif %}{% endblock %}
 
 {# render container block #}
 {% block block %}
@@ -11,18 +11,20 @@
         <div class="box-body">
             <div class="panel panel-default">
                 <div class="panel-body">
+                    {% for key, category in file_categories %}
+                        {% if category|length %}
+                            <h3>{{ key }}</h3>
 
-                    {% for key, category in categories %}
-                        <h3>{{ key }}</h3>
-                        <ul>
-                            {% for item in category %}
-                                <li>
-                                    {{ item }}
-                                    {{ item.name }}
-                                    {{ item.id }}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                            <ul class="list-unstyled">
+                                {% for item in category %}
+                                    <li style="margin-bottom: 10px;">
+                                        <a target="_blank" href="{% path item, 'reference' %}">
+                                            {{ item.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     {% endfor %}
                     </ul>
                 </div>

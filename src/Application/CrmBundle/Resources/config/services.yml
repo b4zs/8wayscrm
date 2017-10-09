@@ -126,3 +126,8 @@ services:
         tags:
             - { name: sonata.block }
 
+    application_crm.event_listener.crm_block_event_listener:
+        class: Application\CrmBundle\EventListener\CrmBlockEventListener
+        tags:
+            - { name: kernel.event_listener, event: sonata.block.event.render_file_categories, method: onRenderFileCategories }
+
