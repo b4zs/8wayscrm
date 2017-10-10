@@ -1,2 +1,14 @@
 parameters:
   sonata.media.admin.gallery_has_media.class: Application\MediaBundle\Admin\GalleryHasMediaAdmin
+  sonata.media.admin.media.class: Application\MediaBundle\Admin\MediaAdmin
+
+#services:
+#  custom.media.admin.media:
+#      class: %sonata.media.admin.media.class%
+#      arguments:
+#          - ~
+#          - Application\MediaBundle\Entity\Media
+#          - Application\MediaBundle\Admin\MediaAdmin
+#          - @sonata.media.pool
+#      tags:
+#          - {name: sonata.admin, manager_type: orm, group: admin, label: 'Media', show }

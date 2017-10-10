@@ -112,6 +112,7 @@ swiftmailer:
     spool:     { type: memory }
 
 sonata_admin:
+    show_mosaic_button: true
     security:
       handler: sonata.admin.security.handler.role
     title: %sonata_admin.title%

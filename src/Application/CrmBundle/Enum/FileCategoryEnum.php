@@ -15,9 +15,10 @@ class FileCategoryEnum
     public static function getChoices()
     {
         return array(
-            self::QUOTATION => 'quotation',
-            self::CONTRACT => 'contract',
-            self::BRIEF => 'brief',
+            '' => 'All medias',
+//            self::QUOTATION => 'quotation',
+//            self::CONTRACT => 'contract',
+//            self::BRIEF => 'brief',
             self::INPUT => 'input',
             self::OTHER_DOCUMENT => 'other document',
         );
