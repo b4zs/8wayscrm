@@ -11,22 +11,21 @@ class FillOutAdminController extends CRUDController
 {
     public function frontendAction(Request $request)
     {
-
         $request = $this->getRequest();
         // the key used to lookup the template
         $templateKey = 'edit';
 
         $id = $request->get($this->admin->getIdParameter());
-        $existingObject = $this->admin->getObject($id);
+        $fillOut = $this->admin->getObject($id);
 
-        if (!$existingObject) {
+        if (!$fillOut) {
             throw $this->createNotFoundException(sprintf('unable to find the object with id : %s', $id));
         }
 
-        $this->admin->checkAccess('edit', $existingObject);
+        $this->admin->checkAccess('edit', $fillOut);
 
         return $this->render('ApplicationQuotationGeneratorBundle:FillOutAdmin:frontend.html.twig', array(
-
+            'fillOut' => $fillOut,
         ));
     }
 }
