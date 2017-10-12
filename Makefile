@@ -91,5 +91,12 @@ run:
 q:
 	$(PHP) $(MEM) $(CON) jms-job-queue:run -r 900 --idle-time 1 --env=$(ENV) -vv
 
-qgrun:
-	cd qgfrontend && npm start
+qg-install:
+	cd src/Application/QuotationGeneratorBundle/Resources/public/qg-v2 && yarn install
+
+qg-run:
+	cd src/Application/QuotationGeneratorBundle/Resources/public/qg-v2 && npm start
+
+qg-build:
+	cd src/Application/QuotationGeneratorBundle/Resources/public/qg-v2 && npm run-script build
+

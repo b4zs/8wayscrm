@@ -5,7 +5,7 @@ export class ApiClient {
 
     this.$http = $http;
     this.config = config;
-    this.id = 1;
+    this.id = 2;
     console.log(this.config)
   }
 

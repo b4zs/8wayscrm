@@ -2,6 +2,8 @@ let webpack = require('webpack')
 let ExtractTextPlugin = require('extract-text-webpack-plugin')
 let HtmlWebPackPlugin = require('html-webpack-plugin')
 let path = require('path')
+let WriteFilePlugin = require('write-file-webpack-plugin')
+
 
 module.exports = {
   entry: {
@@ -33,7 +35,8 @@ module.exports = {
       filename: 'bundle.css',
       disable: false,
       allChunks: true
-    })
+    }),
+    new WriteFilePlugin({})
   ],
   module: {
     rules: [{

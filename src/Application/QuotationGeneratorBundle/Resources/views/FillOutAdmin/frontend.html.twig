@@ -1,1 +1,11 @@
 {% extends '@SonataAdmin/app_standard_layout.html.twig' %}
+
+{% block content %}
+    <div ng-app="App">
+        <div ui-view></div>
+    </div>
+
+    <link href="{{ asset('bundles/applicationquotationgenerator/qg-v2/dist/bundle.css') }}" rel="stylesheet">
+    <script src="{{ asset('bundles/applicationquotationgenerator/qg-v2/dist/vendor.bundle.js') }}"></script>
+    <script src="{{ asset('bundles/applicationquotationgenerator/qg-v2/dist/app.bundle.js') }}"></script>
+{% endblock content %}
