@@ -4,6 +4,7 @@
 namespace Application\CrmBundle\Controller;
 
 use Application\CrmBundle\Entity\Project;
+use Application\CrmBundle\Enum\ProjectStatus;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use JMS\Serializer\Serializer;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
@@ -83,9 +84,6 @@ class ProjectAdminController extends Controller
         $result = $this->getResult(0);
 
         $serializeObject = $this->serializeObject($result);
-        /**
-         * TODO apply filters under the parent
-         */
 
         return $this->render('ApplicationCrmBundle:ProjectAdmin:list.html.twig', array(
             'action' => 'list',
@@ -96,6 +94,7 @@ class ProjectAdminController extends Controller
             'countResults' => $count,
             'lastResultNumber' => 10,
             'isFilterSet' => $isFilterSet,
+            'projectStatusArray' => json_encode(ProjectStatus::getChoices()),
         ));
     }
 

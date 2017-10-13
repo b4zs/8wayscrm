@@ -10,6 +10,8 @@
 
 {% block list_table %}
 
+
+
     <style>
         .tools-frame {
             float: right;
@@ -31,6 +33,7 @@
      #}
 
     <script>
+        var projectStatusArray = {{ projectStatusArray|raw }};
         var serializedData = {{ serializedData|raw }};
         var data = [];
         var lastResultNumber = {{ lastResultNumber }};
@@ -190,12 +193,9 @@
 
             var statuses = {};
 
-            statuses.new = 'N';
-            statuses.assessment = 'A';
-            statuses.quotation = 'Q';
-            statuses.contact = 'C';
-            statuses.execution = 'E';
-            statuses.done = 'D';
+            $.each(projectStatusArray, function(i,e) {
+                statuses[i] = e.slice(0,1);
+            });
 
             item.text = name;
             item.icon = "glyphicon glyphicon-stop";
