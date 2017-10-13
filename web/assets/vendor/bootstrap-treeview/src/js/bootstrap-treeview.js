@@ -609,6 +609,7 @@
             // Add tags as badges
             if (_this.options.showTags && node.tags) {
                 $.each(node.tags, function addTag(id, tag) {
+                    // console.log(id,tag);
                     var badgeTag = $(_this.template.badge);
 
                     badgeTag.addClass(tag.className);

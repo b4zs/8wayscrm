@@ -34,6 +34,7 @@
 
     <script>
         var projectStatusArray = {{ projectStatusArray|raw }};
+        console.log(projectStatusArray);
         var serializedData = {{ serializedData|raw }};
         var data = [];
         var lastResultNumber = {{ lastResultNumber }};
@@ -191,26 +192,20 @@
                 name = name + ' - ' + node.client_name;
             }
 
-            var statuses = {};
-
-            $.each(projectStatusArray, function(i,e) {
-                statuses[i] = e.slice(0,1);
-            });
-
             item.text = name;
             item.icon = "glyphicon glyphicon-stop";
             item.href = href;
             item.tags = [];
 
-            $.each(statuses, function (i, e) {
+            $.each(projectStatusArray, function (i, e) {
                 var className = 'label-default';
 
                 if (node.status == i) {
                     className = 'label-success';
                 }
 
-                item.tags.push({
-                    name: e,
+                item.tags.unshift({
+                    name:  e.slice(0,1),
                     className: className
                 });
             });
