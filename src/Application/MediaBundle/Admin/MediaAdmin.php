@@ -18,7 +18,7 @@ class MediaAdmin extends BaseAdmin
     {
         $dataGridMapper->add('fileCategory', 'doctrine_orm_string', [
             'show_filter' => true,
-        ], 'choice', array('choices' => FileCategoryEnum::getChoices())
+        ], 'choice', array('choices' => FileCategoryEnum::getFilterChoices())
         );
         parent::configureDatagridFilters($dataGridMapper);
 

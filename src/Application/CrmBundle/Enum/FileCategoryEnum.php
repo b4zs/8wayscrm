@@ -15,10 +15,15 @@ class FileCategoryEnum
     public static function getChoices()
     {
         return array(
+            self::INPUT => 'input',
+            self::OTHER_DOCUMENT => 'other document',
+        );
+    }
+
+    public static function getFilterChoices()
+    {
+        return array(
             '' => 'All medias',
-//            self::QUOTATION => 'quotation',
-//            self::CONTRACT => 'contract',
-//            self::BRIEF => 'brief',
             self::INPUT => 'input',
             self::OTHER_DOCUMENT => 'other document',
         );
