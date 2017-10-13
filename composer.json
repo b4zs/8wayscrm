@@ -64,7 +64,8 @@
     "phpoffice/phpexcel": "^1.8",
     "octet/ticketing": "2.*",
     "octet/message-bus": "dev-master",
-    "doctrine/doctrine-migrations-bundle": "^1.2"
+    "doctrine/doctrine-migrations-bundle": "^1.2",
+    "webonaute/doctrine-fixtures-generator-bundle": "^1.3"
   },
   "require-dev": {
     "sensio/generator-bundle": "~2.3",
