@@ -48,7 +48,24 @@
 
     </div>
 
-    {{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}
+    <style>
+        .octet-note {
+            background: white !important;
+            color: black !important;
+            margin-bottom: 15px;
+            padding: 10px !important;
+        }
+
+        .octet-reminder--card, .octet-note--card {
+            background: white !important;
+            border: 1px solid grey;
+            padding: 10px !important;
+        }
+    </style>
+
+    <div class="row">
+        {{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}
+    </div>
     {{ sonata_block_render_event('render_reminders', {'context': [object] }) }}
     {{ sonata_block_render_event('render_tasks', {'context': [object] }) }}
     {{ sonata_block_render_event('render_file_categories', {'context': [object] }) }}

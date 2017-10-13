@@ -136,7 +136,7 @@ class ProjectAdminController extends Controller
      */
     private function getResult($numberOfFirstElement)
     {
-        $limit = 10;
+        $limit = 100;
         /** @var NestedTreeRepository $repo */
         $repo = $this->getDoctrine()->getManager()->getRepository(Project::class);
         $qb = $repo->createQueryBuilder('node')

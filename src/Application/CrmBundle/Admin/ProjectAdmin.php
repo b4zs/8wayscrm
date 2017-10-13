@@ -146,7 +146,6 @@ class ProjectAdmin extends Admin
     {
         $showMapper->with('Project', array('class' => 'col-md-7',));
         $showMapper
-            ->add('id')
             ->add('name')
             ->add('createdAt')
             ->add('description')
@@ -155,17 +154,14 @@ class ProjectAdmin extends Admin
         $showMapper->end();
 
         $showMapper->with('Memberships', array('class' => 'col-md-5',));
-        $showMapper->add('memberships');
-        $showMapper->end();
-
-        $showMapper->with('Files', array('class' => 'col-md-5',));
-        $showMapper->add('fileset.galleryHasMedias');
+        $showMapper->add('memberships', null, ['label' => false]);
         $showMapper->end();
 
         $showMapper->with('Sub projects', array('class' => 'col-md-7',));
         $showMapper
             ->add('originalChildren', null, [
-                'template' => 'ApplicationCrmBundle:ProjectAdmin:project_children.html.twig'
+                'template' => 'ApplicationCrmBundle:ProjectAdmin:project_children.html.twig',
+                'label' => false
             ])
         ;
         $showMapper->end();
