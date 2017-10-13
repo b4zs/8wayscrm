@@ -10,7 +10,7 @@ class ProjectStatus
     const NEW = 'new';
     const ASSESSMENT = 'assessment';
     const QUOTATION = 'quotation';
-    const CONTRACT = 'contact';
+    const CONTRACT = 'contract';
     const EXECUTION = 'execution';
     const DONE = 'done';
 
