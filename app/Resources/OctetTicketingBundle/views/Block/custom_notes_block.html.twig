@@ -1,6 +1,21 @@
 {% extends '@SonataBlock/Block/block_base.html.twig' %}
 
 {% block block %}
+	<style>
+		.octet-note {
+			background: white !important;
+			color: black !important;
+			margin-bottom: 15px;
+			padding: 10px !important;
+		}
+
+		.octet-reminder--card, .octet-note--card {
+			background: white !important;
+			border: 1px solid grey;
+			padding: 10px !important;
+		}
+	</style>
+
 	<div class="octet-note"  id="widget_{{ id }}">
 		<div class="octet-notes--header clearfix">
 			<span class="octet-notes--controls--title pull-left">Notes</span>
