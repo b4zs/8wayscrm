@@ -1,5 +1,5 @@
-<div ng-repeat="group in groups" ng-attr-class="{{'question-group ' + group.class}}">
-    <h3>{{group.name}}</h3>
+<div ng-repeat="group in groups|orderBy:'position'" ng-attr-class="{{'question-group ' + group.class}}">
+    <h3 ng-if="group.label">{{group.label}}</h3>
     <ul class="list list-unstyled">
         <li ng-repeat="question in questions|filter:{ 'group': group.name }">
             <question question="question"></question>

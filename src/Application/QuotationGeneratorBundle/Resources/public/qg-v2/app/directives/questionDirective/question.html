@@ -1,5 +1,5 @@
 <div ng-attr-class="{{'question '+question.class}}">
-    <label class="question-label">{{question.title}}:</label>
+    <label class="question-label" ng-if="question.title">{{question.title}}:</label>
     <div ng-if="'text' == question.type">
         <input type="text" ng-model="question.value"  ng-disabled="$root.loading" ng-blur="ctrl.valueChanged()">
     </div>
@@ -13,17 +13,19 @@
     </div>
 
     <div ng-if="'singlechoice' == question.type"  class="question-type-wrapper question-type-singlechoice">
-        <div ng-repeat="choice in question.choices" class="question-choice">
-            <label>
-                <input type="radio" ng-value="choice.value" ng-model="question.value" ng-disabled="$root.loading"  ng-change="ctrl.valueChanged()">
-                {{choice.label}}
-                <div ng-if="choice.image" class="question-choice-image">
-                    <img ng-attr-src="{{choice.image}}" class="img-responsive">
-                </div>
-                <small ng-if="choice.hint" class="question-choice-hint">{{choice.hint}}</small>
-            </label>
-            <small ng-if="choice.quotation" class="question-choice-quotation">{{choice.quotation.price.currency+' '+choice.quotation.price.amount}} ({{choice.quotation.name}})</small>
-        </div>
+        <ul class="list list-unstyled">
+            <li  ng-repeat="choice in question.choices" class="{{'question-choice '+ (choice.image ? 'question-choice--has-image':'')}}">
+                <label>
+                    <div ng-if="choice.image" class="question-choice-image">
+                        <img ng-attr-src="{{choice.image}}" class="img-responsive">
+                    </div>
+                    <input type="radio" ng-value="choice.value" ng-model="question.value" ng-disabled="$root.loading"  ng-change="ctrl.valueChanged()">
+                    <span class="question-choice-text">{{choice.label}}</span>
+                    <small ng-if="choice.hint" class="question-choice-hint">{{choice.hint}}</small>
+                </label>
+                <small ng-if="choice.quotation && (choice.quotation.name || choice.quotation.price.amount)" class="question-choice-quotation">{{choice.quotation.price.currency+' '+choice.quotation.price.amount}} ({{choice.quotation.name}})</small>
+            </li>
+        </ul>
     </div>
 
     <div ng-if="'multiplechoice' == question.type"  class="question-type-wrapper question-type-multiplechoice">
@@ -38,6 +40,4 @@
 
     <small ng-if="question.hint" class="question-hint"><p>{{question.hint}}</p></small>
     <code ng-show="$root.debug">Q=#{{question.questionId}}, A=#{{question.answerId}}, value={{question.value}}</code>
-
-
 </div>

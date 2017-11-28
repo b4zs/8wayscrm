@@ -1,7 +1,7 @@
-{% extends '@SonataAdmin/app_standard_layout.html.twig' %}
+{% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
 
 {% block content %}
-    <div ng-app="App" data-fillout-id="{{ fillOut.id }}">
+    <div ng-app="App" data-fillout-id="{{ object.id }}">
         <div ui-view></div>
     </div>
 

@@ -19,6 +19,16 @@ class QuestionGroup
      */
     private $name;
 
+    /**
+     * @var string
+     */
+    private $label;
+
+    /**
+     * @var integer
+     */
+    private $position;
+
     private $class;
 
 
@@ -68,5 +78,25 @@ class QuestionGroup
     public function setClass($class)
     {
         $this->class = $class;
+    }
+
+    public function getPosition()
+    {
+        return $this->position ?: 0;
+    }
+
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    public function setLabel($label)
+    {
+        $this->label = $label;
     }
 }

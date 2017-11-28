@@ -19,10 +19,28 @@
   .question-hint
     display: block;
     padding: 0px;
-    margin-left: 20px;
+    background
 
   .question-type-wrapper
     display: inline-block;
+
+  .question-type-singlechoice
+    .question-choice
+      display: inline
+      padding-left: 5px;
+
+      &.question-choice--has-image
+        display: inline-block;
+        max-width: 25%;
+
+        .question-choice-hint
+          display: block;
+
+        label
+          text-align: center;
+          .question-choice-text
+            padding-left: 3px
+
 
   .question-choice
     font-weight: normal;
@@ -32,8 +50,9 @@
     font-weight: normal;
 
   .question-choice-image
-    max-height: 100px;
-    max-width: 100px;
+    max-height: 120px;
+    max-width: 100%;
+    overflow: hidden;
 
 .questions-horizontal
   .question-choice-image

@@ -1,10 +1,9 @@
 <div>
     <div style="position: absolute;left:5px; right: 5px;" class="text-right" ng-show="$root.loading">loading</div>
-    <label for="">debug <input type="checkbox" ng-model="$root.debug"></label>
-
     <questions questions="ctrl.state.questions" groups="ctrl.state.groups"></questions>
 
     <h3>quotation</h3>
+
     <div style="position: fixed; right: 0px; top: 30px; padding: 5px; background: rgba(255,255,255, 0.5); opacity: 0.7; z-index:100;">
         <h3 class="text-center">
             total:
@@ -33,4 +32,6 @@
             </tr>
         </tfoot>
     </table>
+
+    <label for="">debug <input type="checkbox" ng-model="$root.debug"></label>
 </div>

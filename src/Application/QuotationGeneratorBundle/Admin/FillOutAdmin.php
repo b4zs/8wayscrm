@@ -90,11 +90,15 @@ class FillOutAdmin extends Admin
             return;
         }
 
-        if ($activeChildAdmin) {
+        $request = $this->configurationPool->getContainer()->get('request_stack')->getCurrentRequest();
+        $editRoute = $this->getBaseRouteName().'_'.'edit';
+
+//        if ($activeChildAdmin) {
             $menu->addChild('Edit '.json_encode(substr($this->toString($this->getSubject()), 0, 15)), array(
                 'uri' => $this->generateObjectUrl('edit', $this->getSubject()),
+                'current' => $request->get('_route') == $editRoute,
             ));
-        }
+//        }
 
         /** @var Admin $childItem */
         foreach ($this->getChildren() as $childAdmin) {
@@ -109,6 +113,20 @@ class FillOutAdmin extends Admin
                     'current' => $childAdmin === $activeChildAdmin,
                 ));
             }
+        }
+
+
+
+
+
+
+        if ($this->getSubject()) {
+            $router = $this->configurationPool->getContainer()->get('router');
+            $route = $this->getBaseRouteName().'_'.'frontend';
+            $menu->addChild('Frontend', array(
+                'uri' => $router->generate($route, array('id' => $this->getSubject()->getId())),
+                'current' => $request->get('_route') == $route,
+            ));
         }
     }
 

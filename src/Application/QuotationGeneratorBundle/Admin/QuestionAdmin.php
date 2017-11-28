@@ -67,7 +67,7 @@ class QuestionAdmin extends Admin
         $formMapper
             ->add('category', null, array('required' => false))
             ->add('group', null, array('required' => false))
-            ->add('text')
+            ->add('text', null, array('required' => false))
             ->add('hint', 'textarea', array('required' => false,))
             ->add('alias', null, array('required' => false))
             ->add('formType', 'choice', array(

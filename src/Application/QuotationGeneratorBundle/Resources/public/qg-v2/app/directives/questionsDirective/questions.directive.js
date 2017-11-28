@@ -68,19 +68,6 @@ class QuestionsController {
       },
     ];
   }
-
-  updateGroups() {
-    let groups = [], l=this.$scope.questions.length,i;
-    for (i=0; i<l; i++) {
-      this.$scope.questions[i].group = this.$scope.questions[i].group || 'default';
-
-      if (-1 === groups.indexOf(this.$scope.questions[i].group)) {
-        groups.push(this.$scope.questions[i].group);
-      }
-    }
-
-    this.$scope.groups = groups;
-  }
 }
 
 export class QuestionsDirective {

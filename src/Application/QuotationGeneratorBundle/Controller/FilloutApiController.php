@@ -367,14 +367,20 @@ class FilloutApiController extends FOSRestController
             $question = $this->loadQuestion($questionId);
 
             if (!$question->getGroup()) {
-                $groups['default'] = array(
+                $groups[0] = array(
                     'name' => 'default',
+                    'label' => 'default',
                     'class' => '',
+                    'position' => 0,
+                    'id' => null,
                 );
             } else {
-                $groups[$question->getGroup()->getName()] = array(
+                $groups[$question->getGroup()->getId()] = array(
+                    'id' => $question->getGroup()->getId(),
                     'name' => $question->getGroup()->getName(),
+                    'label' => $question->getGroup()->getLabel(),
                     'class' => $question->getGroup()->getClass(),
+                    'position' => $question->getGroup()->getPosition(),
                 );
             }
 
@@ -384,7 +390,7 @@ class FilloutApiController extends FOSRestController
             'questions'     => $questionsResult,
             'questionStack' => $fillout->getState()['questionStack'],
             'quotation'     => $quotation,
-            'groups'        => $groups,
+            'groups'        => array_values($groups),
         );
         return $responseData;
     }

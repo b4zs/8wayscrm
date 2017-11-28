@@ -17,7 +17,9 @@ class QuestionGroupAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
+            ->add('position')
             ->add('name')
+            ->add('label')
         ;
     }
 
@@ -27,8 +29,14 @@ class QuestionGroupAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->add('name')
+            ->addIdentifier('name', null, array(
+            ))
+            ->add('label', null, array(
+                'editable' => true,
+            ))
+            ->add('position', null, array(
+                'editable' => true,
+            ))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -47,6 +55,8 @@ class QuestionGroupAdmin extends Admin
         $formMapper
 //            ->add('id')
             ->add('name')
+            ->add('label')
+            ->add('position')
             ->add('class')
         ;
     }

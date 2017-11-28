@@ -11,6 +11,7 @@ Application\QuotationGeneratorBundle\Entity\Question:
         text:
             type: string
             length: 255
+            nullable: true
         hint:
             type: text
             nullable: true

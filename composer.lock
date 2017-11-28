@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7cb486fc92cc381c16a90c03081b7646",
+    "content-hash": "5274d7f50a04c735f73bda48bb387d68",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3578,6 +3578,54 @@
             "time": "2015-12-18T17:39:27+00:00"
         },
         {
+            "name": "sensio/generator-bundle",
+            "version": "v2.5.3",
+            "target-dir": "Sensio/Bundle/GeneratorBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
+                "reference": "e50108c2133ee5c9c484555faed50c17a61221d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/e50108c2133ee5c9c484555faed50c17a61221d3",
+                "reference": "e50108c2133ee5c9c484555faed50c17a61221d3",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/console": "~2.5",
+                "symfony/framework-bundle": "~2.2"
+            },
+            "require-dev": {
+                "doctrine/orm": "~2.2,>=2.2.3",
+                "symfony/doctrine-bridge": "~2.2",
+                "twig/twig": "~1.11"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sensio\\Bundle\\GeneratorBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "This bundle generates code for you",
+            "time": "2015-03-17T06:36:52+00:00"
+        },
+        {
             "name": "sensiolabs/security-checker",
             "version": "v3.0.7",
             "source": {
@@ -6397,6 +6445,65 @@
             "time": "2017-07-04T13:19:31+00:00"
         },
         {
+            "name": "webonaute/doctrine-fixtures-generator-bundle",
+            "version": "v1.3.7",
+            "target-dir": "Webonaute/DoctrineFixturesGeneratorBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Webonaute/DoctrineFixturesGeneratorBundle.git",
+                "reference": "6f094cfd0502c07db106349046f8a441eb770029"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Webonaute/DoctrineFixturesGeneratorBundle/zipball/6f094cfd0502c07db106349046f8a441eb770029",
+                "reference": "6f094cfd0502c07db106349046f8a441eb770029",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": ">=1.2",
+                "doctrine/doctrine-fixtures-bundle": ">=2.2",
+                "doctrine/orm": ">=2.2",
+                "php": ">=7.0",
+                "sensio/generator-bundle": ">=2.3",
+                "symfony/framework-bundle": ">=2.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0",
+                "symfony/phpunit-bridge": "dev-master"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Webonaute\\DoctrineFixturesGeneratorBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu Delisle",
+                    "email": "mdelisle@webonaute.ca"
+                }
+            ],
+            "description": "Generate Fixture from your existing data in your database. You can specify the Entity name and the IDs you want to import in your fixture.",
+            "keywords": [
+                "Fixture",
+                "Symfony2",
+                "database",
+                "development",
+                "doctrine",
+                "doctrine2",
+                "dumper",
+                "generator",
+                "migration",
+                "symfony",
+                "tests"
+            ],
+            "time": "2017-04-19T18:09:21+00:00"
+        },
+        {
             "name": "willdurand/jsonp-callback-validator",
             "version": "v1.1.0",
             "source": {
@@ -6656,56 +6763,7 @@
             "time": "2016-04-01T10:39:00+00:00"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "sensio/generator-bundle",
-            "version": "v2.5.3",
-            "target-dir": "Sensio/Bundle/GeneratorBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
-                "reference": "e50108c2133ee5c9c484555faed50c17a61221d3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/e50108c2133ee5c9c484555faed50c17a61221d3",
-                "reference": "e50108c2133ee5c9c484555faed50c17a61221d3",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/console": "~2.5",
-                "symfony/framework-bundle": "~2.2"
-            },
-            "require-dev": {
-                "doctrine/orm": "~2.2,>=2.2.3",
-                "symfony/doctrine-bridge": "~2.2",
-                "twig/twig": "~1.11"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Sensio\\Bundle\\GeneratorBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "This bundle generates code for you",
-            "time": "2015-03-17T06:36:52+00:00"
-        }
-    ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
