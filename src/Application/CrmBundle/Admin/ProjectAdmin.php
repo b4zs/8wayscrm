@@ -4,7 +4,9 @@ namespace Application\CrmBundle\Admin;
 
 use Application\CrmBundle\Entity\Project;
 use Application\CrmBundle\Enum\ProjectStatus;
+use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\BreadcrumbsBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -144,6 +146,8 @@ class ProjectAdmin extends Admin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
+
+//        $this->breadcrumbs['show'] = new BreadcrumbsBuilder()
         $showMapper->with('Project', array('class' => 'col-md-7',));
         $showMapper
             ->add('name')
@@ -233,6 +237,11 @@ class ProjectAdmin extends Admin
             $project->setParent($parent);
             return $project;
         }
+    }
+
+    public function buildBreadcrumbs($action, MenuItemInterface $menu = null)
+    {
+        return parent::buildBreadcrumbs($action, $menu);
     }
 
 

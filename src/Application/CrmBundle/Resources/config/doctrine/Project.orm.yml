@@ -6,6 +6,9 @@ Application\CrmBundle\Entity\Project:
         id:
             type: integer
             id: true
+            generator:
+              strategy: AUTO
+
     gedmo:
         tree:
             type: nested
@@ -80,6 +83,7 @@ Application\CrmBundle\Entity\Project:
             inversedBy: projects
             gedmo:
                 - versioned
+
         fileset:
             targetEntity: Application\MediaBundle\Entity\Gallery
             cascade: [all]
