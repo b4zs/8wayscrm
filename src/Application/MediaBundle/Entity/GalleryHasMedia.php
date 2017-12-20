@@ -29,12 +29,21 @@ class GalleryHasMedia extends BaseGalleryHasMedia implements Sortable
      */
     protected $id;
 
+    /**
+     * @var string
+     */
+    protected $fileCategory;
+
+    /**
+     * GalleryHasMedia constructor.
+     */
     public function __construct()
     {
         $this->position = 0;
         $this->enabled = true;
-    }
 
+        parent::__construct();
+    }
 
     /**
      * Get id
@@ -45,4 +54,34 @@ class GalleryHasMedia extends BaseGalleryHasMedia implements Sortable
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFileCategory()
+    {
+        if($this->getMedia()) {
+            /** @var Media $media */
+            $media = $this->getMedia();
+            return $media->getFileCategory();
+        }
+        
+        return '';
+    }
+
+    /**
+     * @param mixed $fileCategory
+     * @return $this
+     */
+    public function setFileCategory($fileCategory)
+    {
+        if($this->getMedia()) {
+            /** @var Media $media */
+            $media = $this->getMedia();
+            $media->setFileCategory($fileCategory);
+        }
+
+        return $this;
+    }
+
 }

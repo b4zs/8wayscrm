@@ -10,10 +10,9 @@ use Application\UserBundle\Entity\Group;
 use Core\LoggableEntityBundle\Model\LogExtraData;
 use Core\LoggableEntityBundle\Model\LogExtraDataAware;
 use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use Sonata\MediaBundle\Model\GalleryHasMediaInterface;
 
@@ -73,7 +72,9 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
      */
     private $logExtraData;
 
-    /** @var  Gallery */
+    /**
+     * @var Gallery
+     */
     private $fileset;
 
     /**
@@ -82,12 +83,43 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     private $groups;
 
     /**
+     * @var ArrayCollection
+     */
+    private $children;
+
+    /**
+     * @var integer
+     */
+    private $lft;
+
+    /**
+     * @var integer
+     */
+    private $lvl;
+
+    /**
+     * @var integer
+     */
+    private $rgt;
+
+    /**
+     * @var integer
+     */
+    private $root;
+
+    /**
+     * @var Project
+     */
+    private $parent;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->memberships = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->memberships = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+        $this->children = new ArrayCollection();
         $this->fileset = new Gallery();
         $this->createdAt = new \DateTime();
         $this->initObjectIdentity();
@@ -96,11 +128,19 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -119,7 +159,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -165,7 +205,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -188,7 +228,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -211,7 +251,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get length
      *
-     * @return string 
+     * @return string
      */
     public function getLength()
     {
@@ -246,7 +286,7 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     /**
      * Get memberships
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMemberships()
     {
@@ -263,11 +303,6 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
     public function getClient()
     {
         return $this->client;
-    }
-
-    function __toString()
-    {
-        return $this->getName() . ($this->getClient() ? ' ('.$this->getClient() . ')' : '');
     }
 
     /**
@@ -353,4 +388,155 @@ class Project implements LogExtraDataAware, OwnerGroupAware, ObjectIdentityAware
         return $this->getName();
     }
 
+    /**
+     * @return bool
+     */
+    public function hasChildren()
+    {
+        if($this->getLft() + 1 !== $this->getRgt()){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getOriginalChildren()
+    {
+        return $this->children;
+    }
+    /**
+     * @param bool $maxLength
+     * @return ArrayCollection
+     */
+    public function getChildren($maxLength = true)
+    {
+        if ($maxLength == true) {
+            return new ArrayCollection();
+        }
+
+        return $this->children;
+    }
+
+    /**
+     * @param ArrayCollection $children
+     * @return $this
+     */
+    public function setChildren(ArrayCollection $children)
+    {
+        $this->children = $children;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLft()
+    {
+        return $this->lft;
+    }
+
+    /**
+     * @param int $lft
+     * @return $this
+     */
+    public function setLft($lft)
+    {
+        $this->lft = $lft;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLvl()
+    {
+        return $this->lvl;
+    }
+
+    /**
+     * @param int $lvl
+     * @return $this
+     */
+    public function setLvl($lvl)
+    {
+        $this->lvl = $lvl;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRgt()
+    {
+        return $this->rgt;
+    }
+
+    /**
+     * @param mixed $rgt
+     * @return $this
+     */
+    public function setRgt($rgt)
+    {
+        $this->rgt = $rgt;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    /**
+     * @param mixed $root
+     * @return $this
+     */
+    public function setRoot($root)
+    {
+        $this->root = $root;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param mixed $parent
+     * @return $this
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    public function getClientName()
+    {
+        if ($this->getClient()) {
+            return $this->getClient()->getCanonicalName();
+        }
+
+        return '';
+    }
+
+    public function getClientId()
+    {
+        if ($this->getClient()) {
+            return $this->getClient()->getId();
+        }
+
+        return '';
+    }
+
+    function __toString()
+    {
+        return $this->getName().($this->getClient() ? ' ('.$this->getClient().')' : '');
+    }
 }

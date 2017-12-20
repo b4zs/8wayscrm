@@ -10,6 +10,7 @@ imports:
 parameters:
     locale: en
     sonata_user.google_authenticator.server: http://example.com
+    jms_serializer.doctrine_proxy_subscriber.class: Application\CrmBundle\EventListener\DoctrineProxyHandler
 
 framework:
     #esi:             ~
@@ -80,7 +81,17 @@ doctrine:
             json: Sonata\Doctrine\Types\JsonType
 
     orm:
+        mappings:
+            gedmo_tree:
+                type: annotation
+                prefix: Gedmo\Tree\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                alias: GedmoTree
+                is_bundle: false
+
         auto_generate_proxy_classes: "%kernel.debug%"
+
+
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         resolve_target_entities:
@@ -102,6 +113,7 @@ swiftmailer:
     spool:     { type: memory }
 
 sonata_admin:
+    show_mosaic_button: true
     security:
       handler: sonata.admin.security.handler.role
     title: %sonata_admin.title%
@@ -237,8 +249,11 @@ sonata_media:
             directory:  %kernel.root_dir%/../web/uploads/media
             create:     false
 
-
-
+stof_doctrine_extensions:
+    default_locale: %locale%
+    orm:
+        default:
+            tree: true
 
 sonata_block:
     blocks:
@@ -311,3 +326,11 @@ fos_rest:
         default_engine: twig
     routing_loader:
         default_format: json
+
+jms_serializer:
+    metadata:
+        auto_detection: true
+        directories:
+            Project:
+                namespace_prefix: "Application\\CrmBundle\\Entity"
+                path: "%kernel.root_dir%/Resources/serializer"

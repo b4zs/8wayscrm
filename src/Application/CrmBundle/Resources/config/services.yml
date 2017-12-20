@@ -1,11 +1,9 @@
 services:
-
     application_crm.admin.contact:
         class: Application\CrmBundle\Admin\ContactAdmin
         arguments: [~, Application\CrmBundle\Entity\Contact, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Contact Persons, label: Contact Persons}
-#
 
     application_crm.admin.address:
         class: Application\CrmBundle\Admin\AddressAdmin
@@ -27,7 +25,7 @@ services:
 
     application_crm.admin.project:
         class: Application\CrmBundle\Admin\ProjectAdmin
-        arguments: [~, Application\CrmBundle\Entity\Project, SonataAdminBundle:CRUD]
+        arguments: [~, Application\CrmBundle\Entity\Project, ApplicationCrmBundle:ProjectAdmin]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Projects, label: All projects }
 
@@ -108,6 +106,16 @@ services:
           - {name: doctrine.event_listener, event: postUpdate, method: postUpdate}
           - {name: doctrine.event_listener, event: postPersist, method: postPersist}
 
+    application_crm.block.file_categories:
+        class: Application\CrmBundle\Block\FileCategoryBlockService
+        arguments:
+            - 'application_crm.block.file_categories'
+            - '@templating'
+            - '@doctrine.orm.entity_manager'
+            - '@sonata.admin.pool'
+        tags:
+            - { name: sonata.block }
+
     application_crm.block.dashboard_clients:
         class: Application\CrmBundle\Block\ClientsBlockService
         arguments:
@@ -117,3 +125,9 @@ services:
             - '@sonata.admin.pool'
         tags:
             - { name: sonata.block }
+
+    application_crm.event_listener.crm_block_event_listener:
+        class: Application\CrmBundle\EventListener\CrmBlockEventListener
+        tags:
+            - { name: kernel.event_listener, event: sonata.block.event.render_file_categories, method: onRenderFileCategories }
+

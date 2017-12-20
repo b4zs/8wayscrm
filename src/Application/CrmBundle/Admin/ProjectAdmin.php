@@ -2,35 +2,40 @@
 
 namespace Application\CrmBundle\Admin;
 
+use Application\CrmBundle\Entity\Project;
 use Application\CrmBundle\Enum\ProjectStatus;
+use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\BreadcrumbsBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 class ProjectAdmin extends Admin
 {
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $dataGridMapper
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $dataGridMapper)
     {
-        $datagridMapper
+        $dataGridMapper
             ->add('name')
-//            ->add('createdAt')
-//            ->add('description')
+            ->add('parent')
             ->add(
                 'status',
                 'doctrine_orm_choice',
                 array(
-                    'label' => 'Status', 'multiple' => true,
+                    'label' => 'Status',
+                    'multiple' => true,
                 ),
                 'choice',
                 array('choices' => ProjectStatus::getChoices(), 'multiple' => true,)
             )
             ->add('client', 'doctrine_orm_callback', array(
-                'callback' => function($queryBuilder, $alias, $field, $value){
+                'callback' => function ($queryBuilder, $alias, $field, $value) {
                     $aliases = $queryBuilder->getRootAliases();
                     $value = is_array($value) ? $value['value'] : null;
                     if (!empty($value)) {
@@ -41,8 +46,7 @@ class ProjectAdmin extends Admin
                     }
                 }
             ))
-            ->add('id')
-        ;
+            ->add('id');
     }
 
     /**
@@ -50,13 +54,14 @@ class ProjectAdmin extends Admin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
+        $this->setListMode('list');
         $listMapper
             ->addIdentifier('id')
             ->addIdentifier('name')
             ->add('client')
             ->add('status', 'choice', array(
                 'editable' => true,
-                'choices'  => ProjectStatus::getChoices(),
+                'choices' => ProjectStatus::getChoices(),
             ))
             ->add('createdAt')
             ->add('_action', 'actions', array(
@@ -64,8 +69,7 @@ class ProjectAdmin extends Admin
                     'edit' => array(),
                     'delete' => array(),
                 )
-            ))
-        ;
+            ));
     }
 
     /**
@@ -77,62 +81,62 @@ class ProjectAdmin extends Admin
 
 
         $formMapper->with('Project', array('class' => 'col-md-6'));
-            $formMapper->add('name');
+        $formMapper->add('name');
+        $formMapper->add('parent', ModelListType::class, []);
 
-            if ('lead' !== $parentAdmin) {
-                $formMapper->add('client', 'sonata_type_model_list', array(
-                    'btn_delete' => false,
-                    'btn_list' => 'Select',
-                ), array());
-            }
+        if ('lead' !== $parentAdmin) {
+            $formMapper->add('client', 'sonata_type_model_list', array(
+                'btn_delete' => false,
+                'btn_list' => 'Select',
+            ), array());
+        }
 
         $formMapper->end();
 
         $formMapper->with('Info', array('class' => 'col-md-6'));
-            $formMapper->add('status', 'choice', array(
-                'choices' => ProjectStatus::getChoices(),
+        $formMapper->add('status', 'choice', array(
+            'choices' => ProjectStatus::getChoices(),
+        ));
+        $formMapper
+            ->add('description', 'textarea', array(
+                'required' => false,
             ));
-            $formMapper
-                ->add('description', 'textarea', array(
-                    'required' => false,
-                ))
-            ;
         $formMapper->end();
 
         if (null === $parentAdmin) {
             $formMapper->with('Members', array('col-md-12'));
-                $formMapper->add('memberships', 'sonata_type_collection', array(
-                    'label'         => false,
-                    'by_reference'  => false,
-                ), array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                    'link_parameters' => array(
-                        'parent_admin'  => 'project',
-                    ),
-                ));
+            $formMapper->add('memberships', 'sonata_type_collection', array(
+                'label' => false,
+                'by_reference' => false,
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'link_parameters' => array(
+                    'parent_admin' => 'project',
+                ),
+            ));
             $formMapper->end();
 
             $formMapper->with('Files');
-                $formMapper->add('fileset.galleryHasMedias', 'sonata_type_collection', array(
-                    'label'                 => false,
-                    'by_reference'          => false,
-                    'cascade_validation'    => true,
-                ), array(
-                    'edit'              => 'inline',
-                    'inline'            => 'table',
-                    'sortable'          => 'position',
-                    'link_parameters'   => array('context' => 'default'),
-                    'admin_code'        => 'sonata.media.admin.gallery_has_media',
-                ));
+            $formMapper->add('fileset.galleryHasMedias', 'sonata_type_collection', array(
+                'label' => false,
+                'by_reference' => false,
+                'cascade_validation' => true,
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable' => 'position',
+                'link_parameters' => array('context' => 'default'),
+                'admin_code' => 'sonata.media.admin.gallery_has_media',
+            ));
             $formMapper->end();
         } else {
             $disabled = !$this->getSubject() || !$this->getSubject()->getId();
             $formMapper->with('open');
-            $formMapper->add('_open', 'gb_open_button', array('required' => false, 'mapped' => false, 'label' => 'Details', 'disabled' => $disabled));
+            $formMapper->add('_open', 'gb_open_button',
+                array('required' => false, 'mapped' => false, 'label' => 'Details', 'disabled' => $disabled));
             $formMapper->end();
         }
-
 
 
     }
@@ -142,13 +146,30 @@ class ProjectAdmin extends Admin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
+
+//        $this->breadcrumbs['show'] = new BreadcrumbsBuilder()
+        $showMapper->with('Project', array('class' => 'col-md-7',));
         $showMapper
-            ->add('id')
             ->add('name')
             ->add('createdAt')
             ->add('description')
             ->add('status')
         ;
+        $showMapper->end();
+
+        $showMapper->with('Memberships', array('class' => 'col-md-5',));
+        $showMapper->add('memberships', null, ['label' => false]);
+        $showMapper->end();
+
+        $showMapper->with('Sub projects', array('class' => 'col-md-7',));
+        $showMapper
+            ->add('originalChildren', null, [
+                'template' => 'ApplicationCrmBundle:ProjectAdmin:project_children.html.twig',
+                'label' => false
+            ])
+        ;
+        $showMapper->end();
+
     }
 
     /**
@@ -185,10 +206,43 @@ class ProjectAdmin extends Admin
     {
         return parent::isGranted($name, $object)
             && (
-                (in_array($name, array('EDIT', 'SHOW', 'DELETE')) && $object)
-                ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name, $object)
+            (in_array($name, array('EDIT', 'SHOW', 'DELETE')) && $object)
+                ? $this->getConfigurationPool()->getContainer()->get('application_crm.admin.extension.owner_group_manager')->isGranted($name,
+                $object)
                 : true
             );
     }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('loadMoreProject');
+        $collection->add('loadChildren');
+    }
+
+    public function getNewInstance()
+    {
+        /** @var Project $project */
+        $project = parent::getNewInstance();
+        $parentId = $this->getRequest()->get('parent_id');
+
+        if (!$parentId) {
+            return $project;
+        }
+
+        $parent = $this->modelManager->findOneBy(Project::class, [
+            'id' => $parentId
+        ]);
+
+        if ($parent) {
+            $project->setParent($parent);
+            return $project;
+        }
+    }
+
+    public function buildBreadcrumbs($action, MenuItemInterface $menu = null)
+    {
+        return parent::buildBreadcrumbs($action, $menu);
+    }
+
 
 }

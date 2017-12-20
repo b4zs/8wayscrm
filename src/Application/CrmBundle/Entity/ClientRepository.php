@@ -19,7 +19,7 @@ class ClientRepository extends EntityRepository
         $qb->setParameter('status', $status);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        return isset($result['c']) ? $result['c'] : 0;
+        return empty($result) ? 0 : $result[0]['c'];
     }
 
     /**
@@ -33,8 +33,7 @@ class ClientRepository extends EntityRepository
         $qb->where('client.createdAt >= :createdAt');
         $qb->setParameter('createdAt', $dateTime);
 
-        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        return isset($result['c']) ? $result['c'] : 0;
+        return $qb->getQuery()->getResult(Query::HYDRATE_SINGLE_SCALAR);
     }
 
 }

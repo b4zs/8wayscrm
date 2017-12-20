@@ -1,0 +1,30 @@
+Application\CrmBundle\Entity\Project:
+    exclusion_policy: ALL
+    exclude: false
+    read_only: false
+    access_type: public_method # defaults to property
+    virtual_properties:
+        hasChildren:
+            serialized_name: hasChildren
+            type: boolean
+
+        getClientName:
+            serialized_name: client_name
+            type: string
+
+        getClientId:
+            serialized_name: client_id
+            type: integer
+
+    properties:
+        id:
+            expose: true
+
+        name:
+            expose: true
+
+        children:
+            expose: true
+
+        status:
+            expose: true

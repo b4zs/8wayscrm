@@ -1,0 +1,11 @@
+{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+
+{% block field %}
+    {% spaceless %}
+        <ul>
+        {% for row in value %}
+            <li><a href="{{ path('admin_application_crm_project_show', {'id': row.id }) }}">{{ row }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endspaceless %}
+{% endblock %}

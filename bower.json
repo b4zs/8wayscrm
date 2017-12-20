@@ -1,0 +1,21 @@
+{
+  "name": "8wayscrm",
+  "authors": [
+    "David Kovacs <kovacs.david@gb-art.hu>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-treeview": "http://gitlab.assist01.gbart.h3.hu/bower/bootstrap-treeview.git#d628f81e5e3b7b948eabfd78c99f4e70e792b4ea"
+  }
+}

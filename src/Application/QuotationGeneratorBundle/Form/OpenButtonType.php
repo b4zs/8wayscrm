@@ -4,7 +4,7 @@
 namespace Application\QuotationGeneratorBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OpenButtonType extends AbstractType
 {

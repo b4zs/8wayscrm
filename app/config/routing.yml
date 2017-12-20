@@ -37,6 +37,12 @@ app_classification:
     resource: '@ApplicationClassificationBundle/Resources/config/routing.yml'
     prefix: /
 
+#app_test:
+#    path: /import-test
+#    defaults:
+#        _controller: ApplicationCrmBundle:Default:importProjects
+
+
 object_identity:
     resource: '@CoreObjectIdentityBundle/Resources/config/routing.yml'
     prefix: /

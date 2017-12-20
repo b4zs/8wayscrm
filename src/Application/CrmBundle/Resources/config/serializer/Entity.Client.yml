@@ -1,0 +1,16 @@
+# Error when I try to use custom solution
+#
+#The discriminator field name "type" of the base-class "Application\CrmBundle\Entity\AbstractClient" conflicts with a regular property of the sub-class "Application\CrmBundle\Entity\Client"
+
+Application\CrmBundle\Entity\Client:
+    exclusion_policy: ALL
+    exclude: false
+    read_only: false
+    access_type: public_method # defaults to property
+    virtual_properties:
+        getCanonicalName:
+              serialized_name: company_name
+              type: string
+    properties:
+        id:
+            expose: true
