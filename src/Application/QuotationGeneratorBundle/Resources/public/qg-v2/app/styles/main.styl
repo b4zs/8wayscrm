@@ -8,24 +8,37 @@
     padding: 3px
     margin: 0px;
 
-.question
+  label
+    font-weight: normal
+
+.hint
+  background: #fff
   padding: 3px
-  margin: 3px
+  border: 1px solid #000
+  max-width: 300px
+  position: absolute
+  z-index: 1000
+
+.question
+  padding-bottom: 3px
 
   .question-label
     vertical-align: top
     padding-right: 5px;
+    width: 200px;
 
-  .question-hint
-    display: block;
-    padding: 0px;
+    .question-hint
+      display: none;
+
+    &:hover .question-hint
+      display: block
 
   .question-type-wrapper
     display: inline-block;
 
   .question-type-singlechoice
     .question-choice
-      display: inline
+      //display: inline
       padding-left: 5px;
 
       &.question-choice--has-image
@@ -44,20 +57,54 @@
   .question-choice
     font-weight: normal;
 
+    small.question-choice-hint
+      display: none
+
+    &:hover small.question-choice-hint
+      display: block
+
   .question-choice-hint,
   .question-choice-quotation
     font-weight: normal;
+
+  .question-choice-quotation
+    white-space: nowrap
+
 
   .question-choice-image
     max-height: 120px;
     max-width: 100%;
     overflow: hidden;
 
+
+
 .questions-horizontal
   .question-choice-image
     display: inline-block
-  .question-choice
-    padding-left: 10px;
-    display: inline-block;
+  label.question-label
+    display: inline-block
+    width: 14%
+
+
+  .question-type-wrapper
+    width: 85%
+
+  ul
+    //display: table
+    width: 100%
+    li.question-choice
+      background: linear-gradient(to right, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, */
+      padding-left: 10px
+      //display: table-cell
+      display: inline-block
+      width: 20%
+      vertical-align: top
+
+        //white-space: normal
+
+      //label:not(.question-label)
+        //white-space: nowrap
+
+
 
 

@@ -46,3 +46,9 @@ app
       return result;
     };
   })
+  .filter("sanitize", function($sce) {
+    "ngInject";
+    return function(htmlCode){
+      return $sce.trustAsHtml(htmlCode);
+    };
+  })

@@ -1,5 +1,11 @@
 <div ng-attr-class="{{'question '+question.class}}">
-    <label class="question-label" ng-if="question.title">{{question.title}}:</label>
+    <label class="question-label" ng-if="question.title">
+        {{question.title}}:
+        <small ng-if="question.hint" class="hint question-hint"><p ng-bind-html="question.hint|sanitize"></p></small>
+    </label>
+
+    <code ng-show="$root.debug">Q=#{{question.questionId}}, A=#{{question.answerId}}, value={{question.value}}</code>
+
     <div ng-if="'text' == question.type">
         <input type="text" ng-model="question.value"  ng-disabled="$root.loading" ng-blur="ctrl.valueChanged()">
     </div>
@@ -21,9 +27,12 @@
                     </div>
                     <input type="radio" ng-value="choice.value" ng-model="question.value" ng-disabled="$root.loading"  ng-change="ctrl.valueChanged()">
                     <span class="question-choice-text">{{choice.label}}</span>
-                    <small ng-if="choice.hint" class="question-choice-hint">{{choice.hint}}</small>
+                    <small ng-if="choice.hint" class="hint question-choice-hint" ng-bind-html="choice.hint|sanitize"></small>
                 </label>
-                <small ng-if="choice.quotation && (choice.quotation.name || choice.quotation.price.amount)" class="question-choice-quotation">{{choice.quotation.price.currency+' '+choice.quotation.price.amount}} ({{choice.quotation.name}})</small>
+                <small ng-if="choice.quotation && (choice.quotation.name || choice.quotation.price.amount)" class="question-choice-quotation">
+                    {{choice.quotation.price.currency+' '+choice.quotation.price.amount}}
+                    <!--({{choice.quotation.name}})-->
+                </small>
             </li>
         </ul>
     </div>
@@ -37,7 +46,4 @@
             <small ng-if="choice.hint" class="question-choice-hint">{{choice.hint}}</small>
         </div>
     </div>
-
-    <small ng-if="question.hint" class="question-hint"><p>{{question.hint}}</p></small>
-    <code ng-show="$root.debug">Q=#{{question.questionId}}, A=#{{question.answerId}}, value={{question.value}}</code>
 </div>

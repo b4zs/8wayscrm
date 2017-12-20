@@ -43,7 +43,7 @@ class FilloutApiController extends FOSRestController
         $result = array();
         $result['questionId'] = $question->getId();
         $result['title'] = $question->getText();
-        $result['hint'] = $question->getHint();
+        $result['hint'] = nl2br($question->getHint());
         $result['type'] = $question->getFormType();
         $result['group'] = $question->getGroup() ? $question->getGroup()->getName() : null;
         $result['stage'] = $question->getStage();
@@ -58,7 +58,7 @@ class FilloutApiController extends FOSRestController
                 $option = array(
                     'label' => $questionOption->getText(),
                     'value' => $questionOption->getValue(),
-                    'hint'  => $questionOption->getHint(),
+                    'hint'  => nl2br($questionOption->getHint()),
                     'quotation' => $this->calculateQuestionOptionPrice($questionOption),
                 );
 
