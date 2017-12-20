@@ -16,7 +16,7 @@ app
       return new ApiClient($http, config);
   }])
   .constant('config', {
-    apiRoot: 'http://localhost:8000/app_dev.php'
+    apiRoot: '/app_dev.php'
   })
   .filter("filter", function() {
     return (list, conditions) => {

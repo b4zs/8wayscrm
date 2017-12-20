@@ -328,8 +328,10 @@ class FilloutApiController extends FOSRestController
         }
 
         usort($questionsResult, function($a, $b) {
-            $av = isset($a['answerId']) ? $a['answerId'] : $a['questionId'];
-            $bv = isset($b['answerId']) ? $b['answerId'] : $b['questionId'];
+            $av = $a['questionId'];
+            $bv = $b['questionId'];
+//            $av = isset($a['answerId']) ? $a['answerId'] : $a['questionId'];
+//            $bv = isset($b['answerId']) ? $b['answerId'] : $b['questionId'];
 
             return $av < $bv
                ? -1
