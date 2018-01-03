@@ -28,7 +28,9 @@ class AddQuotationItem extends AbstractActionType
         $state['quotation']['items'][] = $quotationItem;
         $total = isset($state['quotation']['total']) ? Price::fromArray($state['quotation']['total']) : new Price(0.0, 'EUR');
 
-        $total->add($action->getQuotationItemPrice());
+        if ($action->getQuotationItemPrice() && $action->getQuotationItemPrice()->getAmount() && $action->getQuotationItemPrice()->getCurrency()) {
+            $total->add($action->getQuotationItemPrice());
+        }
 
         $state['quotation']['total'] = $total->toArray();
 
