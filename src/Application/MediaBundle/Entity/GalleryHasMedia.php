@@ -42,7 +42,6 @@ class GalleryHasMedia extends BaseGalleryHasMedia implements Sortable
         $this->position = 0;
         $this->enabled = true;
 
-        parent::__construct();
     }
 
     /**

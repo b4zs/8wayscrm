@@ -2,7 +2,7 @@ import './home.view.html'
 import '../../images/coringa.jpg'
 
 export class HomeController {
-  constructor($scope, apiClient, $timeout, $rootElement) {
+  constructor($scope, apiClient, $timeout, $rootElement, $q) {
     'ngInject'
 
     this.$scope = $scope;
@@ -13,31 +13,28 @@ export class HomeController {
 
     this.$scope.$root.loading = true;
     this.$scope.$root.$on('answer.change', (event, question) => {
-      console.log('HomeController:answer.change', '"'+question.title+'"=', question.value);
-
       this.$scope.$root.loading = true;
 
       this
           .apiClient
           .sendState(this.id, this.state)
-          .then(response => this.onStateReceived(response));
+          .then((data) => {
+            this.onStateReceived(data);
+          });
 
       $timeout(() => {
         this.$scope.$root.loading = false;
       }, 500);
     });
 
+
     this.apiClient
         .fetchState(this.id)
-        .then(response => this.onStateReceived(response));
+        .then(data => this.onStateReceived(data));
   }
 
-  onStateReceived(response)  {
-    let state = response.data;
-    console.log('HomeController.getState resolved', state);
-
-    this.state = state;
-
+  onStateReceived(data)  {
+    this.state = data;
     this.$timeout(() => {
       this.$scope.$root.loading = false;
     });

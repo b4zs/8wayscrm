@@ -6,6 +6,7 @@ use Application\CrmBundle\Entity\Project;
 use Application\CrmBundle\Enum\ProjectStatus;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\BreadcrumbsBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -242,6 +243,36 @@ class ProjectAdmin extends Admin
     public function buildBreadcrumbs($action, MenuItemInterface $menu = null)
     {
         return parent::buildBreadcrumbs($action, $menu);
+    }
+
+    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $activeChildAdmin = null)
+    {
+        if ($activeChildAdmin) {
+            $root = $activeChildAdmin->buildSideMenu($action, $activeChildAdmin);
+            if ($root instanceof MenuItemInterface) {
+                foreach ($root->getChildren() as $item) {
+                    $menu->addChild($item);
+                }
+            }
+            return;
+        }
+
+        if (!$this->hasSubject() || null === $this->getSubject()->getId()) {
+            return;
+        }
+
+        $menu->addChild('Edit '.json_encode(substr($this->toString($this->getSubject()), 0, 15)), array(
+            'uri' => $this->generateObjectUrl('edit', $this->getSubject()),
+            'current' => !$activeChildAdmin,
+        ));
+
+        /** @var Admin $childItem */
+        foreach ($this->getChildren() as $childAdmin) {
+            $menu->addChild($childAdmin->getLabel(), array(
+                'uri' => $childAdmin->generateUrl('list'),
+                'current' => $activeChildAdmin === $childAdmin,
+            ));
+        }
     }
 
 

@@ -26,6 +26,8 @@ services:
     application_crm.admin.project:
         class: Application\CrmBundle\Admin\ProjectAdmin
         arguments: [~, Application\CrmBundle\Entity\Project, ApplicationCrmBundle:ProjectAdmin]
+        calls:
+            - [addChild, ['@application_quotation_generator.admin.fill_out']]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Projects, label: All projects }
 

@@ -12,9 +12,7 @@ app
   .controller('HomeController', HomeController)
   .directive('questions', () => new QuestionsDirective())
   .directive('question', () => new QuestionDirective())
-  .service('apiClient', ['$http', 'config', function($http, config) {
-      return new ApiClient($http, config);
-  }])
+  .service('apiClient', ApiClient)
   .constant('config', {
     apiRoot: '/app_dev.php'
   })

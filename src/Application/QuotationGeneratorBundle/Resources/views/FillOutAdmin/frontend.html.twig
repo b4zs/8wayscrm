@@ -9,3 +9,7 @@
     <script src="{{ asset('bundles/applicationquotationgenerator/qg-v2/dist/vendor.bundle.js') }}"></script>
     <script src="{{ asset('bundles/applicationquotationgenerator/qg-v2/dist/app.bundle.js') }}"></script>
 {% endblock content %}
+
+{% block form %}
+    {{ block('parentForm') }}
+{% endblock %}

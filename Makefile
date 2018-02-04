@@ -86,7 +86,7 @@ db-diff:
 	$(PHP) $(MEM) $(CON)  doctrine:migrations:diff
 
 run:
-	$(PHP) -S localhost:8000 -t web/
+	$(PHP) -S 127.0.0.1:8000 -t web/
 
 q:
 	$(PHP) $(MEM) $(CON) jms-job-queue:run -r 900 --idle-time 1 --env=$(ENV) -vv

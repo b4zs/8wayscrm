@@ -23,5 +23,8 @@ Application\QuotationGeneratorBundle\Entity\FillOut:
             mappedBy: fillOut
             cascade: [all]
             orphanRemoval: true
+    manyToOne:
+        project:
+            targetEntity: Application\CrmBundle\Entity\Project
 
     lifecycleCallbacks: {  }

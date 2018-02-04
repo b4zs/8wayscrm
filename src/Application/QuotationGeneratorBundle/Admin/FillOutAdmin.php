@@ -2,6 +2,7 @@
 
 namespace Application\QuotationGeneratorBundle\Admin;
 
+use Application\CrmBundle\Entity\Project;
 use Application\QuotationGeneratorBundle\Entity\FillOut;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
@@ -100,31 +101,29 @@ class FillOutAdmin extends Admin
             ));
 //        }
 
-        /** @var Admin $childItem */
-        foreach ($this->getChildren() as $childAdmin) {
-            if ($childAdmin instanceof FillOutAnswerAdmin) {
-                $menu->addChild($childAdmin->getClassnameLabel(), array(
-                    'uri' => $childAdmin->generateUrl('list', array('id' => $this->getSubject()->getId())),
-                    'current' => $childAdmin === $activeChildAdmin,
-                ));
-            } else {
-                $menu->addChild($childAdmin->getLabel(), array(
-                    'uri' => $childAdmin->generateUrl('list'),
-                    'current' => $childAdmin === $activeChildAdmin,
-                ));
+
+        if (!$this->isChild()) {
+            /** @var Admin $childItem */
+            foreach ($this->getChildren() as $childAdmin) {
+                if ($childAdmin instanceof FillOutAnswerAdmin) {
+                    $menu->addChild($childAdmin->getClassnameLabel(), array(
+                        'uri' => $childAdmin->generateUrl('list', array('id' => $this->getSubject()->getId())),
+                        'current' => $childAdmin === $activeChildAdmin,
+                    ));
+                } else {
+                    $menu->addChild($childAdmin->getLabel(), array(
+                        'uri' => $childAdmin->generateUrl('list'),
+                        'current' => $childAdmin === $activeChildAdmin,
+                    ));
+                }
             }
         }
-
-
-
-
-
 
         if ($this->getSubject()) {
             $router = $this->configurationPool->getContainer()->get('router');
             $route = $this->getBaseRouteName().'_'.'frontend';
             $menu->addChild('Frontend', array(
-                'uri' => $router->generate($route, array('id' => $this->getSubject()->getId())),
+                'uri' => $router->generate($route, array('id' => $this->getSubject()->getId(), 'childId' => $this->getSubject()->getId())),
                 'current' => $request->get('_route') == $route,
             ));
         }
@@ -134,6 +133,32 @@ class FillOutAdmin extends Admin
     {
         parent::configureRoutes($collection);
         $collection->add('frontend', $this->getRouterIdParameter().'/frontend', array(), array('id' => '.+', '_method' => 'GET'));
+    }
+
+    public function getNewInstance()
+    {
+        /** @var FillOut $fillout */
+        $fillout = parent::getNewInstance();
+
+        if ($this->isChild() && $this->getParent()->getSubject() instanceof Project) {
+            $project = $this->getParent()->getSubject();
+            $fillout->setProject($project);
+            $fillout->setName(sprintf('%s - %s', $project->getName(), date('Y-m-d H:i')));
+        }
+
+        return $fillout;
+    }
+
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+
+        if ($this->isChild() && $this->getParent()->getSubject() instanceof Project) {
+            $query->andWhere('o.project = :project');
+            $query->setParameter('project', $this->getParent()->getSubject());
+        }
+
+        return $query;
     }
 
 

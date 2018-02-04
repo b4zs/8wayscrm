@@ -7,15 +7,15 @@
     <code ng-show="$root.debug">Q=#{{question.questionId}}, A=#{{question.answerId}}, value={{question.value}}</code>
 
     <div ng-if="'text' == question.type">
-        <input type="text" ng-model="question.value"  ng-disabled="$root.loading" ng-blur="ctrl.valueChanged()">
+        <input type="text" ng-model="question.value"  ng-disabled="$root.inputsDisabled" ng-blur="ctrl.valueChanged()">
     </div>
 
     <div ng-if="'textarea' == question.type"  class="question-type-wrapper question-type-textarea">
-        <textarea ng-model="question.value"  ng-disabled="$root.loading"  ng-blur="ctrl.valueChanged()"></textarea>
+        <textarea ng-model="question.value"  ng-disabled="$root.inputsDisabled"  ng-blur="ctrl.valueChanged()"></textarea>
     </div>
 
     <div ng-if="'number' == question.type" class="question-type-wrapper question-type-number">
-        <input type="number" ng-model="question.value"  ng-disabled="$root.loading"  ng-blur="ctrl.valueChanged()">
+        <input type="number" ng-model="question.value"  ng-disabled="$root.inputsDisabled"  ng-blur="ctrl.valueChanged()">
     </div>
 
     <div ng-if="'singlechoice' == question.type"  class="question-type-wrapper question-type-singlechoice">
@@ -25,7 +25,7 @@
                     <div ng-if="choice.image" class="question-choice-image">
                         <img ng-attr-src="{{choice.image}}" class="img-responsive">
                     </div>
-                    <input type="radio" ng-value="choice.value" ng-model="question.value" ng-disabled="$root.loading"  ng-change="ctrl.valueChanged()">
+                    <input type="radio" ng-value="choice.value" ng-model="question.value" ng-disabled="$root.inputsDisabled"  ng-change="ctrl.valueChanged()">
                     <span class="question-choice-text">{{choice.label}}</span>
                     <small ng-if="choice.hint" class="hint question-choice-hint" ng-bind-html="choice.hint|sanitize"></small>
                 </label>
@@ -40,7 +40,7 @@
     <div ng-if="'multiplechoice' == question.type"  class="question-type-wrapper question-type-multiplechoice">
         <div  ng-repeat="choice in question.choices"  class="question-choice">
             <label>
-                <input type="checkbox" ng-true-value="true" ng-model="question.checkboxValue[choice.value]" ng-change="ctrl.checkboxChange()"  ng-disabled="$root.loading"  ng-change="ctrl.valueChanged()">
+                <input type="checkbox" ng-true-value="true" ng-model="question.checkboxValue[choice.value]" ng-change="ctrl.checkboxChange()"  ng-disabled="$root.inputsDisabled"  ng-change="ctrl.valueChanged()">
                 {{choice.label}}
             </label>
             <small ng-if="choice.hint" class="question-choice-hint">{{choice.hint}}</small>

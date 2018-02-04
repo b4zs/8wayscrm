@@ -41,6 +41,11 @@ class FillOut
      */
     private $createdAt;
 
+    /**
+     * @var Project
+     */
+    private $project;
+
 
     /**
      * Constructor
@@ -172,5 +177,15 @@ class FillOut
         return $this->getAnswers()->filter(function(FillOutAnswer $answer){
             return $answer->getQuestion()->getText() !== '__INIT__';
         });
+    }
+
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    public function setProject($project)
+    {
+        $this->project = $project;
     }
 }
